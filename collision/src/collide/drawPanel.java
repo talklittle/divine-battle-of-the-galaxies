@@ -21,12 +21,12 @@ public class drawPanel extends JPanel implements KeyListener {
     BufferedImage buffer;
     entity player;
     entity enemy;
+    public boolean nFlag_gameOver = false;
 
     public drawPanel() {
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
-
     }
 
     public void Initialize() {
@@ -60,7 +60,7 @@ public class drawPanel extends JPanel implements KeyListener {
         } else {
             b.setColor(Color.white);
             b.drawString("C O L L I S I O N", 350, 300);
-            player.collision=false;
+            player.collision = false;
         }
         b.dispose();
 
@@ -83,6 +83,9 @@ public class drawPanel extends JPanel implements KeyListener {
                 drawBuffer();
                 drawScreen();
                 Thread.sleep(15);
+                if (nFlag_gameOver == true) {
+                    break;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -107,6 +110,8 @@ public class drawPanel extends JPanel implements KeyListener {
         if (key == KeyEvent.VK_DOWN) {
             player.down = true;
         }
+        if (key == KeyEvent.VK_F12)
+            nFlag_gameOver=true;
 
     }
 
