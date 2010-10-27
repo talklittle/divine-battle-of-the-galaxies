@@ -28,7 +28,7 @@ public class Main implements ActionListener
         window = new JFrame("This is just a test for collision.");
         gamePanel = new drawPanel();
         registerPanel = new registerPanel();
-        window.setSize(800, 600);
+        window.setSize(900, 700);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
     }
