@@ -77,13 +77,13 @@ public class entity {
 
     public void move()
     {
-        if (up)
+        if (up&&y>0)
             y-=speed;
-        if (down)
+        if (down&&y<550)
             y+=speed;
-        if (left)
+        if (left&&x>0)
             x-=speed;
-        if(right)
+        if(right&&x<750)
             x+=speed;
     }
 
