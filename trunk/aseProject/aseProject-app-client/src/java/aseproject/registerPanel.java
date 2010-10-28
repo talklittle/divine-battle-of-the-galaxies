@@ -15,8 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import session.userEntityFacadeRemote;
-import entity.userEntity;
+import session.PlayerEntityFacadeRemote;
+import entity.PlayerEntity;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 
@@ -35,8 +35,8 @@ public class registerPanel extends JPanel implements ActionListener {
     JTextField loginUserName;
     JPasswordField pswField;
     JButton loginOKBtn;
-    userEntityFacadeRemote userFacade;
-    userEntity User;
+    PlayerEntityFacadeRemote playerFacade;
+    PlayerEntity User;
 
     public registerPanel() {
         newAccountBtn = new JButton("Create New Account");
@@ -54,7 +54,7 @@ public class registerPanel extends JPanel implements ActionListener {
         add(loginBtn);
         newAccountBtn.addActionListener(this);
         loginBtn.addActionListener(this);
-        userFacade = lookupuserEntityFacadeRemote();
+        playerFacade = lookupuserEntityFacadeRemote();
     }
 
     public void rebuildPanel() {
@@ -81,16 +81,15 @@ public class registerPanel extends JPanel implements ActionListener {
             revalidate();
         }
         if (src == newAccountOK) {
-            String userName = newAccountUser.getText();
-            int userID = Integer.parseInt(userName);
-            userEntity user = userFacade.find(userID);
+            String username = newAccountUser.getText();
+            PlayerEntity user = playerFacade.find(username);
             if (user == null) {
                 String input = newAccountPsw.getText();
-                user = new userEntity();
-                user.setId(userID);
+                user = new PlayerEntity();
+                user.setUsername(username);
                 user.setPassword(input);
-                userFacade.create(user);
-                JOptionPane.showMessageDialog(null, "user ID:" + userID + "  " + "Password" + input);
+                playerFacade.create(user);
+                JOptionPane.showMessageDialog(null, "user ID:" + username + "  " + "Password" + input);
                 nFlag_registered = true;
             } else {
                 System.out.println("Change another user ID.");
@@ -106,7 +105,7 @@ public class registerPanel extends JPanel implements ActionListener {
 //            newUser.setPassword("1234567");
             int userID = Integer.parseInt(userName);
             char[] input = pswField.getPassword();
-            userFacade = lookupuserEntityFacadeRemote();
+            playerFacade = lookupuserEntityFacadeRemote();
 //            userFacade.create(newUser);
 //            List users = userFacade.findAll();
 //            for (Iterator it = users.iterator(); it.hasNext();) {
@@ -115,7 +114,7 @@ public class registerPanel extends JPanel implements ActionListener {
 //                System.out.println(user.getPassword());
 //            }
             System.out.println(userID);
-            User = userFacade.find(userID);
+            User = playerFacade.find(userID);
             System.out.println("Get the user!");
             boolean isCorrect;
             String correctPassword = User.getPassword();
@@ -130,10 +129,10 @@ public class registerPanel extends JPanel implements ActionListener {
 
     }
 
-    private userEntityFacadeRemote lookupuserEntityFacadeRemote() {
+    private PlayerEntityFacadeRemote lookupuserEntityFacadeRemote() {
         try {
             Context c = new InitialContext();
-            return (userEntityFacadeRemote) c.lookup("java:comp/env/userEntityFacade");
+            return (PlayerEntityFacadeRemote) c.lookup("java:comp/env/userEntityFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

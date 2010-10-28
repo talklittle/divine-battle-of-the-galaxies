@@ -5,7 +5,7 @@
 
 package session;
 
-import entity.userEntity;
+import entity.PlayerEntity;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author Administrator
  */
 @Stateless
-public class userEntityFacade extends AbstractFacade<userEntity> implements userEntityFacadeRemote {
+public class PlayerEntityFacade extends AbstractFacade<PlayerEntity> implements PlayerEntityFacadeRemote {
     @PersistenceContext(unitName = "aseProject-ejbPU")
     private EntityManager em;
 
@@ -23,8 +23,8 @@ public class userEntityFacade extends AbstractFacade<userEntity> implements user
         return em;
     }
 
-    public userEntityFacade() {
-        super(userEntity.class);
+    public PlayerEntityFacade() {
+        super(PlayerEntity.class);
     }
 
 }
