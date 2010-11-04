@@ -122,7 +122,7 @@ public class registerPanel extends JPanel implements ActionListener {
             isCorrect = Arrays.equals(input, charPsw);
             if (isCorrect) {
                 nFlag_registered = true;
-                System.out.println("User authenticated with pwd: "+User.getPassword());
+                System.out.println("User authenticated with pwd: "+User.getPassword()+" var: "+nFlag_registered);
             } else {
                 JOptionPane.showMessageDialog(null, "Password Error");
             }
@@ -139,6 +139,5 @@ public class registerPanel extends JPanel implements ActionListener {
             throw new RuntimeException(ne);
         }
     }
-
 
 }
