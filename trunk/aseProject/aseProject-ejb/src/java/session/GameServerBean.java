@@ -38,7 +38,7 @@ import javax.naming.NamingException;
 @Stateful
 public class GameServerBean implements GameServerBeanRemote, TimedObject {
 
-    public static final long PUBLISH_INTERVAL_MILLIS = 10;
+    public static final long PUBLISH_INTERVAL_MILLIS = 50;
 
     private static PlayerEntityFacadeRemote playerFacade = lookupPlayerEntityFacadeRemote();
 
