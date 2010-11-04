@@ -89,11 +89,11 @@ public class registerPanel extends JPanel implements ActionListener {
                 user.setUsername(username);
                 user.setPassword(input);
                 playerFacade.create(user);
-                JOptionPane.showMessageDialog(null, "user ID:" + username + "  " + "Password" + input);
+                JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
                 nFlag_registered = true;
             } else {
-                System.out.println("Change another user ID.");
-                JOptionPane.showMessageDialog(null, "this ID already existed, Change another one.");
+                System.out.println("Try another user ID.");
+                JOptionPane.showMessageDialog(null, "this ID already exists, please try another one.");
             }
         }
 
@@ -103,7 +103,7 @@ public class registerPanel extends JPanel implements ActionListener {
 //            userEntity newUser = new userEntity();
 //            newUser.setId(12345);
 //            newUser.setPassword("1234567");
-            int userID = Integer.parseInt(userName);
+            String userID = userName;
             char[] input = pswField.getPassword();
             playerFacade = lookupPlayerEntityFacadeRemote();
 //            userFacade.create(newUser);
@@ -115,13 +115,14 @@ public class registerPanel extends JPanel implements ActionListener {
 //            }
             System.out.println(userID);
             User = playerFacade.find(userID);
-            System.out.println("Get the user!");
+            System.out.println("Got the user: "+User.getUsername());
             boolean isCorrect;
             String correctPassword = User.getPassword();
             char[] charPsw = correctPassword.toCharArray();
             isCorrect = Arrays.equals(input, charPsw);
             if (isCorrect) {
                 nFlag_registered = true;
+                System.out.println("User authenticated with pwd: "+User.getPassword());
             } else {
                 JOptionPane.showMessageDialog(null, "Password Error");
             }
