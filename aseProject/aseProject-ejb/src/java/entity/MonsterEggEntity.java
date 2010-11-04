@@ -24,7 +24,8 @@ public class MonsterEggEntity extends GameEntity implements Serializable {
     private int timeToHatch;
 
     public MonsterEggEntity(int x, int y, String type) {
-        
+        super(x, y);
+        this.type = type;
     }
 
     public Long getId() {

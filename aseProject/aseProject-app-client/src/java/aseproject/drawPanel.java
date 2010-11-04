@@ -5,18 +5,23 @@
 package aseproject;
 
 import entity.GameEntity;
+import entity.MonsterEggEntity;
+import entity.MonsterEntity;
+import entity.PlayerEntity;
+import entity.StarEntity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Properties;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
@@ -33,8 +38,8 @@ import javax.swing.*;
 public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     BufferedImage buffer;
-    GameEntity player;
-    GameEntity enemy;
+    ArrayList<GameEntity> gameEntityList = null;
+
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
 //    JLabel[] labels;
@@ -61,8 +66,6 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     public void Initialize() {
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
-        player = new GameEntity(100, 100);
-        enemy = new GameEntity(400, 400);
 
 //        initTopic("GameBoardTopic", username, password);
         try {
@@ -91,8 +94,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
         // Create two JMS session objects
         TopicSession subSession =
-        connection.createTopicSession(false,
-                                      Session.AUTO_ACKNOWLEDGE);
+            connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
 
         // Look up a JMS topic
         Topic gameTopic = (Topic)jndi.lookup(topicName);
@@ -106,16 +108,14 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
         // Start the JMS connection; allows messages to be delivered
         connection.start( );
-
     }
 
     @Override
     /* Receive message from topic subscriber */
     public void onMessage(Message message) {
         try {
-            TextMessage textMessage = (TextMessage) message;
-            String text = textMessage.getText( );
-            System.out.println(text);
+            ObjectMessage objectMessage = (ObjectMessage) message;
+            ArrayList<GameEntity> gameBoard = (ArrayList<GameEntity>) objectMessage.getObject();
         } catch (JMSException jmse){ jmse.printStackTrace( ); }
     }
 
@@ -141,6 +141,25 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
             b.drawLine(i*50, 0, i*50, 600);
         for(int i = 0; i<12;i++)
             b.drawLine(0, i*50, 800, i*50);
+
+        for (GameEntity entity : gameEntityList) {
+            if (entity instanceof PlayerEntity) {
+                PlayerEntity playerEntity = (PlayerEntity) entity;
+            }
+            else if (entity instanceof MonsterEntity) {
+
+            }
+            else if (entity instanceof MonsterEggEntity) {
+
+            }
+            else if (entity instanceof StarEntity) {
+
+            }
+        }
+
+
+        // TODO migrate collision detection to server!!!
+
         if (player.collision == false) {
             b.setColor(Color.red);
             b.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
@@ -187,6 +206,9 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
+
+        // TODO send a message to server (do client-side validation too)!!!
+
         if (key == KeyEvent.VK_LEFT && !player.isMoving) {
             player.left = true;
             player.isMoving = true;

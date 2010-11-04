@@ -13,12 +13,16 @@ import java.io.Serializable;
  * @author Andrew
  */
 
-public class StarEntity implements Serializable {
+public class StarEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
     private Point location;
+
+    public StarEntity(int x, int y) {
+        super(x, y);
+    }
 
     public Point getLocation() {
         return location;

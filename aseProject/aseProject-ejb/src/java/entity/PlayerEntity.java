@@ -15,7 +15,7 @@ import javax.persistence.Id;
  * @author Administrator
  */
 @Entity
-public class PlayerEntity implements Serializable {
+public class PlayerEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,6 +38,10 @@ public class PlayerEntity implements Serializable {
     private boolean frozen; // freezePlayer and freezeTimeout
 
     private Point location;
+
+    public PlayerEntity(int x, int y) {
+        super(x, y);
+    }
 
     public Point getLocation() {
         return location;

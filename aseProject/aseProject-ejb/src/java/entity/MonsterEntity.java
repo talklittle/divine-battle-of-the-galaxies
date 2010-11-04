@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  * @author Andrew
  */
-public class MonsterEntity implements Serializable {
+public class MonsterEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
 
@@ -26,6 +26,14 @@ public class MonsterEntity implements Serializable {
 //    private boolean mode; //collectMonster
 //    private int x; //generateItem and moveMonster
 //    private int y; //generateItem and moveMonster
+
+    public MonsterEntity(int x, int y, String type, int lifespan, String ownerId, String color) {
+        super(x, y);
+        this.type = type;
+        this.lifespan = lifespan;
+        this.ownerId = ownerId;
+        this.color = color;
+    }
 
     public Point getLocation() {
         return location;
