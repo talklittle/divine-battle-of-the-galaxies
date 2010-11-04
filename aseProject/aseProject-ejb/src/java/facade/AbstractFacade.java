@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package session;
+package facade;
 
 import java.util.List;
 import javax.persistence.EntityManager;

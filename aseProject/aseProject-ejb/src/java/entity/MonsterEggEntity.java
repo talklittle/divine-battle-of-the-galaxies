@@ -7,27 +7,25 @@ package entity;
 
 import java.awt.Point;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  *
  * @author Andrew
  */
-@Entity
-public class MonsterEggEntity implements Serializable {
+public class MonsterEggEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
 
-    private Point location;
+    private int x, y;
 
     private String type;
     private String ownerId;
     private int timeToHatch;
+
+    public MonsterEggEntity(int x, int y, String type) {
+        
+    }
 
     public Long getId() {
         return id;
@@ -35,14 +33,6 @@ public class MonsterEggEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
     }
 
     public String getOwnerId() {
