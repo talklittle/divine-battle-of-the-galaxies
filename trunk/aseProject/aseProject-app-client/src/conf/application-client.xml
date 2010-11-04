@@ -6,4 +6,9 @@
     <ejb-ref-type>Session</ejb-ref-type>
     <remote>session.userEntityFacadeRemote</remote>
   </ejb-ref>
+  <ejb-ref>
+    <ejb-ref-name>PlayerEntityFacade</ejb-ref-name>
+    <ejb-ref-type>Session</ejb-ref-type>
+    <remote>session.PlayerEntityFacadeRemote</remote>
+  </ejb-ref>
 </application-client>

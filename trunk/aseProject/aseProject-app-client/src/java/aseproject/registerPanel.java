@@ -54,7 +54,7 @@ public class registerPanel extends JPanel implements ActionListener {
         add(loginBtn);
         newAccountBtn.addActionListener(this);
         loginBtn.addActionListener(this);
-        playerFacade = lookupuserEntityFacadeRemote();
+        playerFacade = lookupPlayerEntityFacadeRemote();
     }
 
     public void rebuildPanel() {
@@ -105,7 +105,7 @@ public class registerPanel extends JPanel implements ActionListener {
 //            newUser.setPassword("1234567");
             int userID = Integer.parseInt(userName);
             char[] input = pswField.getPassword();
-            playerFacade = lookupuserEntityFacadeRemote();
+            playerFacade = lookupPlayerEntityFacadeRemote();
 //            userFacade.create(newUser);
 //            List users = userFacade.findAll();
 //            for (Iterator it = users.iterator(); it.hasNext();) {
@@ -129,13 +129,15 @@ public class registerPanel extends JPanel implements ActionListener {
 
     }
 
-    private PlayerEntityFacadeRemote lookupuserEntityFacadeRemote() {
+    private PlayerEntityFacadeRemote lookupPlayerEntityFacadeRemote() {
         try {
             Context c = new InitialContext();
-            return (PlayerEntityFacadeRemote) c.lookup("java:comp/env/userEntityFacade");
+            return (PlayerEntityFacadeRemote) c.lookup("java:comp/env/PlayerEntityFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
     }
+
+
 }
