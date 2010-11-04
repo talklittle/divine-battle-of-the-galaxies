@@ -115,16 +115,20 @@ public class registerPanel extends JPanel implements ActionListener {
 //            }
             System.out.println(userID);
             User = playerFacade.find(userID);
-            System.out.println("Got the user: "+User.getUsername());
-            boolean isCorrect;
-            String correctPassword = User.getPassword();
-            char[] charPsw = correctPassword.toCharArray();
-            isCorrect = Arrays.equals(input, charPsw);
-            if (isCorrect) {
-                nFlag_registered = true;
-                System.out.println("User authenticated with pwd: "+User.getPassword()+" var: "+nFlag_registered);
+            if (User == null) {
+                JOptionPane.showMessageDialog(null, "User does not exist");
             } else {
-                JOptionPane.showMessageDialog(null, "Password Error");
+                System.out.println("Got the user: "+User.getUsername());
+                boolean isCorrect;
+                String correctPassword = User.getPassword();
+                char[] charPsw = correctPassword.toCharArray();
+                isCorrect = Arrays.equals(input, charPsw);
+                if (isCorrect) {
+                    nFlag_registered = true;
+                    System.out.println("User authenticated with pwd: "+User.getPassword()+" var: "+nFlag_registered);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Password Error");
+                }
             }
         }
 
