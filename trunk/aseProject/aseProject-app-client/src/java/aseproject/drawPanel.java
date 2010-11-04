@@ -5,19 +5,30 @@
 package aseproject;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.Properties;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicSession;
+import javax.jms.TopicSubscriber;
+import javax.naming.InitialContext;
 import javax.swing.*;
 
 /**
  *
  * @author Administrator
  */
-public class drawPanel extends JPanel implements KeyListener {
+public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     BufferedImage buffer;
     entity player;
@@ -25,6 +36,10 @@ public class drawPanel extends JPanel implements KeyListener {
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
 //    JLabel[] labels;
+
+    private TopicSession subSession;
+    private TopicConnection connection;
+
 
     public drawPanel() {
         this.setIgnoreRepaint(true);
@@ -47,6 +62,53 @@ public class drawPanel extends JPanel implements KeyListener {
         player = new entity(100, 100);
         enemy = new entity(400, 400);
 
+        initTopic("GameBoardTopic", username, password);
+    }
+
+    private void initTopic(String topicName, String username, String password)
+            throws Exception {
+        // Obtain a JNDI connection
+        Properties env = new Properties( );
+        // ... specify the JNDI properties specific to the vendor
+
+        InitialContext jndi = new InitialContext(env);
+
+        // Look up a JMS connection factory
+        TopicConnectionFactory conFactory =
+        (TopicConnectionFactory)jndi.lookup("TopicConnectionFactory");
+
+        // Create a JMS connection
+        TopicConnection connection =
+        conFactory.createTopicConnection(username,password);
+
+        // Create two JMS session objects
+        TopicSession subSession =
+        connection.createTopicSession(false,
+                                      Session.AUTO_ACKNOWLEDGE);
+
+        // Look up a JMS topic
+        Topic gameTopic = (Topic)jndi.lookup(topicName);
+
+        // Create a JMS subscriber
+        TopicSubscriber subscriber =
+            subSession.createSubscriber(gameTopic);
+
+        // Set a JMS message listener
+        subscriber.setMessageListener(this);
+
+        // Start the JMS connection; allows messages to be delivered
+        connection.start( );
+
+    }
+
+    @Override
+    /* Receive message from topic subscriber */
+    public void onMessage(Message message) {
+        try {
+            TextMessage textMessage = (TextMessage) message;
+            String text = textMessage.getText( );
+            System.out.println(text);
+        } catch (JMSException jmse){ jmse.printStackTrace( ); }
     }
 
     public void update() {
