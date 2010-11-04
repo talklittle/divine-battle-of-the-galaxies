@@ -14,12 +14,13 @@ import java.awt.Rectangle;
 public class entity {
     int x, y , height, width, speed;
     boolean up, down, left, right,collision,stop;
+    boolean isMoving;
 
     public entity(int x, int y)
     {
         this.x=x;
         this.y=y;
-        speed =50;
+        speed =10;
         height=50;
         width=50;
         up=false;
@@ -77,14 +78,37 @@ public class entity {
 
     public void move()
     {
-        if (up&&y>0)
-            y-=speed;
-        if (down&&y<550)
-            y+=speed;
-        if (left&&x>0)
-            x-=speed;
-        if(right&&x<750)
-            x+=speed;
+        if (isMoving) {
+            if (up&&y>0) {
+                y-=speed;
+                if (y % 50 == 0) {
+                    isMoving = false;
+                    up = false;
+                }
+            }
+            if (down&&y<550) {
+                y+=speed;
+                if (y % 50 == 0) {
+                    isMoving = false;
+                    down = false;
+                }
+            }
+            if (left&&x>0) {
+                x-=speed;
+                if (x % 50 == 0) {
+                    isMoving = false;
+                    left = false;
+                }
+            }
+            if(right&&x<750) {
+                x+=speed;
+                if (x % 50 == 0) {
+                    isMoving = false;
+                    right = false;
+                }
+            }
+        }
+
     }
 
 }
