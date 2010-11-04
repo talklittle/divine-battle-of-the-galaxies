@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import session.PlayerEntityFacadeRemote;
+import facade.PlayerEntityFacadeRemote;
 import entity.PlayerEntity;
 import java.util.Arrays;
 import javax.swing.JOptionPane;

@@ -4,6 +4,7 @@
  */
 package aseproject;
 
+import entity.GameEntity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -31,8 +32,8 @@ import javax.swing.*;
 public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     BufferedImage buffer;
-    entity player;
-    entity enemy;
+    GameEntity player;
+    GameEntity enemy;
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
 //    JLabel[] labels;
@@ -59,8 +60,8 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     public void Initialize() {
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
-        player = new entity(100, 100);
-        enemy = new entity(400, 400);
+        player = new GameEntity(100, 100);
+        enemy = new GameEntity(400, 400);
 
         initTopic("GameBoardTopic", username, password);
     }
