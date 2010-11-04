@@ -117,17 +117,21 @@ public class drawPanel extends JPanel implements KeyListener {
 
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) {
+        if (key == KeyEvent.VK_LEFT && !player.isMoving) {
             player.left = true;
+            player.isMoving = true;
         }
-        if (key == KeyEvent.VK_RIGHT) {
+        if (key == KeyEvent.VK_RIGHT && !player.isMoving) {
             player.right = true;
+            player.isMoving = true;
         }
-        if (key == KeyEvent.VK_UP) {
+        if (key == KeyEvent.VK_UP && !player.isMoving) {
             player.up = true;
+            player.isMoving = true;
         }
-        if (key == KeyEvent.VK_DOWN) {
+        if (key == KeyEvent.VK_DOWN && !player.isMoving) {
             player.down = true;
+            player.isMoving = true;
         }
         if (key == KeyEvent.VK_F12)
             nFlag_gameOver=true;
@@ -135,19 +139,6 @@ public class drawPanel extends JPanel implements KeyListener {
     }
 
     public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) {
-            player.left = false;
-        }
-        if (key == KeyEvent.VK_RIGHT) {
-            player.right = false;
-        }
-        if (key == KeyEvent.VK_UP) {
-            player.up = false;
-        }
-        if (key == KeyEvent.VK_DOWN) {
-            player.down = false;
-        }
-
+        // not needed; see entity.move()
     }
 }
