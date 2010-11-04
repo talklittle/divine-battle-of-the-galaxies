@@ -21,28 +21,23 @@ public class Main implements ActionListener
 
     JFrame window;
     drawPanel gamePanel;
-    registerPanel registerPanel;
+    registerPanel regPanel;
 
     public Main() {
 
         window = new JFrame("This is just a test for collision.");
         gamePanel = new drawPanel();
-        registerPanel = new registerPanel();
+        regPanel = new registerPanel();
         window.setSize(900, 700);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
     }
 
     public void go() {
+        window.setContentPane(regPanel);
         while (true) {
-            if (registerPanel.nFlag_registered == false) {
-                //ask to registered.
-                window.setContentPane(registerPanel);
-                while (registerPanel.nFlag_registered == false) {
-                }
-            }
 
-            if (registerPanel.nFlag_registered == true && gamePanel.nFlag_gameOver == false) {
+            if (regPanel.nFlag_registered && gamePanel.nFlag_gameOver == false) {
 
                 window.setContentPane(gamePanel);
                 window.validate();
