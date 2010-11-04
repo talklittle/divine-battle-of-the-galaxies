@@ -23,6 +23,7 @@ import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.swing.*;
 
 /**
@@ -63,11 +64,16 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
         player = new GameEntity(100, 100);
         enemy = new GameEntity(400, 400);
 
-        initTopic("GameBoardTopic", username, password);
+//        initTopic("GameBoardTopic", username, password);
+        try {
+            initTopic("GameBoardTopic");
+        } catch (Exception e) {
+            System.err.println("shoot, there is Topic init exception " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    private void initTopic(String topicName, String username, String password)
-            throws Exception {
+    private void initTopic(String topicName) throws NamingException, JMSException {
         // Obtain a JNDI connection
         Properties env = new Properties( );
         // ... specify the JNDI properties specific to the vendor
@@ -80,7 +86,8 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
         // Create a JMS connection
         TopicConnection connection =
-        conFactory.createTopicConnection(username,password);
+//        conFactory.createTopicConnection(username,password);
+        conFactory.createTopicConnection();
 
         // Create two JMS session objects
         TopicSession subSession =
