@@ -163,13 +163,43 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 }
             }
             else if (entity instanceof MonsterEntity) {
+                MonsterEntity monsterEntity = (MonsterEntity) entity;
+                String type = monsterEntity.getType();
+                String color = monsterEntity.getColor();
+                BufferedImage img = null;
 
+                try {
+                    img = ImageIO.read(new File("assets/"+type+"-"+color+".jpg"));
+                    b.drawImage(img, monsterEntity.getX(), monsterEntity.getY(), null);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else if (entity instanceof MonsterEggEntity) {
+                MonsterEggEntity monsterEggEntity = (MonsterEggEntity) entity;
+                String type = monsterEggEntity.getType();
+                BufferedImage img = null;
 
+                try {
+                    img = ImageIO.read(new File("assets/"+type+"-item.jpg"));
+                    b.drawImage(img, monsterEggEntity.getX(), monsterEggEntity.getY(), null);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else if (entity instanceof StarEntity) {
+                StarEntity starEntity = (StarEntity) entity;
+                BufferedImage img = null;
 
+                try {
+                    img = ImageIO.read(new File("assets/star.jpg"));
+                    b.drawImage(img, starEntity.getX(), starEntity.getY(), null);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
