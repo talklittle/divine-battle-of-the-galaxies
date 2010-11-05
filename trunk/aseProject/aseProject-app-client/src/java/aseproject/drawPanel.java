@@ -155,7 +155,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 BufferedImage img = null;
                 
                 try {
-                    img = ImageIO.read(new File("assets/sprite-"+color+".jpg"));
+                    img = ImageIO.read(new File("assets/sprite-"+color+".png"));
                     b.drawImage(img, playerEntity.getX(), playerEntity.getY(), null);
                 }
                 catch (IOException e) {
@@ -169,7 +169,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 BufferedImage img = null;
 
                 try {
-                    img = ImageIO.read(new File("assets/"+type+"-"+color+".jpg"));
+                    img = ImageIO.read(new File("assets/"+type+"-"+color+".png"));
                     b.drawImage(img, monsterEntity.getX(), monsterEntity.getY(), null);
                 }
                 catch (IOException e) {
@@ -182,7 +182,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 BufferedImage img = null;
 
                 try {
-                    img = ImageIO.read(new File("assets/"+type+"-item.jpg"));
+                    img = ImageIO.read(new File("assets/"+type+"-item.png"));
                     b.drawImage(img, monsterEggEntity.getX(), monsterEggEntity.getY(), null);
                 }
                 catch (IOException e) {
@@ -194,7 +194,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 BufferedImage img = null;
 
                 try {
-                    img = ImageIO.read(new File("assets/star.jpg"));
+                    img = ImageIO.read(new File("assets/star.png"));
                     b.drawImage(img, starEntity.getX(), starEntity.getY(), null);
                 }
                 catch (IOException e) {
