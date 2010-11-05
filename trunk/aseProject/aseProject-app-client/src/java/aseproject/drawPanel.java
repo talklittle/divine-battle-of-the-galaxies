@@ -17,7 +17,9 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.jms.JMSException;
@@ -45,7 +47,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
     public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
 
     BufferedImage buffer;
-    ArrayList<GameEntity> gameBoard = null;
+    HashMap<String,GameEntity> gameBoard = null;
 
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
@@ -132,7 +134,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
     public void onMessage(Message message) {
         try {
             ObjectMessage objectMessage = (ObjectMessage) message;
-            ArrayList<GameEntity> gameBoard = (ArrayList<GameEntity>) objectMessage.getObject();
+            gameBoard = (HashMap<String,GameEntity>) objectMessage.getObject();
         } catch (JMSException jmse){ jmse.printStackTrace( ); }
     }
 
@@ -148,7 +150,10 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
             b.drawLine(0, i*50, 800, i*50);
 
         // TODO draw entities on buffer b
-        for (GameEntity entity : gameBoard) {
+        Set keys = gameBoard.keySet();
+        Iterator iter = keys.iterator();
+        while (iter.hasNext()) {
+            GameEntity entity = gameBoard.get((String)iter.next());
             if (entity instanceof PlayerEntity) {
                 PlayerEntity playerEntity = (PlayerEntity) entity;
                 String color = playerEntity.getColor();
@@ -248,8 +253,6 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
         }
         if (key == KeyEvent.VK_F12)
             nFlag_gameOver=true;
-
-
     }
 
     public void keyPressed(KeyEvent e) {
