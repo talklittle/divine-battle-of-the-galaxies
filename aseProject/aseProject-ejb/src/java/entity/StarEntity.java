@@ -5,7 +5,6 @@
 
 package entity;
 
-import java.awt.Point;
 import java.io.Serializable;
 
 /**
@@ -18,18 +17,10 @@ public class StarEntity extends GameEntity implements Serializable {
 
     private Long id;
 
-    private Point location;
+    private int x, y;
 
     public StarEntity(int x, int y) {
-        super(x, y);
-    }
-
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
+        super(x,y);
     }
 
     public Long getId() {

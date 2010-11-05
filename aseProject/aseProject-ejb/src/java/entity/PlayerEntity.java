@@ -5,7 +5,6 @@
 
 package entity;
 
-import java.awt.Point;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,32 +25,28 @@ public class PlayerEntity extends GameEntity implements Serializable {
 //    private long gamewin; //updateHistory and showStatistics
 //    private long starstotal; //updateHistory and showStatistics
     //long is not suitable for duration
-    private long duration; //updateHistory and showStatistics
+    private int duration; //updateHistory and showStatistics
     //variables for the current game
     private String mode; //gameover
     private int stars; //collectStars and killPlayer and collectStat and gamescoreboard
-//    private long lifespan; //collectStat
     private String color; //gameStart
-//    private int x; //Start and character moveControl and regenerate
-//    private int y; //Start and character moveControl and regenerate
+    private int x; //Start and character moveControl and regenerate
+    private int y; //Start and character moveControl and regenerate
 //    private Vector Mon;  //collectMonster monsterTimeout
     private boolean frozen; // freezePlayer and freezeTimeout
 
-    private Point location;
-
-    public PlayerEntity(int x, int y) {
-        super(x, y);
+    public PlayerEntity() {
+        
     }
 
-    public Point getLocation() {
-        return location;
+    public PlayerEntity(int x, int y, String mode) {
+        super(x,y);
+        this.mode = mode;
+        this.frozen = false;
+        this.duration = 0;
+        this.stars = 0;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-
-    
     /**
      * Get the value of password
      *
@@ -78,11 +73,11 @@ public class PlayerEntity extends GameEntity implements Serializable {
         this.color = color;
     }
 
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 

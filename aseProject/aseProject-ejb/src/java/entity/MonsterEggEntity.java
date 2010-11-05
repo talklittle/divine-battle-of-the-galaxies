@@ -5,7 +5,6 @@
 
 package entity;
 
-import java.awt.Point;
 import java.io.Serializable;
 
 /**
@@ -21,11 +20,13 @@ public class MonsterEggEntity extends GameEntity implements Serializable {
 
     private String type;
     private String ownerId;
-    private int timeToHatch;
+    private int timeToHatch;    //ms
 
-    public MonsterEggEntity(int x, int y, String type) {
-        super(x, y);
+    public MonsterEggEntity(int x, int y, String type, String ownerId) {
+        super(x,y);
         this.type = type;
+        this.ownerId = ownerId;
+        this.timeToHatch = 10000;
     }
 
     public Long getId() {

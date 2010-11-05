@@ -5,7 +5,6 @@
 
 package entity;
 
-import java.awt.Point;
 import java.io.Serializable;
 
 /**
@@ -16,10 +15,10 @@ public class MonsterEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
 
-    private Point location;
+    private int x, y;
 
     private String type; //generateItem
-    private int lifespan; //generateItem
+    private int lifespan; //ms
     private String ownerId; //collectMonster
     private String color; //collectMonster
     //whether picked up by a player
@@ -27,20 +26,12 @@ public class MonsterEntity extends GameEntity implements Serializable {
 //    private int x; //generateItem and moveMonster
 //    private int y; //generateItem and moveMonster
 
-    public MonsterEntity(int x, int y, String type, int lifespan, String ownerId, String color) {
-        super(x, y);
+    public MonsterEntity(int x, int y, String type, String ownerId, String color) {
+        super(x,y);
         this.type = type;
-        this.lifespan = lifespan;
         this.ownerId = ownerId;
         this.color = color;
-    }
-
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
+        this.lifespan = 20000;
     }
 
     public String getColor() {
