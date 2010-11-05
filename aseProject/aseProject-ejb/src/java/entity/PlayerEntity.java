@@ -7,7 +7,6 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 /**
  *
@@ -16,9 +15,9 @@ import javax.persistence.Id;
 @Entity
 public class PlayerEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
 //    private int id;
+//    @Id
     private String username; // administrator collectAll and logIn and createAccount and changePassword and gamescoreboard
     private String password; //logIn and createAccount and changePassword
 //    private long gametotal; //updateHistory and showStatistics
@@ -35,17 +34,17 @@ public class PlayerEntity extends GameEntity implements Serializable {
 //    private Vector Mon;  //collectMonster monsterTimeout
     private boolean frozen; // freezePlayer and freezeTimeout
 
-    public PlayerEntity() {
-        
-    }
+//    public PlayerEntity() {
+//
+//    }
 
-    public PlayerEntity(int x, int y, String mode) {
-        super(x,y);
-        this.mode = mode;
-        this.frozen = false;
-        this.duration = 0;
-        this.stars = 0;
-    }
+//    public PlayerEntity(int x, int y, String mode) {
+//        super(x,y);
+//        this.mode = mode;
+//        this.frozen = false;
+//        this.duration = 0;
+//        this.stars = 0;
+//    }
 
     /**
      * Get the value of password

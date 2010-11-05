@@ -6,15 +6,29 @@
 package entity;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author Administrator
  */
-public class GameEntity {
-    int x, y , height, width, speed;
-    public boolean up, down, left, right, collision, stop;
-    public boolean isMoving;
+@Entity
+public class GameEntity implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private int x, y , height, width, speed;
+    private boolean isUp;
+    private boolean isDown;
+    private boolean isLeft;
+    private boolean isRight;
+    private boolean collision;
+    private boolean stop;
+    private boolean isMoving;
 
     public GameEntity() {
     }
@@ -26,15 +40,15 @@ public class GameEntity {
         speed =10;
         height=50;
         width=50;
-        up=false;
-        down=false;
-        left=false;
-        right=false;
+        isUp=false;
+        isDown=false;
+        isLeft=false;
+        isRight=false;
         collision = false;
     }
 
     public boolean isDown() {
-        return down;
+        return isDown;
     }
 
     public int getHeight() {
@@ -42,11 +56,11 @@ public class GameEntity {
     }
 
     public boolean isLeft() {
-        return left;
+        return isLeft;
     }
 
     public boolean isRight() {
-        return right;
+        return isRight;
     }
 
     public int getSpeed() {
@@ -58,7 +72,7 @@ public class GameEntity {
     }
 
     public boolean isUp() {
-        return up;
+        return isUp;
     }
 
     public int getWidth() {
@@ -82,32 +96,32 @@ public class GameEntity {
     public void move()
     {
         if (isMoving) {
-            if (up&&y>0) {
+            if (isUp&&y>0) {
                 y-=speed;
                 if (y % 50 == 0) {
                     isMoving = false;
-                    up = false;
+                    isUp = false;
                 }
             }
-            if (down&&y<550) {
+            if (isDown&&y<550) {
                 y+=speed;
                 if (y % 50 == 0) {
                     isMoving = false;
-                    down = false;
+                    isDown = false;
                 }
             }
-            if (left&&x>0) {
+            if (isLeft&&x>0) {
                 x-=speed;
                 if (x % 50 == 0) {
                     isMoving = false;
-                    left = false;
+                    isLeft = false;
                 }
             }
-            if(right&&x<750) {
+            if(isRight&&x<750) {
                 x+=speed;
                 if (x % 50 == 0) {
                     isMoving = false;
-                    right = false;
+                    isRight = false;
                 }
             }
         }
