@@ -15,8 +15,11 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+import javax.imageio.ImageIO;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -148,6 +151,16 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
         for (GameEntity entity : gameBoard) {
             if (entity instanceof PlayerEntity) {
                 PlayerEntity playerEntity = (PlayerEntity) entity;
+                String color = playerEntity.getColor();
+                BufferedImage img = null;
+                
+                try {
+                    img = ImageIO.read(new File("assets/sprite-"+color+".jpg"));
+                    b.drawImage(img, playerEntity.getX(), playerEntity.getY(), null);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else if (entity instanceof MonsterEntity) {
 
