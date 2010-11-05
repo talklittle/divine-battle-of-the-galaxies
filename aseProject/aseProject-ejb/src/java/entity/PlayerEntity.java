@@ -15,10 +15,6 @@ import javax.persistence.Entity;
 @Entity
 public class PlayerEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private int id;
-//    @Id
-    private String username; // administrator collectAll and logIn and createAccount and changePassword and gamescoreboard
     private String password; //logIn and createAccount and changePassword
 //    private long gametotal; //updateHistory and showStatistics
 //    private long gamewin; //updateHistory and showStatistics
@@ -104,13 +100,6 @@ public class PlayerEntity extends GameEntity implements Serializable {
         this.stars = stars;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
 //    @Override
 //    public int hashCode() {
@@ -132,9 +121,5 @@ public class PlayerEntity extends GameEntity implements Serializable {
 //        return true;
 //    }
 
-    @Override
-    public String toString() {
-        return "entity.userEntity[username=" + username + "]";
-    }
 
 }
