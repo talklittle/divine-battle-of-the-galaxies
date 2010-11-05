@@ -19,8 +19,8 @@ import javax.persistence.Id;
 @Entity
 public class GameEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String id;
+
     private int x, y , height, width, speed;
     private boolean isUp;
     private boolean isDown;
@@ -45,6 +45,14 @@ public class GameEntity implements Serializable {
         isLeft=false;
         isRight=false;
         collision = false;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public boolean isDown() {

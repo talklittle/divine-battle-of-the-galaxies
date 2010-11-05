@@ -88,7 +88,7 @@ public class registerPanel extends JPanel implements ActionListener {
             if (user == null) {
                 String input = newAccountPsw.getText();
                 user = new PlayerEntity();
-                user.setUsername(username);
+                user.setId(username);
                 user.setPassword(input);
                 playerFacade.create(user);
                 JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
@@ -120,7 +120,7 @@ public class registerPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(null, "User does not exist");
                 username = null;
             } else {
-                System.out.println("Got the user: "+User.getUsername());
+                System.out.println("Got the user: "+User.getId());
                 boolean isCorrect;
                 String correctPassword = User.getPassword();
                 char[] charPsw = correctPassword.toCharArray();
