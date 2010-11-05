@@ -101,6 +101,9 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
             Logger.getLogger(GameServerBean.class.getName()).log(Level.SEVERE, "exception caught", ex);
             throw new RuntimeException(ex);
         }
+
+        initGameBoard();
+        System.out.println("!!!!!!!!Gameboard initialized: "+gameBoard.size());
     }
 
     public void initGameBoard() {
@@ -116,8 +119,10 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
             star = new StarEntity(x,y);
             star.setId("star-"+numStars);
             numStars+=1;
-            if(!gameBoardOcc[x/50][y/50])
+            if(!gameBoardOcc[x/50][y/50]) {
                 gameBoard.put(star.getId(), star);
+                gameBoardOcc[x/50][y/50] = true;
+            }
             else i-=1;
         }
         // initialize MonsterEggs
@@ -128,8 +133,10 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
             egg = new MonsterEggEntity(x,y,"kill");
             egg.setId("egg-"+numEggs);
             numEggs+=1;
-            if(!gameBoardOcc[x/50][y/50])
+            if(!gameBoardOcc[x/50][y/50]) {
                 gameBoard.put("egg-"+egg.getId(), egg);
+                gameBoardOcc[x/50][y/50] = true;
+            }
             else i-=1;
         }
         for(int i=0; i<INIT_EGGS_FREEZE; i++) {
@@ -138,8 +145,10 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
             egg = new MonsterEggEntity(x,y,"freeze");
             egg.setId("egg-"+numEggs);
             numEggs+=1;
-            if(!gameBoardOcc[x/50][y/50])
+            if(!gameBoardOcc[x/50][y/50]) {
                 gameBoard.put("egg-"+egg.getId(), egg);
+                gameBoardOcc[x/50][y/50] = true;
+            }
             else i-=1;
         }
     }
@@ -234,6 +243,7 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
     public void ejbTimeout(Timer timer) {
         // publish the current map to clients
         try {
+            System.out.println("timer tick!!");
             publisher.publish(session.createObjectMessage(gameBoard));
         } catch (JMSException ex) {
             ex.printStackTrace();
