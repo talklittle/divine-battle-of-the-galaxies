@@ -6,10 +6,15 @@
 package session;
 
 import entity.GameEntity;
+import entity.MonsterEggEntity;
 import entity.MonsterEntity;
 import entity.PlayerEntity;
+import entity.StarEntity;
 import facade.PlayerEntityFacadeRemote;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -40,6 +45,13 @@ import javax.naming.NamingException;
 public class GameServerBean implements GameServerBeanRemote, TimedObject {
 
     public static final long PUBLISH_INTERVAL_MILLIS = 50;
+    public static final int INIT_STARS = 5;
+    public static final int INIT_EGGS_KILL = 5;
+    public static final int INIT_EGGS_FREEZE = 5;
+
+    private int numStars = 0;
+    private int numEggs = 0;
+    private int numMonsters = 0;
 
     private static PlayerEntityFacadeRemote playerFacade = lookupPlayerEntityFacadeRemote();
 
@@ -49,7 +61,8 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
     private SessionContext sessionContext;
     private TimerHandle timerHandle = null;
 
-    private ArrayList<GameEntity> gameBoard = new ArrayList<GameEntity>();
+    private HashMap<String,GameEntity> gameBoard = new HashMap<String,GameEntity>();
+    private boolean[][] gameBoardOcc = new boolean[16][12];
     
     public GameServerBean() {
         try {
@@ -90,6 +103,47 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
         }
     }
 
+    public void initGameBoard() {
+        // TODO initialize the Game Board
+        // initialize Stars
+        Random widthRand = new Random( 19580427 );
+        Random heightRand = new Random( 19580427 );
+        int x,y;
+        StarEntity star;
+        for(int i=0; i<INIT_STARS; i++) {
+            x = widthRand.nextInt(15) * 50;
+            y = heightRand.nextInt(11) * 50;
+            star = new StarEntity(x,y);
+            star.setId("star-"+numStars);
+            numStars+=1;
+            if(!gameBoardOcc[x/50][y/50])
+                gameBoard.put(star.getId(), star);
+            else i-=1;
+        }
+        // initialize MonsterEggs
+        MonsterEggEntity egg;
+        for(int i=0; i<INIT_EGGS_KILL; i++) {
+            x = widthRand.nextInt(15) * 50;
+            y = heightRand.nextInt(11) * 50;
+            egg = new MonsterEggEntity(x,y,"kill");
+            egg.setId("egg-"+numEggs);
+            numEggs+=1;
+            if(!gameBoardOcc[x/50][y/50])
+                gameBoard.put("egg-"+egg.getId(), egg);
+            else i-=1;
+        }
+        for(int i=0; i<INIT_EGGS_FREEZE; i++) {
+            x = widthRand.nextInt(15) * 50;
+            y = heightRand.nextInt(11) * 50;
+            egg = new MonsterEggEntity(x,y,"freeze");
+            egg.setId("egg-"+numEggs);
+            numEggs+=1;
+            if(!gameBoardOcc[x/50][y/50])
+                gameBoard.put("egg-"+egg.getId(), egg);
+            else i-=1;
+        }
+    }
+
     public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
         return fromX % 50 == 0 && fromY % 50 == 0
             && toX >= 0 && toY >= 0
@@ -108,8 +162,6 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
 
         if (!isValidMove(playerX, playerY, toX, toY))
             return false;
-
-
 
         // TODO update the Game Board
 
@@ -194,7 +246,10 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
     }
 
     public void update() {
-        for (GameEntity entity : gameBoard) {
+        Set keys = gameBoard.keySet();
+        Iterator iter = keys.iterator();
+        while (iter.hasNext()) {
+            GameEntity entity = gameBoard.get((String)iter.next());
             if (entity instanceof PlayerEntity) {
                 PlayerEntity playerEntity = (PlayerEntity) entity;
                 playerEntity.move();
@@ -202,7 +257,6 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
                 MonsterEntity monsterEntity = (MonsterEntity) entity;
                 monsterEntity.move();
             }
-
         }
     }
 
