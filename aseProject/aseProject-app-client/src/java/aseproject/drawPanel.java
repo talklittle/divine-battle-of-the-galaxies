@@ -30,6 +30,7 @@ import javax.jms.TopicSubscriber;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.*;
+import session.GameServerBeanRemote;
 
 /**
  *
@@ -37,15 +38,23 @@ import javax.swing.*;
  */
 public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
+
+    public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
+
     BufferedImage buffer;
-    ArrayList<GameEntity> gameEntityList = null;
+    ArrayList<GameEntity> gameBoard = null;
 
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
 //    JLabel[] labels;
 
+    private long lastSuccessfulMoveTime = 0;
+
     private TopicSession subSession;
     private TopicConnection connection;
+
+    private GameServerBeanRemote gameServer;
+    private String username;
 
 
     public drawPanel() {
@@ -64,12 +73,17 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     }
 
-    public void Initialize() {
+    public void Initialize(String username) {
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
 
 //        initTopic("GameBoardTopic", username, password);
         try {
             initTopic("GameBoardTopic");
+
+            // Lookup the GameServerBeanRemote
+            InitialContext context = new InitialContext();
+            gameServer = (GameServerBeanRemote)
+                    context.lookup("java:comp/env/GameServerBeanRemote");
         } catch (Exception e) {
             System.err.println("shoot, there is Topic init exception " + e.getMessage());
             e.printStackTrace();
@@ -85,7 +99,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
         // Look up a JMS connection factory
         TopicConnectionFactory conFactory =
-        (TopicConnectionFactory)jndi.lookup("TopicConnectionFactory");
+            (TopicConnectionFactory)jndi.lookup("TopicConnectionFactory");
 
         // Create a JMS connection
         TopicConnection connection =
@@ -119,18 +133,6 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
         } catch (JMSException jmse){ jmse.printStackTrace( ); }
     }
 
-    public void update() {
-        player.move();
-    }
-
-    public void checkCollision() {
-        if (player.getBounds().intersects(enemy.getBounds())) {
-            player.collision = true;
-        } else {
-            player.collision = false;
-        }
-    }
-
     public void drawBuffer() {
         Graphics2D b = buffer.createGraphics();
         b.setColor(Color.black);
@@ -142,7 +144,8 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
         for(int i = 0; i<12;i++)
             b.drawLine(0, i*50, 800, i*50);
 
-        for (GameEntity entity : gameEntityList) {
+        // TODO draw entities on buffer b
+        for (GameEntity entity : gameBoard) {
             if (entity instanceof PlayerEntity) {
                 PlayerEntity playerEntity = (PlayerEntity) entity;
             }
@@ -157,21 +160,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
             }
         }
 
-
-        // TODO migrate collision detection to server!!!
-
-        if (player.collision == false) {
-            b.setColor(Color.red);
-            b.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
-            b.setColor(Color.CYAN);
-            b.fillRect(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
-        } else {
-            b.setColor(Color.white);
-            b.drawString("C O L L I S I O N", 350, 300);
-            player.collision = false;
-        }
         b.dispose();
-
     }
 
     public void drawScreen() {
@@ -182,12 +171,10 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     }
 
-    public void startGame() {
-        Initialize();
+    public void startGame(String username) {
+        Initialize(username);
         while (true) {
             try {
-                update();
-                checkCollision();
                 drawBuffer();
                 drawScreen();
                 Thread.sleep(15);
@@ -201,36 +188,32 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
     }
 
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        // TODO send a message to server (do client-side validation too)!!!
-
-        if (key == KeyEvent.VK_LEFT && !player.isMoving) {
-            player.left = true;
-            player.isMoving = true;
+        // send a message to server (do client-side validation too)!!!
+        if (key == KeyEvent.VK_LEFT) {
+            gameServer.moveLeft(username);
         }
-        if (key == KeyEvent.VK_RIGHT && !player.isMoving) {
-            player.right = true;
-            player.isMoving = true;
+        if (key == KeyEvent.VK_RIGHT) {
+            gameServer.moveRight(username);
         }
-        if (key == KeyEvent.VK_UP && !player.isMoving) {
-            player.up = true;
-            player.isMoving = true;
+        if (key == KeyEvent.VK_UP) {
+            gameServer.moveUp(username);
         }
-        if (key == KeyEvent.VK_DOWN && !player.isMoving) {
-            player.down = true;
-            player.isMoving = true;
+        if (key == KeyEvent.VK_DOWN) {
+            gameServer.moveDown(username);
         }
         if (key == KeyEvent.VK_F12)
             nFlag_gameOver=true;
 
+
+    }
+
+    public void keyPressed(KeyEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void keyReleased(KeyEvent e) {
-        // not needed; see entity.move()
+        // nothing
     }
 }

@@ -14,6 +14,10 @@ import javax.ejb.Remote;
 @Remote
 public interface GameServerBeanRemote {
 
-    boolean moveAction(String username, int fromX, int fromY, int toX, int toY);
+    boolean moveUp(String username);
+    boolean moveLeft(String username);
+    boolean moveDown(String username);
+    boolean moveRight(String username);
+
     
 }

@@ -6,6 +6,7 @@
 package session;
 
 import entity.GameEntity;
+import entity.MonsterEntity;
 import entity.PlayerEntity;
 import facade.PlayerEntityFacadeRemote;
 import java.util.ArrayList;
@@ -89,35 +90,92 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
         }
     }
 
-    /**
-     * Send movement actions
-     * @return whether movement is valid and accepted (board updated)
-     */
-    public boolean moveAction(String username, int fromX, int fromY, int toX, int toY) {
-        if (!isValidMove(username, fromX, fromY, toX, toY))
-            return false;
-
-        //
-        // TODO update the GameBoard
-        //
-
-        return true;
-    }
-
-    /**
-     *
-     * @return
-     */
-    private boolean isValidMove(String username, int fromX, int fromY, int toX, int toY) {
-        PlayerEntity player = playerFacade.find(username);
-        double playerX = player.getLocation().getX();
-        double playerY = player.getLocation().getY();
-        return playerX % 50 == 0 && playerY % 50 == 0
-            && playerX == fromX && playerY == fromY
+    public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
+        return fromX % 50 == 0 && fromY % 50 == 0
             && toX >= 0 && toY >= 0
             && toX <= 750 && toY <= 550
             && (toX - fromX == 50 || toX - fromX == -50)
             && (toY - fromY == 50 || toY - fromY == -50);
+    }
+
+    public boolean moveUp(String username) {
+        PlayerEntity player = playerFacade.find(username);
+        int playerX = player.getX();
+        int playerY = player.getY();
+
+        int toX = playerX;
+        int toY = playerY - 50;
+
+        if (!isValidMove(playerX, playerY, toX, toY))
+            return false;
+
+
+
+        // TODO update the Game Board
+
+
+
+        return true;
+    }
+
+    public boolean moveLeft(String username) {
+        PlayerEntity player = playerFacade.find(username);
+        int playerX = player.getX();
+        int playerY = player.getY();
+
+        int toX = playerX - 50;
+        int toY = playerY;
+
+        if (!isValidMove(playerX, playerY, toX, toY))
+            return false;
+
+
+
+        // TODO update the Game Board
+
+
+
+        return true;
+    }
+
+    public boolean moveDown(String username) {
+        PlayerEntity player = playerFacade.find(username);
+        int playerX = player.getX();
+        int playerY = player.getY();
+
+        int toX = playerX;
+        int toY = playerY + 50;
+
+        if (!isValidMove(playerX, playerY, toX, toY))
+            return false;
+
+
+
+        // TODO update the Game Board
+
+
+
+        return true;
+    }
+
+    public boolean moveRight(String username) {
+        PlayerEntity player = playerFacade.find(username);
+        int playerX = player.getX();
+        int playerY = player.getY();
+
+        int toX = playerX + 50;
+        int toY = playerY;
+
+        if (!isValidMove(playerX, playerY, toX, toY))
+            return false;
+
+
+
+        // TODO update the Game Board
+
+
+
+        return true;
     }
 
     @Override
@@ -135,6 +193,18 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
         sessionContext = ctx;
     }
 
+    public void update() {
+        for (GameEntity entity : gameBoard) {
+            if (entity instanceof PlayerEntity) {
+                PlayerEntity playerEntity = (PlayerEntity) entity;
+                playerEntity.move();
+            } else if (entity instanceof MonsterEntity) {
+                MonsterEntity monsterEntity = (MonsterEntity) entity;
+                monsterEntity.move();
+            }
+
+        }
+    }
 
 
     private static PlayerEntityFacadeRemote lookupPlayerEntityFacadeRemote() {
