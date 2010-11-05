@@ -47,7 +47,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
     public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
 
     BufferedImage buffer;
-    HashMap<String,GameEntity> gameBoard = null;
+    HashMap<String,GameEntity> gameBoard = new HashMap<String,GameEntity>();
 
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
@@ -80,6 +80,8 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
     public void Initialize(String username) {
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
+        //StarEntity star = new StarEntity(0,0);
+        //gameBoard.put("star-0", star);
 
 //        initTopic("GameBoardTopic", username, password);
         try {
@@ -88,7 +90,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
             // Lookup the GameServerBeanRemote
             InitialContext context = new InitialContext();
             gameServer = (GameServerBeanRemote)
-                    context.lookup("java:comp/env/GameServerBeanRemote");
+                    context.lookup("java:global/aseProject/aseProject-ejb/GameServerBean");
         } catch (Exception e) {
             System.err.println("shoot, there is Topic init exception " + e.getMessage());
             e.printStackTrace();
@@ -104,7 +106,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
         // Look up a JMS connection factory
         TopicConnectionFactory conFactory =
-            (TopicConnectionFactory)jndi.lookup("TopicConnectionFactory");
+            (TopicConnectionFactory)jndi.lookup("GameBoardTopicFactory");
 
         // Create a JMS connection
         TopicConnection connection =
