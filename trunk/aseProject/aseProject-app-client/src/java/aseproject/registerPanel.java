@@ -38,6 +38,8 @@ public class registerPanel extends JPanel implements ActionListener {
     PlayerEntityFacadeRemote playerFacade;
     PlayerEntity User;
 
+    String username;
+
     public registerPanel() {
         newAccountBtn = new JButton("Create New Account");
         loginBtn = new JButton("Log in with Existed Account");
@@ -81,7 +83,7 @@ public class registerPanel extends JPanel implements ActionListener {
             revalidate();
         }
         if (src == newAccountOK) {
-            String username = newAccountUser.getText();
+            username = newAccountUser.getText();
             PlayerEntity user = playerFacade.find(username);
             if (user == null) {
                 String input = newAccountPsw.getText();
@@ -94,16 +96,16 @@ public class registerPanel extends JPanel implements ActionListener {
             } else {
                 System.out.println("Try another user ID.");
                 JOptionPane.showMessageDialog(null, "this ID already exists, please try another one.");
+                username = null;
             }
         }
 
         if (src == loginOKBtn) {
-            String userName = loginUserName.getText();
-            System.out.println(userName);
+            username = loginUserName.getText();
+            System.out.println(username);
 //            userEntity newUser = new userEntity();
 //            newUser.setId(12345);
 //            newUser.setPassword("1234567");
-            String userID = userName;
             char[] input = pswField.getPassword();
             playerFacade = lookupPlayerEntityFacadeRemote();
 //            userFacade.create(newUser);
@@ -113,10 +115,10 @@ public class registerPanel extends JPanel implements ActionListener {
 //                System.out.println(user.getId());
 //                System.out.println(user.getPassword());
 //            }
-            System.out.println(userID);
-            User = playerFacade.find(userID);
+            User = playerFacade.find(username);
             if (User == null) {
                 JOptionPane.showMessageDialog(null, "User does not exist");
+                username = null;
             } else {
                 System.out.println("Got the user: "+User.getUsername());
                 boolean isCorrect;

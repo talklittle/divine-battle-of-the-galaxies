@@ -22,6 +22,7 @@ public class Main implements ActionListener
     JFrame window;
     drawPanel gamePanel;
     registerPanel regPanel;
+    String username;
 
     public Main() {
 
@@ -43,7 +44,7 @@ public class Main implements ActionListener
                 window.validate();
                 window.repaint();
                 gamePanel.requestFocusInWindow();
-                gamePanel.startGame();
+                gamePanel.startGame(regPanel.username);
             }
 
             if (gamePanel.nFlag_gameOver == true) {
