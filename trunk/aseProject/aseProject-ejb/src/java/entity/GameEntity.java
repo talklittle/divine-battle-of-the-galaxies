@@ -16,6 +16,9 @@ public class GameEntity {
     public boolean up, down, left, right, collision, stop;
     public boolean isMoving;
 
+    public GameEntity() {
+    }
+
     public GameEntity(int x, int y)
     {
         this.x=x;
