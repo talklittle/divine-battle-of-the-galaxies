@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.ejb.SessionContext;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.ejb.TimedObject;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
@@ -36,7 +36,7 @@ import javax.naming.NamingException;
  *
  * @author Janessa
  */
-@Stateful
+@Stateless
 public class GameServerBean implements GameServerBeanRemote, TimedObject {
 
     public static final long PUBLISH_INTERVAL_MILLIS = 50;
@@ -62,15 +62,15 @@ public class GameServerBean implements GameServerBeanRemote, TimedObject {
             session = connect.createTopicSession(false,Session.AUTO_ACKNOWLEDGE);
             publisher = session.createPublisher(topic);
 
-            // Set up the EJB Timer
-            if (timerHandle == null) {
-//                SessionContext sc = (SessionContext)
-//                        context.lookup("java:comp/EJBContext");
-                TimerService ts = sessionContext.getTimerService();
-                TimerConfig tc = new TimerConfig();
-                Timer timer = ts.createIntervalTimer(5000, PUBLISH_INTERVAL_MILLIS, null);
-                timerHandle = timer.getHandle();
-            }
+//            // Set up the EJB Timer
+//            if (timerHandle == null) {
+////                SessionContext sc = (SessionContext)
+////                        context.lookup("java:comp/EJBContext");
+//                TimerService ts = sessionContext.getTimerService();
+//                TimerConfig tc = new TimerConfig();
+//                Timer timer = ts.createIntervalTimer(5000, PUBLISH_INTERVAL_MILLIS, null);
+//                timerHandle = timer.getHandle();
+//            }
 
         } catch (NamingException ex) {
             Logger.getLogger(GameServerBean.class.getName()).log(Level.SEVERE, "exception caught", ex);
