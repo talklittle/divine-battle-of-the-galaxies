@@ -18,6 +18,7 @@ public interface GameServerBeanRemote {
     boolean moveLeft(String username);
     boolean moveDown(String username);
     boolean moveRight(String username);
+    void initGameBoard();
 
     
 }
