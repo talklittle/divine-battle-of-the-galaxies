@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -91,5 +92,81 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             }
             em.persist(egg);
         }
+    }
+
+    public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
+        return fromX % 50 == 0 && fromY % 50 == 0
+                && toX >= 0 && toY >= 0
+                && toX <= 750 && toY <= 550
+                && (toX - fromX == 50 || toX - fromX == -50)
+                && (toY - fromY == 50 || toY - fromY == -50);
+    }
+
+    public boolean moveUp(String username) {
+        GameEntity player = em.find(GameEntity.class, username);
+        int playerX = player.getX();
+        int playerY = player.getY();
+
+        int toX = playerX;
+        int toY = playerY - 50;
+//        if (!isValidMove(playerX, playerY, toX, toY)) {
+//            return false;
+//        }
+        player.setX(toX);
+        player.setY(toY);
+        edit(player);
+        return true;
+    }
+
+    public boolean moveLeft(String username) {
+        GameEntity player = em.find(GameEntity.class, username);
+        int playerX = player.getX();
+        int playerY = player.getY();
+
+        int toX = playerX - 50;
+        int toY = playerY;
+
+//        if (!isValidMove(playerX, playerY, toX, toY)) {
+//            return false;
+//        }
+        player.setX(toX);
+        player.setY(toY);
+        edit(player);
+        return true;
+    }
+
+    public boolean moveDown(String username) {
+        GameEntity player = em.find(GameEntity.class, username);
+        int playerX = player.getX();
+        int playerY = player.getY();
+
+        int toX = playerX;
+        int toY = playerY + 50;
+
+//        if (!isValidMove(playerX, playerY, toX, toY)) {
+//            return false;
+//        }
+        player.setX(toX);
+        player.setY(toY);
+        edit(player);
+        return true;
+    }
+
+    public boolean moveRight(String username) {
+        GameEntity player = find(username);
+        int playerX = player.getX();
+        int playerY = player.getY();
+
+        int toX = playerX + 50;
+        int toY = playerY;
+//
+//        if (!isValidMove(playerX, playerY, toX, toY)) {
+//            return false;
+//        }
+        player.setX(toX);
+        player.setY(toY);
+        edit(player);
+        System.out.println(player.getX());
+        return true;
     }
 }

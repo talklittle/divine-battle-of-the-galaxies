@@ -1,8 +1,8 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package session;
 
 import entity.GameEntity;
@@ -30,6 +30,13 @@ public interface GameEntityFacadeRemote {
 
     void initGameBoard();
 
-    int count();
+    boolean moveUp(String username);
 
+    boolean moveLeft(String username);
+
+    boolean moveDown(String username);
+
+    boolean moveRight(String username);
+
+    int count();
 }
