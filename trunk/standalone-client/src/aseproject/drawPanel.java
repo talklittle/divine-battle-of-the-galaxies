@@ -52,7 +52,7 @@ public class drawPanel extends JPanel implements KeyListener {
     public drawPanel() {
         GameSession = lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
-        GameSession.initGameBoard();
+//        GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -95,7 +95,7 @@ public class drawPanel extends JPanel implements KeyListener {
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
                     img = ImageIO.read(new File("assets/sprite-blue.png"));
-
+                    b.drawString("STAR"+player.getStars(), player.getX()+50, player.getY()+50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
                 if (entity instanceof MonsterEntity) {

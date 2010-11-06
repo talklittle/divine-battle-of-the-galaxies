@@ -215,6 +215,9 @@ public class registerPanel extends JPanel implements ActionListener {
             isCorrect = Arrays.equals(input, charPsw);
             if (isCorrect) {
                 nFlag_registered = true;
+                PlayerEntity oldUser = new PlayerEntity();
+                oldUser.setId(username);
+                playerFacade.create(oldUser);
                 System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
                 JOptionPane.showMessageDialog(null, "Password Error");
