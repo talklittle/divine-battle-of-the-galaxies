@@ -5,7 +5,6 @@
 
 package aseproject;
 
-import java.awt.GraphicsConfiguration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -25,7 +24,7 @@ public class Main implements ActionListener
 
     public Main() {
 
-        window = new JFrame("This is just a test for collision.");
+        window = new JFrame("DIVINE BATTLE OF THE GALAXIES.");
         gamePanel = new drawPanel();
         regPanel = new registerPanel();
         window.setSize(900, 700);

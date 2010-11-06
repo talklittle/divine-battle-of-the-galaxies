@@ -37,11 +37,9 @@ public class drawPanel extends JPanel implements KeyListener {
 
     public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
     BufferedImage buffer;
-//    HashMap<String, GameEntity> gameBoard = new HashMap<String, GameEntity>();
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
     private long lastSuccessfulMoveTime = 0;
-//    private GameServerBeanRemote gameServer;
     private String username;
     private GameEntityFacadeRemote GameSession;
 
