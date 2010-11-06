@@ -61,7 +61,7 @@ public class drawPanel extends JPanel implements KeyListener {
     }
 
     public void activate() {
-        initTimer();
+        //initTimer();
     }
 
     public void Initialize(String username) {
@@ -119,6 +119,13 @@ public class drawPanel extends JPanel implements KeyListener {
                 Logger.getLogger(drawPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+        }
+        b.setColor(Color.red);
+        String[][] occ = GameSession.getOcc();
+        for(int i=0; i<16; i++) {
+            for(int j=0; j<12; j++) {
+                if(occ[i][j] != null) b.drawString(occ[i][j], i*50, j*50+25);
+            }
         }
         b.dispose();
     }

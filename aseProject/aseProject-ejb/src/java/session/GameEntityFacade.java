@@ -41,6 +41,10 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         return em;
     }
 
+    public String[][] getOcc() {
+        return gameBoardOcc;
+    }
+
     public GameEntityFacade() {
         super(GameEntity.class);
     }
