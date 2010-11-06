@@ -22,7 +22,6 @@ public class Main implements ActionListener
     JFrame window;
     drawPanel gamePanel;
     registerPanel regPanel;
-    String username;
 
     public Main() {
 
