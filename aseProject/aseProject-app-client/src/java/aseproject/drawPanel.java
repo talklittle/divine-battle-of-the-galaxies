@@ -56,16 +56,8 @@ public class drawPanel extends JPanel implements KeyListener {
     }
 
     public void Initialize(String username) {
+        this.username = username;
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
-//        try {
-//            // Lookup the GameServerBeanRemote
-//            InitialContext context = new InitialContext();
-//            gameServer = (GameServerBeanRemote)
-//                    context.lookup("java:global/aseProject/aseProject-ejb/GameServerBean");
-//        } catch (Exception e) {
-//            System.err.println("shoot, there is Topic init exception " + e.getMessage());
-//            e.printStackTrace();
-//        }
     }
 
     public void drawBuffer() {
@@ -83,68 +75,35 @@ public class drawPanel extends JPanel implements KeyListener {
 
         // TODO draw entities on buffer b
         List gameEntities = GameSession.findAll();
-     
+
         Iterator iter = gameEntities.iterator();
         while (iter.hasNext()) {
             GameEntity entity = (GameEntity) iter.next();
             BufferedImage img = null;
             try {
-                img = ImageIO.read(new File("aseproject-app-client/assets/freeze-blue.png"));
-                b.drawImage(img, entity.getX(), entity.getY(), null);
+                if (entity instanceof PlayerEntity) {
+                    img = ImageIO.read(new File("aseproject-app-client/assets/sprite-blue.png"));
+                    b.drawImage(img, entity.getX(), entity.getY(), null);
+                }
+                if (entity instanceof MonsterEntity) {
+                    img = ImageIO.read(new File("aseproject-app-client/assets/freeze-red.png"));
+                    b.drawImage(img, entity.getX(), entity.getY(), null);
+                }
+                if (entity instanceof MonsterEggEntity) {
+                    img = ImageIO.read(new File("aseproject-app-client/assets/kill-yellow.png"));
+                    b.drawImage(img, entity.getX(), entity.getY(), null);
+                }
+                if (entity instanceof StarEntity) {
+                    img = ImageIO.read(new File("aseproject-app-client/assets/star.png"));
+                    b.drawImage(img, entity.getX(), entity.getY(), null);
+                }
+
             } catch (IOException ex) {
                 Logger.getLogger(drawPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
-
             System.out.println(entity.getId());
 
-//            if (entity instanceof PlayerEntity) {
-//                PlayerEntity playerEntity = (PlayerEntity) entity;
-//                String color = playerEntity.getColor();
-//                BufferedImage img = null;
-//
-//                try {
-//                    img = ImageIO.read(new File("assets/sprite-green.png"));
-//                    b.drawImage(img, playerEntity.getX(), playerEntity.getY(), null);
-//                    
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            } else if (entity instanceof MonsterEntity) {
-//                MonsterEntity monsterEntity = (MonsterEntity) entity;
-//                String type = monsterEntity.getType();
-//                String color = monsterEntity.getColor();
-//                BufferedImage img = null;
-//
-//                try {
-//                    img = ImageIO.read(new File("assets/" + type + "-" + color + ".png"));
-//                    b.drawImage(img, monsterEntity.getX(), monsterEntity.getY(), null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            } else if (entity instanceof MonsterEggEntity) {
-//                MonsterEggEntity monsterEggEntity = (MonsterEggEntity) entity;
-//                String type = monsterEggEntity.getType();
-//                BufferedImage img = null;
-//
-//                try {
-//                    img = ImageIO.read(new File("assets/" + type + "-item.png"));
-//                    b.drawImage(img, monsterEggEntity.getX(), monsterEggEntity.getY(), null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            } else if (entity instanceof StarEntity) {
-//                StarEntity starEntity = (StarEntity) entity;
-//                BufferedImage img = null;
-//
-//                try {
-//                    img = ImageIO.read(new File("assets/star.png"));
-//                    b.drawImage(img, starEntity.getX(), starEntity.getY(), null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
         }
-
         b.dispose();
     }
 
@@ -172,32 +131,32 @@ public class drawPanel extends JPanel implements KeyListener {
         }
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
-//        int key = e.getKeyCode();
-//
-//        // send a message to server (do client-side validation too)!!!
-//        if (key == KeyEvent.VK_LEFT) {
-//            gameServer.moveLeft(username);
-//        }
-//        if (key == KeyEvent.VK_RIGHT) {
-//            gameServer.moveRight(username);
-//        }
-//        if (key == KeyEvent.VK_UP) {
-//            gameServer.moveUp(username);
-//        }
-//        if (key == KeyEvent.VK_DOWN) {
-//            gameServer.moveDown(username);
-//        }
-//        if (key == KeyEvent.VK_F12) {
-//            nFlag_gameOver = true;
-//        }
-        System.out.println("NOT SUPPORTED YET");
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
-//        throw new UnsupportedOperationException("Not supported yet.");
+        int key = e.getKeyCode();
+        // send a message to server (do client-side validation too)!!!
+        if (key == KeyEvent.VK_LEFT) {
+            GameSession.moveLeft(username);
+        }
+        if (key == KeyEvent.VK_RIGHT) {
+            GameSession.moveRight(username);
+        }
+        if (key == KeyEvent.VK_UP) {
+            GameSession.moveUp(username);
+        }
+        if (key == KeyEvent.VK_DOWN) {
+            GameSession.moveDown(username);
+        }
+        if (key == KeyEvent.VK_F12) {
+            nFlag_gameOver = true;
+        }
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         // nothing
     }
@@ -205,7 +164,7 @@ public class drawPanel extends JPanel implements KeyListener {
     private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
         try {
             Context c = new InitialContext();
-            return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
+            return (GameEntityFacadeRemote) c.lookup("java:comp/env/GameEntityFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

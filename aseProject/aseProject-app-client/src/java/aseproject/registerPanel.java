@@ -252,4 +252,6 @@ public class registerPanel extends JPanel implements ActionListener {
             throw new RuntimeException(ne);
         }
     }
+
+
 }
