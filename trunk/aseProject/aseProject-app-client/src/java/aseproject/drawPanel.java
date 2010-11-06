@@ -156,7 +156,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 BufferedImage img = null;
                 
                 try {
-                    img = ImageIO.read(new File("assets/sprite-"+color+".png"));
+                    img = ImageIO.read(new File("aseProject-app-client/assets/sprite-"+color+".png"));
                     b.drawImage(img, playerEntity.getX(), playerEntity.getY(), null);
                 }
                 catch (IOException e) {
@@ -170,7 +170,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 BufferedImage img = null;
 
                 try {
-                    img = ImageIO.read(new File("assets/"+type+"-"+color+".png"));
+                    img = ImageIO.read(new File("aseProject-app-client/assets/"+type+"-"+color+".png"));
                     b.drawImage(img, monsterEntity.getX(), monsterEntity.getY(), null);
                 }
                 catch (IOException e) {
@@ -183,7 +183,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 BufferedImage img = null;
 
                 try {
-                    img = ImageIO.read(new File("assets/"+type+"-item.png"));
+                    img = ImageIO.read(new File("aseProject-app-client/assets/"+type+"-item.png"));
                     b.drawImage(img, monsterEggEntity.getX(), monsterEggEntity.getY(), null);
                 }
                 catch (IOException e) {
@@ -195,7 +195,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
                 BufferedImage img = null;
 
                 try {
-                    img = ImageIO.read(new File("assets/star.png"));
+                    img = ImageIO.read(new File("aseProject-app-client/assets/star.png"));
                     b.drawImage(img, starEntity.getX(), starEntity.getY(), null);
                 }
                 catch (IOException e) {
