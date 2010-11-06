@@ -39,6 +39,7 @@ public class Main implements ActionListener
             if (regPanel.nFlag_registered && gamePanel.nFlag_gameOver == false) {
 
                 window.setContentPane(gamePanel);
+                gamePanel.activate();
                 window.validate();
                 window.repaint();
                 gamePanel.requestFocusInWindow();
