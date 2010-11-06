@@ -17,42 +17,42 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 import javax.swing.*;
 import session.GameEntityFacadeRemote;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 public class drawPanel extends JPanel implements KeyListener {
 
     public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
+
     BufferedImage buffer;
-//    HashMap<String, GameEntity> gameBoard = new HashMap<String, GameEntity>();
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
     private long lastSuccessfulMoveTime = 0;
-//    private GameServerBeanRemote gameServer;
     private String username;
     private GameEntityFacadeRemote GameSession;
+//    PlayerEntity player;
+
+    private Timer myTimer;
 
     public drawPanel() {
         GameSession = lookupGameEntityFacadeRemote();
-//        GameSession.initGameBoard();
+        GameSession.gameBoard();
+        //GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -60,12 +60,17 @@ public class drawPanel extends JPanel implements KeyListener {
 
     }
 
+    public void activate() {
+        initTimer();
+    }
+
     public void Initialize(String username) {
         this.username = username;
+//        player = (PlayerEntity) GameSession.find(username);
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
     }
 
-    public void drawBuffer() {
+    public void drawBuffer() throws InterruptedException {
         Graphics2D b = buffer.createGraphics();
         b.setColor(Color.black);
         b.fillRect(0, 0, 800, 600);
@@ -87,7 +92,9 @@ public class drawPanel extends JPanel implements KeyListener {
             BufferedImage img = null;
             try {
                 if (entity instanceof PlayerEntity) {
+                    PlayerEntity player = (PlayerEntity) entity;
                     img = ImageIO.read(new File("assets/sprite-blue.png"));
+
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
                 if (entity instanceof MonsterEntity) {
@@ -95,7 +102,12 @@ public class drawPanel extends JPanel implements KeyListener {
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
                 if (entity instanceof MonsterEggEntity) {
-                    img = ImageIO.read(new File("assets/kill-yellow.png"));
+                    MonsterEggEntity egg = (MonsterEggEntity) entity;
+                    if (egg.getType().equals("kill")) {
+                        img = ImageIO.read(new File("assets/freeze-kiwi.png"));
+                    } else {
+                        img = ImageIO.read(new File("assets/kill-yellow.png"));
+                    }
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
                 if (entity instanceof StarEntity) {
@@ -106,7 +118,6 @@ public class drawPanel extends JPanel implements KeyListener {
             } catch (IOException ex) {
                 Logger.getLogger(drawPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println(entity.getId());
 
         }
         b.dispose();
@@ -166,35 +177,44 @@ public class drawPanel extends JPanel implements KeyListener {
         // nothing
     }
 
+    class monsterTask extends TimerTask {
+    	public void run() {
+            List entities = GameSession.findAll();
+            Iterator iter = entities.iterator();
+            Random rand = new Random();
+            int direction;
+            while(iter.hasNext()) {
+                GameEntity entity = (GameEntity) iter.next();
+                if(entity instanceof MonsterEggEntity) {
+                    direction = rand.nextInt(1920)%4;
+                    switch(direction) {
+                        case 0://up
+                            GameSession.moveUp(entity.getId());
+                            break;
+                        case 1://down
+                            GameSession.moveDown(entity.getId());
+                            break;
+                        case 2://left
+                            GameSession.moveLeft(entity.getId());
+                            break;
+                        case 3://right
+                            GameSession.moveRight(entity.getId());
+                            break;
+                    }
+                }
+            }
+    	}
+    }
+
+    public void initTimer() {
+        myTimer = new Timer();
+        myTimer.scheduleAtFixedRate(new monsterTask(), 1000, 1000);
+    }
+
     private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
         try {
-//            Hashtable props = new Hashtable();
-//            props.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.enterprise.naming.SerialInitContextFactory");
-//            props.put(Context.PROVIDER_URL, "iiop://192.168.1.101:3700");
-
-//            Properties props = new Properties();
-//            props.setProperty("java.naming.factory.initial", "com.sun.enterprise.naming.SerialInitContextFactory");
-//            props.setProperty("java.naming.factory.url.pkgs", "com.sun.enterprise.naming");
-//            props.setProperty("java.naming.factory.state", "com.sun.corba.ee.impl.presentation.rmi.JNDIStateFactoryImpl");
-//            props.setProperty("org.omg.CORBA.ORBInitialHost", "192.168.1.101");
-//            props.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
-
-//            Context c = new InitialContext(props);
             Context c = new InitialContext();
-
-//            //Get all the names in the initial context
-//            NamingEnumeration children = c.list("");
-//
-//            while(children.hasMore()) {
-//                NameClassPair ncPair = (NameClassPair)children.next();
-//                System.out.print(ncPair.getName() + " (type ");
-//                System.out.println(ncPair.getClassName() + ")");
-//            }
-
             return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
-//            return (GameEntityFacadeRemote) c.lookup("java:comp/env/GameEntityFacade");
-//            return (GameEntityFacadeRemote)
-//                    c.lookup("corbaname:iiop:192.168.1.101:3700#aseProject/aseProject-ejb/session/GameEntityFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
