@@ -20,20 +20,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.jms.Session;
-import javax.jms.Topic;
 import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
-import javax.jms.TopicSubscriber;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.swing.*;
 import session.GameServerBeanRemote;
 
@@ -85,7 +79,7 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
 
 //        initTopic("GameBoardTopic", username, password);
         try {
-            initTopic("GameBoardTopic");
+//            initTopic("GameBoardTopic");
 
             // Lookup the GameServerBeanRemote
             InitialContext context = new InitialContext();
@@ -97,39 +91,39 @@ public class drawPanel extends JPanel implements KeyListener, MessageListener {
         }
     }
 
-    private void initTopic(String topicName) throws NamingException, JMSException {
-        // Obtain a JNDI connection
-        Properties env = new Properties( );
-        // ... specify the JNDI properties specific to the vendor
-
-        InitialContext jndi = new InitialContext(env);
-
-        // Look up a JMS connection factory
-        TopicConnectionFactory conFactory =
-            (TopicConnectionFactory)jndi.lookup("GameBoardTopicFactory");
-
-        // Create a JMS connection
-        TopicConnection connection =
-//        conFactory.createTopicConnection(username,password);
-        conFactory.createTopicConnection();
-
-        // Create two JMS session objects
-        TopicSession subSession =
-            connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-
-        // Look up a JMS topic
-        Topic gameTopic = (Topic)jndi.lookup(topicName);
-
-        // Create a JMS subscriber
-        TopicSubscriber subscriber =
-            subSession.createSubscriber(gameTopic);
-
-        // Set a JMS message listener
-        subscriber.setMessageListener(this);
-
-        // Start the JMS connection; allows messages to be delivered
-        connection.start( );
-    }
+//    private void initTopic(String topicName) throws NamingException, JMSException {
+//        // Obtain a JNDI connection
+//        Properties env = new Properties( );
+//        // ... specify the JNDI properties specific to the vendor
+//
+//        InitialContext jndi = new InitialContext(env);
+//
+//        // Look up a JMS connection factory
+//        TopicConnectionFactory conFactory =
+//            (TopicConnectionFactory)jndi.lookup("GameBoardTopicFactory");
+//
+//        // Create a JMS connection
+//        TopicConnection connection =
+////        conFactory.createTopicConnection(username,password);
+//        conFactory.createTopicConnection();
+//
+//        // Create two JMS session objects
+//        TopicSession subSession =
+//            connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+//
+//        // Look up a JMS topic
+//        Topic gameTopic = (Topic)jndi.lookup(topicName);
+//
+//        // Create a JMS subscriber
+//        TopicSubscriber subscriber =
+//            subSession.createSubscriber(gameTopic);
+//
+//        // Set a JMS message listener
+//        subscriber.setMessageListener(this);
+//
+//        // Start the JMS connection; allows messages to be delivered
+//        connection.start( );
+//    }
 
     @Override
     /* Receive message from topic subscriber */
