@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import entity.PlayerEntity;
+import entity.accountInfo;
 import facade.PlayerEntityFacadeRemote;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import session.GameEntityFacadeRemote;
+import session.accountInfoFacadeRemote;
 
 /**
  *
@@ -52,6 +53,9 @@ public class registerPanel extends JPanel implements ActionListener {
     JButton loginOKBtn;
     PlayerEntityFacadeRemote playerFacade;
     PlayerEntity User;
+    accountInfo account;
+    accountInfoFacadeRemote accountInfoFacade;
+
 
     String username;
 
@@ -127,6 +131,7 @@ public class registerPanel extends JPanel implements ActionListener {
         newAccountBtn.addActionListener(this);
         loginBtn.addActionListener(this);
         playerFacade = lookupPlayerEntityFacadeRemote();
+        accountInfoFacade = lookupaccountInfoFacadeRemote();
     }
 
     public void rebuildPanel() {
@@ -162,13 +167,16 @@ public class registerPanel extends JPanel implements ActionListener {
 
     private void doNewAccountOK() {
         username = newAccountUser.getText();
-        PlayerEntity user = (PlayerEntity) playerFacade.find(username);
-        if (user == null) {
+        account = (accountInfo) accountInfoFacade.find(username);
+        if (account == null) {
             String input = newAccountPsw.getText();
-            user = new PlayerEntity();
+            PlayerEntity user = new PlayerEntity();
+            account = new accountInfo();
+            account.setId(username);
+            account.setPsw(input);
             user.setId(username);
-            user.setPassword(input);
             playerFacade.create(user);
+            accountInfoFacade.create(account);
             JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
             nFlag_registered = true;
         } else {
@@ -185,7 +193,8 @@ public class registerPanel extends JPanel implements ActionListener {
 //            newUser.setId(12345);
 //            newUser.setPassword("1234567");
         char[] input = pswField.getPassword();
-        playerFacade = lookupPlayerEntityFacadeRemote();
+//
+//        playerFacade = lookupPlayerEntityFacadeRemote();
 //            userFacade.create(newUser);
 //            List users = userFacade.findAll();
 //            for (Iterator it = users.iterator(); it.hasNext();) {
@@ -193,19 +202,20 @@ public class registerPanel extends JPanel implements ActionListener {
 //                System.out.println(user.getId());
 //                System.out.println(user.getPassword());
 //            }
-        User = playerFacade.find(username);
-        if (User == null) {
+        account = accountInfoFacade.find(username);
+//        User = playerFacade.find(username);
+        if (account == null) {
             JOptionPane.showMessageDialog(null, "User does not exist");
             username = null;
         } else {
 //                System.out.println("Got the user: " + User.getUsername());
             boolean isCorrect;
-            String correctPassword = User.getPassword();
+            String correctPassword = account.getPsw();
             char[] charPsw = correctPassword.toCharArray();
             isCorrect = Arrays.equals(input, charPsw);
             if (isCorrect) {
                 nFlag_registered = true;
-                System.out.println("User authenticated with pwd: " + User.getPassword() + " var: " + nFlag_registered);
+                System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
                 JOptionPane.showMessageDialog(null, "Password Error");
             }
@@ -235,6 +245,16 @@ public class registerPanel extends JPanel implements ActionListener {
         try {
             Context c = new InitialContext();
             return (PlayerEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/PlayerEntityFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private accountInfoFacadeRemote lookupaccountInfoFacadeRemote() {
+        try {
+            Context c = new InitialContext();
+            return (accountInfoFacadeRemote) c.lookup("java:comp/env/accountInfoFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
