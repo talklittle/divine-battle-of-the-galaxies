@@ -181,9 +181,8 @@ public class drawPanel extends JPanel implements KeyListener {
     	public void run() {
             List entities = GameSession.findAll();
             Iterator iter = entities.iterator();
-            Random rand = new Random();
+            Random rand = new Random(19356280);
             int direction;
-            int counter = 0;
             while(iter.hasNext()) {
                 GameEntity entity = (GameEntity) iter.next();
                 if(entity instanceof MonsterEggEntity) {
