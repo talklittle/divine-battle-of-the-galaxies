@@ -117,20 +117,6 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         while (it.hasNext()) {
             GameEntity elem = (GameEntity) it.next();
             gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem.getId();
-//            if (elem instanceof PlayerEntity) {
-//                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = "player";
-//            }
-//            if (elem instanceof MonsterEggEntity) {
-//                MonsterEggEntity elem_egg = (MonsterEggEntity) elem;
-//                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem_egg.getType();
-//            }
-//            if (elem instanceof MonsterEntity) {
-//                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = "monster";
-//            }
-//            if (elem instanceof StarEntity) {
-//                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = "star";
-//            }
-
         }
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 12; j++) {
@@ -143,6 +129,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
             player.setStars(player.getStars() + 1);
             StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+            player.setX(toX);
+            player.setY(toY);
+            edit(player);
             remove(star);
         }
 
@@ -153,14 +142,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 player.setX(0);
                 player.setY(0);
                 player.setStars(0);
-
-                System.out.println(player.getId());
-                System.out.println(player.getX());
-                System.out.println(player.getY());
                 edit(player);
-                System.out.println(player.getId());
-                System.out.println(player.getX());
-                System.out.println(player.getY());
 
                 return true;
             } else {
