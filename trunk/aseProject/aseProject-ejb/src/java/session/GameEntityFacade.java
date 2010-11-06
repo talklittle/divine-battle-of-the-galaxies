@@ -186,7 +186,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 playerLogic((PlayerEntity)entity, toX, toY);
         }
         if(entity instanceof MonsterEggEntity) {
-            moveOk = monsterLogic((MonsterEggEntity) entity, toX, toY);
+            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
             if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
         }
 
@@ -208,13 +208,12 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         }
 
         boolean moveOk = true;
-        if (gameBoardOcc[toX / 50][toY / 50] != null) {
+        if(entity instanceof PlayerEntity && gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            if(entity instanceof PlayerEntity)
-                playerLogic((PlayerEntity)entity, toX, toY);
+            playerLogic((PlayerEntity)entity, toX, toY);
         }
-        if(entity instanceof MonsterEggEntity) {
-            moveOk = monsterLogic((MonsterEggEntity) entity, toX, toY);
+        else if(entity instanceof MonsterEggEntity) {
+            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
             if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
         }
         entity.setX(toX);
@@ -242,7 +241,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 playerLogic((PlayerEntity)entity, toX, toY);
         }
         if(entity instanceof MonsterEggEntity) {
-            moveOk = monsterLogic((MonsterEggEntity) entity, toX, toY);
+            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
             if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
         }
         entity.setX(toX);
@@ -270,7 +269,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 playerLogic((PlayerEntity)entity, toX, toY);
         }
         if(entity instanceof MonsterEggEntity) {
-            moveOk = monsterLogic((MonsterEggEntity) entity, toX, toY);
+            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
             if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
         }
         entity.setX(toX);
