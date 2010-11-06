@@ -16,6 +16,8 @@ import javax.ejb.Remote;
 @Remote
 public interface GameEntityFacadeRemote {
 
+    String[][] getOcc();
+
     void create(GameEntity gameEntity);
 
     void edit(GameEntity gameEntity);
