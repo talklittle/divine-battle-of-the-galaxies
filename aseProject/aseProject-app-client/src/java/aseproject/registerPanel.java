@@ -78,18 +78,6 @@ public class registerPanel extends JPanel implements ActionListener {
 
         BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         this.setLayout(layout);
-//        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-//        this.setLayout(layout);
-//        layout.setHorizontalGroup(
-//                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(66, 66, 66).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER).addComponent(gameTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(newAccountBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(loginBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)).addContainerGap(98, Short.MAX_VALUE)));
-//
-//        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[]{loginBtn, newAccountBtn});
-//
-//        layout.setVerticalGroup(
-//                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(35, 35, 35).addComponent(gameTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(71, 71, 71).addComponent(newAccountBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(27, 27, 27).addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(97, Short.MAX_VALUE)));
-//
-//        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{loginBtn, newAccountBtn});
-
         loginOKBtn = new JButton();
         loginOKBtn.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
         loginOKBtn.setText("OK");
