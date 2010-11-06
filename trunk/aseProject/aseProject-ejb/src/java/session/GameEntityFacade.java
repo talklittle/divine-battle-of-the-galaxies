@@ -7,8 +7,11 @@ package session;
 
 import entity.GameEntity;
 import entity.MonsterEggEntity;
+import entity.MonsterEntity;
+import entity.PlayerEntity;
 import entity.StarEntity;
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -24,14 +27,13 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     @PersistenceContext(unitName = "aseProject-ejbPU")
     private EntityManager em;
     public static final long PUBLISH_INTERVAL_MILLIS = 50;
-    public static final int INIT_STARS = 5;
+    public static final int INIT_STARS = 15;
     public static final int INIT_EGGS_KILL = 5;
     public static final int INIT_EGGS_FREEZE = 5;
     private int numStars = 0;
     private int numEggs = 0;
     private int numMonsters = 0;
-    private HashMap<String, GameEntity> gameBoard = new HashMap<String, GameEntity>();
-    private boolean[][] gameBoardOcc = new boolean[16][12];
+    private String[][] gameBoardOcc = new String[16][12];
 
     protected EntityManager getEntityManager() {
         return em;
@@ -54,13 +56,12 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             star = new StarEntity(x, y);
             star.setId("star-" + numStars);
             numStars += 1;
-            if (!gameBoardOcc[x / 50][y / 50]) {
-                gameBoard.put(star.getId(), star);
-                gameBoardOcc[x / 50][y / 50] = true;
+            if (gameBoardOcc[x / 50][y / 50] == null) {
+                gameBoardOcc[x / 50][y / 50] = star.getId();
             } else {
                 i -= 1;
             }
-            em.persist(star);
+            create(star);
         }
         // initialize MonsterEggs
         MonsterEggEntity egg;
@@ -70,13 +71,12 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             egg = new MonsterEggEntity(x, y, "kill");
             egg.setId("egg-" + numEggs);
             numEggs += 1;
-            if (!gameBoardOcc[x / 50][y / 50]) {
-                gameBoard.put("egg-" + egg.getId(), egg);
-                gameBoardOcc[x / 50][y / 50] = true;
+            if (gameBoardOcc[x / 50][y / 50] == null) {
+                gameBoardOcc[x / 50][y / 50] = egg.getId();
             } else {
                 i -= 1;
             }
-            em.persist(egg);
+            create(egg);
         }
         for (int i = 0; i < INIT_EGGS_FREEZE; i++) {
             x = widthRand.nextInt(15) * 50;
@@ -84,34 +84,71 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             egg = new MonsterEggEntity(x, y, "freeze");
             egg.setId("egg-" + numEggs);
             numEggs += 1;
-            if (!gameBoardOcc[x / 50][y / 50]) {
-                gameBoard.put("egg-" + egg.getId(), egg);
-                gameBoardOcc[x / 50][y / 50] = true;
+            if (gameBoardOcc[x / 50][y / 50] == null) {
+                gameBoardOcc[x / 50][y / 50] = egg.getId();
             } else {
                 i -= 1;
             }
-            em.persist(egg);
+            create(egg);
         }
     }
 
     public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
-        return fromX % 50 == 0 && fromY % 50 == 0
-                && toX >= 0 && toY >= 0
-                && toX <= 750 && toY <= 550
-                && (toX - fromX == 50 || toX - fromX == -50)
-                && (toY - fromY == 50 || toY - fromY == -50);
+        //boundaries
+        if (toX < 0 || toY < 0 || toX >= 800 || toY >= 600) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void gameBoard() {
+        List gameEntities = findAll();
+        Iterator it = gameEntities.iterator();
+        while (it.hasNext()) {
+            GameEntity elem = (GameEntity) it.next();
+            gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem.getId();
+//            if (elem instanceof PlayerEntity) {
+//                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = "player";
+//            }
+//            if (elem instanceof MonsterEggEntity) {
+//                MonsterEggEntity elem_egg = (MonsterEggEntity) elem;
+//                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem_egg.getType();
+//            }
+//            if (elem instanceof MonsterEntity) {
+//                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = "monster";
+//            }
+//            if (elem instanceof StarEntity) {
+//                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = "star";
+//            }
+
+        }
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 12; j++) {
+                System.out.println(i + " " + j + " " + gameBoardOcc[i][j]);
+            }
+        }
     }
 
     public boolean moveUp(String username) {
-        GameEntity player = em.find(GameEntity.class, username);
+        PlayerEntity player = (PlayerEntity) em.find(GameEntity.class, username);
         int playerX = player.getX();
         int playerY = player.getY();
 
         int toX = playerX;
         int toY = playerY - 50;
-//        if (!isValidMove(playerX, playerY, toX, toY)) {
-//            return false;
-//        }
+        if (!isValidMove(playerX, playerY, toX, toY)) {
+            return false;
+        }
+
+        if (gameBoardOcc[toX / 50][toY / 50] != null) {
+            System.out.println(gameBoardOcc[toX / 50][toY / 50]);
+            if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
+                player.setStars(player.getStars() + 1);
+                StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                remove(star);
+            }
+        }
         player.setX(toX);
         player.setY(toY);
         edit(player);
@@ -119,16 +156,24 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean moveLeft(String username) {
-        GameEntity player = em.find(GameEntity.class, username);
+        PlayerEntity player = (PlayerEntity) em.find(GameEntity.class, username);
         int playerX = player.getX();
         int playerY = player.getY();
 
         int toX = playerX - 50;
         int toY = playerY;
 
-//        if (!isValidMove(playerX, playerY, toX, toY)) {
-//            return false;
-//        }
+        if (!isValidMove(playerX, playerY, toX, toY)) {
+            return false;
+        }
+        if (gameBoardOcc[toX / 50][toY / 50] != null) {
+            System.out.println(gameBoardOcc[toX / 50][toY / 50]);
+            if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
+                player.setStars(player.getStars() + 1);
+                StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                remove(star);
+            }
+        }
         player.setX(toX);
         player.setY(toY);
         edit(player);
@@ -136,16 +181,24 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean moveDown(String username) {
-        GameEntity player = em.find(GameEntity.class, username);
+        PlayerEntity player = (PlayerEntity) em.find(GameEntity.class, username);
         int playerX = player.getX();
         int playerY = player.getY();
 
         int toX = playerX;
         int toY = playerY + 50;
 
-//        if (!isValidMove(playerX, playerY, toX, toY)) {
-//            return false;
-//        }
+        if (!isValidMove(playerX, playerY, toX, toY)) {
+            return false;
+        }
+        if (gameBoardOcc[toX / 50][toY / 50] != null) {
+            System.out.println(gameBoardOcc[toX / 50][toY / 50]);
+            if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
+                player.setStars(player.getStars() + 1);
+                StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                remove(star);
+            }
+        }
         player.setX(toX);
         player.setY(toY);
         edit(player);
@@ -153,20 +206,27 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean moveRight(String username) {
-        GameEntity player = find(username);
+        PlayerEntity player = (PlayerEntity) find(username);
         int playerX = player.getX();
         int playerY = player.getY();
 
         int toX = playerX + 50;
         int toY = playerY;
 //
-//        if (!isValidMove(playerX, playerY, toX, toY)) {
-//            return false;
-//        }
+        if (!isValidMove(playerX, playerY, toX, toY)) {
+            return false;
+        }
+        if (gameBoardOcc[toX / 50][toY / 50] != null) {
+            System.out.println(gameBoardOcc[toX / 50][toY / 50]);
+            if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
+                player.setStars(player.getStars() + 1);
+                StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                remove(star);
+            }
+        }
         player.setX(toX);
         player.setY(toY);
         edit(player);
-        System.out.println(player.getX());
         return true;
     }
 }

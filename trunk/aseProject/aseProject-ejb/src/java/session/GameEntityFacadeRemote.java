@@ -38,5 +38,7 @@ public interface GameEntityFacadeRemote {
 
     boolean moveRight(String username);
 
+    void gameBoard();
+
     int count();
 }
