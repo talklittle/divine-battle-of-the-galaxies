@@ -15,14 +15,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import facade.PlayerEntityFacadeRemote;
 import entity.PlayerEntity;
+import facade.PlayerEntityFacadeRemote;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.Arrays;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import session.GameEntityFacadeRemote;
 
 /**
  *
@@ -102,7 +103,6 @@ public class registerPanel extends JPanel implements ActionListener {
 
         newAccountUser = new JTextField(20);
         newAccountUser.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
-        newAccountUser.setText("PLZ ENTER UR USERNAME");
         newAccountUser.setAlignmentX(Component.CENTER_ALIGNMENT);
         newAccountUser.addActionListener(this);
         newAccountUser.setMaximumSize(newAccountUser.getPreferredSize());
@@ -119,9 +119,9 @@ public class registerPanel extends JPanel implements ActionListener {
 
         loginUserName = new JTextField(20);
         loginUserName.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
-        loginUserName.setText("PLZ ENTER UR USERNAME!");
         loginUserName.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginUserName.addActionListener(this);
+        loginUserName.setMaximumSize(loginUserName.getPreferredSize());
 
         newAccountOK = new JButton("OK");
         newAccountOK.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
@@ -174,7 +174,7 @@ public class registerPanel extends JPanel implements ActionListener {
 
     private void doNewAccountOK() {
         username = newAccountUser.getText();
-        PlayerEntity user = playerFacade.find(username);
+        PlayerEntity user = (PlayerEntity) playerFacade.find(username);
         if (user == null) {
             String input = newAccountPsw.getText();
             user = new PlayerEntity();
@@ -246,7 +246,7 @@ public class registerPanel extends JPanel implements ActionListener {
     private PlayerEntityFacadeRemote lookupPlayerEntityFacadeRemote() {
         try {
             Context c = new InitialContext();
-            return (PlayerEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
+            return (PlayerEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/PlayerEntityFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
