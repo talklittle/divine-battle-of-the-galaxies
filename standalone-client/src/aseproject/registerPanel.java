@@ -35,11 +35,8 @@ public class registerPanel extends JPanel implements ActionListener {
     static final int PANEL_MODE_DEFAULT = 0;
     static final int PANEL_MODE_NEW_ACCOUNT = 1;
     static final int PANEL_MODE_LOGIN = 2;
-
     public boolean nFlag_registered = false;
-
     int panelMode = PANEL_MODE_DEFAULT;
-
     JLabel gameTitle;
     JLabel newAccountUserLabel;
     JLabel newAccountPswLabel;
@@ -55,8 +52,6 @@ public class registerPanel extends JPanel implements ActionListener {
     PlayerEntity User;
     accountInfo account;
     accountInfoFacadeRemote accountInfoFacade;
-
-
     String username;
 
     public registerPanel() {
@@ -189,26 +184,13 @@ public class registerPanel extends JPanel implements ActionListener {
     private void doLoginOK() {
         username = loginUserName.getText();
         System.out.println(username);
-//            userEntity newUser = new userEntity();
-//            newUser.setId(12345);
-//            newUser.setPassword("1234567");
         char[] input = pswField.getPassword();
-//
-//        playerFacade = lookupPlayerEntityFacadeRemote();
-//            userFacade.create(newUser);
-//            List users = userFacade.findAll();
-//            for (Iterator it = users.iterator(); it.hasNext();) {
-//                userEntity user = (userEntity) it.next();
-//                System.out.println(user.getId());
-//                System.out.println(user.getPassword());
-//            }
         account = accountInfoFacade.find(username);
-//        User = playerFacade.find(username);
+
         if (account == null) {
             JOptionPane.showMessageDialog(null, "User does not exist");
             username = null;
         } else {
-//                System.out.println("Got the user: " + User.getUsername());
             boolean isCorrect;
             String correctPassword = account.getPsw();
             char[] charPsw = correctPassword.toCharArray();
@@ -216,8 +198,11 @@ public class registerPanel extends JPanel implements ActionListener {
             if (isCorrect) {
                 nFlag_registered = true;
                 PlayerEntity oldUser = new PlayerEntity();
-                oldUser.setId(username);
-                playerFacade.create(oldUser);
+                oldUser = playerFacade.find(username);
+                if (oldUser == null) {
+                    oldUser.setId(username);
+                    playerFacade.create(oldUser);
+                }
                 System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
                 JOptionPane.showMessageDialog(null, "Password Error");
@@ -230,19 +215,15 @@ public class registerPanel extends JPanel implements ActionListener {
         Object src = e.getSource();
         if (src == loginBtn) {
             doLogin();
-        }
-        else if (src == newAccountBtn) {
+        } else if (src == newAccountBtn) {
             doNewAccount();
-        }
-        else if (src == newAccountOK || src == newAccountUser || src == newAccountPsw) {
+        } else if (src == newAccountOK || src == newAccountUser || src == newAccountPsw) {
             doNewAccountOK();
-        }
-        else if(src == loginOKBtn || src == loginUserName || src == pswField) {
+        } else if (src == loginOKBtn || src == loginUserName || src == pswField) {
             doLoginOK();
         }
 
     }
-
 
     private PlayerEntityFacadeRemote lookupPlayerEntityFacadeRemote() {
         try {
@@ -263,6 +244,4 @@ public class registerPanel extends JPanel implements ActionListener {
             throw new RuntimeException(ne);
         }
     }
-
-
 }
