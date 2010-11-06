@@ -113,6 +113,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public void gameBoard() {
         List gameEntities = findAll();
         Iterator it = gameEntities.iterator();
+        gameBoardOcc = new String[16][12];
         while (it.hasNext()) {
             GameEntity elem = (GameEntity) it.next();
             gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem.getId();
