@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,15 +47,21 @@ public class drawPanel extends JPanel implements KeyListener {
     private GameEntityFacadeRemote GameSession;
 //    PlayerEntity player;
 
+    private Timer myTimer;
+
     public drawPanel() {
         GameSession = lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
-//        GameSession.initGameBoard();
+        //GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
         this.setLayout(layout);
 
+    }
+
+    public void activate() {
+        initTimer();
     }
 
     public void Initialize(String username) {
@@ -167,6 +175,41 @@ public class drawPanel extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // nothing
+    }
+    
+    class monsterTask extends TimerTask {
+    	public void run() {
+            List entities = GameSession.findAll();
+            Iterator iter = entities.iterator();
+            Random rand = new Random();
+            int direction;
+            int counter = 0;
+            while(iter.hasNext()) {
+                GameEntity entity = (GameEntity) iter.next();
+                if(entity instanceof MonsterEggEntity) {
+                    direction = rand.nextInt(1920)%4;
+                    switch(direction) {
+                        case 0://up
+                            GameSession.moveUp(entity.getId());
+                            break;
+                        case 1://down
+                            GameSession.moveDown(entity.getId());
+                            break;
+                        case 2://left
+                            GameSession.moveLeft(entity.getId());
+                            break;
+                        case 3://right
+                            GameSession.moveRight(entity.getId());
+                            break;
+                    }
+                }
+            }
+    	}
+    }
+
+    public void initTimer() {
+        myTimer = new Timer();
+        myTimer.scheduleAtFixedRate(new monsterTask(), 1000, 1000);
     }
 
     private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {

@@ -34,6 +34,8 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     private int numMonsters = 0;
     private String[][] gameBoardOcc = new String[16][12];
 
+    private Timer myTimer;
+
     protected EntityManager getEntityManager() {
         return em;
     }
@@ -90,6 +92,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             }
             create(egg);
         }
+
+        //setup timer for monsters
+        //initTimer();
     }
 
     public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
@@ -129,20 +134,8 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         }
     }
 
-    public boolean moveUp(String username) {
-        PlayerEntity player = (PlayerEntity) em.find(GameEntity.class, username);
-        int playerX = player.getX();
-        int playerY = player.getY();
-
-        int toX = playerX;
-        int toY = playerY - 50;
-        if (!isValidMove(playerX, playerY, toX, toY)) {
-            return false;
-        }
-
-        if (gameBoardOcc[toX / 50][toY / 50] != null) {
-            System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
+    public boolean playerLogic(PlayerEntity player, int toX, int toY) {
+        if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
                 player.setStars(player.getStars() + 1);
                 StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
                 remove(star);
@@ -160,126 +153,128 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                     player.setFrozen(true);
                 }
             }
-        }
-        player.setX(toX);
-        player.setY(toY);
-        edit(player);
         return true;
     }
 
-    public boolean moveLeft(String username) {
-        PlayerEntity player = (PlayerEntity) em.find(GameEntity.class, username);
-        int playerX = player.getX();
-        int playerY = player.getY();
+    public boolean monsterLogic(MonsterEggEntity monster, int toX, int toY) {
+        if (gameBoardOcc[toX / 50][toY / 50]!=null && gameBoardOcc[toX / 50][toY / 50].contains("star")) {
+            System.out.println("star encountered, don't move");
+            return false;
+        }
+        else {
+            gameBoardOcc[toX / 50][toY / 50] = monster.getId();
+            return true;
+        }
+    }
 
-        int toX = playerX - 50;
-        int toY = playerY;
-        if (!isValidMove(playerX, playerY, toX, toY)) {
+    public boolean moveUp(String id) {
+        GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
+        int fromX = entity.getX();
+        int fromY = entity.getY();
+
+        int toX = fromX;
+        int toY = fromY - 50;
+        if (!isValidMove(fromX, fromY, toX, toY)) {
             return false;
         }
 
+        boolean moveOk = true;
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
-                player.setStars(player.getStars() + 1);
-                StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-                remove(star);
-            }
-            if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
-                MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-                if (egg.getType().equals("kill")) {
-                    System.out.println("U GOT KILLED");
-                    player.setX(0);
-                    player.setY(0);
-                    player.setStars(0);
-                    edit(player);
-                    return true;
-                } else {
-                    player.setFrozen(true);
-                }
-            }
+            if(entity instanceof PlayerEntity)
+                playerLogic((PlayerEntity)entity, toX, toY);
         }
-        player.setX(toX);
-        player.setY(toY);
-        edit(player);
+        if(entity instanceof MonsterEggEntity) {
+            moveOk = monsterLogic((MonsterEggEntity) entity, toX, toY);
+            if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
+        }
+
+        entity.setX(toX);
+        entity.setY(toY);
+        if(moveOk) edit(entity);
         return true;
     }
 
-    public boolean moveDown(String username) {
-        PlayerEntity player = (PlayerEntity) em.find(GameEntity.class, username);
-        int playerX = player.getX();
-        int playerY = player.getY();
+    public boolean moveLeft(String id) {
+        GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
+        int fromX = entity.getX();
+        int fromY = entity.getY();
 
-        int toX = playerX;
-        int toY = playerY + 50;
-
-        if (!isValidMove(playerX, playerY, toX, toY)) {
+        int toX = fromX - 50;
+        int toY = fromY;
+        if (!isValidMove(fromX, fromY, toX, toY)) {
             return false;
         }
 
+        boolean moveOk = true;
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
-                player.setStars(player.getStars() + 1);
-                StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-                remove(star);
-            }
-            if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
-                MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-                if (egg.getType().equals("kill")) {
-                    System.out.println("U GOT KILLED");
-                    player.setX(0);
-                    player.setY(0);
-                    player.setStars(0);
-                    edit(player);
-                    return true;
-                } else {
-                    player.setFrozen(true);
-                }
-            }
+            if(entity instanceof PlayerEntity)
+                playerLogic((PlayerEntity)entity, toX, toY);
         }
-        player.setX(toX);
-        player.setY(toY);
-        edit(player);
+        if(entity instanceof MonsterEggEntity) {
+            moveOk = monsterLogic((MonsterEggEntity) entity, toX, toY);
+            if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
+        }
+        entity.setX(toX);
+        entity.setY(toY);
+        if(moveOk) edit(entity);
         return true;
     }
 
-    public boolean moveRight(String username) {
-        PlayerEntity player = (PlayerEntity) find(username);
-        int playerX = player.getX();
-        int playerY = player.getY();
+    public boolean moveDown(String id) {
+        GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
+        int fromX = entity.getX();
+        int fromY = entity.getY();
 
-        int toX = playerX + 50;
-        int toY = playerY;
+        int toX = fromX;
+        int toY = fromY + 50;
+
+        if (!isValidMove(fromX, fromY, toX, toY)) {
+            return false;
+        }
+
+        boolean moveOk = true;
+        if (gameBoardOcc[toX / 50][toY / 50] != null) {
+            System.out.println(gameBoardOcc[toX / 50][toY / 50]);
+            if(entity instanceof PlayerEntity)
+                playerLogic((PlayerEntity)entity, toX, toY);
+        }
+        if(entity instanceof MonsterEggEntity) {
+            moveOk = monsterLogic((MonsterEggEntity) entity, toX, toY);
+            if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
+        }
+        entity.setX(toX);
+        entity.setY(toY);
+        if(moveOk) edit(entity);
+        return true;
+    }
+
+    public boolean moveRight(String id) {
+        GameEntity entity = (GameEntity) find(id);
+        int fromX = entity.getX();
+        int fromY = entity.getY();
+
+        int toX = fromX + 50;
+        int toY = fromY;
 //
-        if (!isValidMove(playerX, playerY, toX, toY)) {
+        if (!isValidMove(fromX, fromY, toX, toY)) {
             return false;
         }
 
+        boolean moveOk = true;
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
-                player.setStars(player.getStars() + 1);
-                StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-                remove(star);
-            }
-            if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
-                MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-                if (egg.getType().equals("kill")) {
-                    System.out.println("U GOT KILLED");
-                    player.setX(0);
-                    player.setY(0);
-                    player.setStars(0);
-                    edit(player);
-                    return true;
-                } else {
-                    player.setFrozen(true);
-                }
-            }
+            if(entity instanceof PlayerEntity)
+                playerLogic((PlayerEntity)entity, toX, toY);
         }
-        player.setX(toX);
-        player.setY(toY);
-        edit(player);
+        if(entity instanceof MonsterEggEntity) {
+            moveOk = monsterLogic((MonsterEggEntity) entity, toX, toY);
+            if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
+        }
+        entity.setX(toX);
+        entity.setY(toY);
+        if(moveOk) edit(entity);
         return true;
     }
 }
