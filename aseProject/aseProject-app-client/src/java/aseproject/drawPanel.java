@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -36,17 +36,19 @@ import session.GameEntityFacadeRemote;
 public class drawPanel extends JPanel implements KeyListener {
 
     public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
+
     BufferedImage buffer;
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
     private long lastSuccessfulMoveTime = 0;
     private String username;
     private GameEntityFacadeRemote GameSession;
+//    PlayerEntity player;
 
     public drawPanel() {
         GameSession = lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
-        GameSession.initGameBoard();
+//        GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -56,10 +58,11 @@ public class drawPanel extends JPanel implements KeyListener {
 
     public void Initialize(String username) {
         this.username = username;
+//        player = (PlayerEntity) GameSession.find(username);
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
     }
 
-    public void drawBuffer() {
+    public void drawBuffer() throws InterruptedException {
         Graphics2D b = buffer.createGraphics();
         b.setColor(Color.black);
         b.fillRect(0, 0, 800, 600);
@@ -81,7 +84,9 @@ public class drawPanel extends JPanel implements KeyListener {
             BufferedImage img = null;
             try {
                 if (entity instanceof PlayerEntity) {
+                    PlayerEntity player = (PlayerEntity) entity;
                     img = ImageIO.read(new File("aseproject-app-client/assets/sprite-blue.png"));
+
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
                 if (entity instanceof MonsterEntity) {
@@ -89,7 +94,12 @@ public class drawPanel extends JPanel implements KeyListener {
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
                 if (entity instanceof MonsterEggEntity) {
-                    img = ImageIO.read(new File("aseproject-app-client/assets/kill-yellow.png"));
+                    MonsterEggEntity egg = (MonsterEggEntity) entity;
+                    if (egg.getType().equals("kill")) {
+                        img = ImageIO.read(new File("aseproject-app-client/assets/freeze-kiwi.png"));
+                    } else {
+                        img = ImageIO.read(new File("aseproject-app-client/assets/kill-yellow.png"));
+                    }
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
                 if (entity instanceof StarEntity) {
