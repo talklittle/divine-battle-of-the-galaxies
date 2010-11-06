@@ -205,7 +205,7 @@ public class drawPanel extends JPanel implements KeyListener {
     private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
         try {
             Context c = new InitialContext();
-            return (GameEntityFacadeRemote) c.lookup("java:comp/env/GameEntityFacade");
+            return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
