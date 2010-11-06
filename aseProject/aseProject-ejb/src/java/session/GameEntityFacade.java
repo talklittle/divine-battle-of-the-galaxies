@@ -12,6 +12,7 @@ import entity.StarEntity;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
