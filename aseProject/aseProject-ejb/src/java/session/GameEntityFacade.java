@@ -7,12 +7,13 @@ package session;
 
 import entity.GameEntity;
 import entity.MonsterEggEntity;
-import entity.MonsterEntity;
 import entity.PlayerEntity;
 import entity.StarEntity;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -148,6 +149,19 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
                 remove(star);
             }
+            if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
+                MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                if (egg.getType().equals("kill")) {
+                    System.out.println("U GOT KILLED");
+                    player.setX(0);
+                    player.setY(0);
+                    player.setStars(0);
+                    edit(player);
+                    return true;
+                } else {
+                    player.setFrozen(true);
+                }
+            }
         }
         player.setX(toX);
         player.setY(toY);
@@ -162,16 +176,29 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
 
         int toX = playerX - 50;
         int toY = playerY;
-
         if (!isValidMove(playerX, playerY, toX, toY)) {
             return false;
         }
+
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
             if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
                 player.setStars(player.getStars() + 1);
                 StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
                 remove(star);
+            }
+            if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
+                MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                if (egg.getType().equals("kill")) {
+                    System.out.println("U GOT KILLED");
+                    player.setX(0);
+                    player.setY(0);
+                    player.setStars(0);
+                    edit(player);
+                    return true;
+                } else {
+                    player.setFrozen(true);
+                }
             }
         }
         player.setX(toX);
@@ -191,12 +218,26 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         if (!isValidMove(playerX, playerY, toX, toY)) {
             return false;
         }
+
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
             if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
                 player.setStars(player.getStars() + 1);
                 StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
                 remove(star);
+            }
+            if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
+                MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                if (egg.getType().equals("kill")) {
+                    System.out.println("U GOT KILLED");
+                    player.setX(0);
+                    player.setY(0);
+                    player.setStars(0);
+                    edit(player);
+                    return true;
+                } else {
+                    player.setFrozen(true);
+                }
             }
         }
         player.setX(toX);
@@ -216,12 +257,26 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         if (!isValidMove(playerX, playerY, toX, toY)) {
             return false;
         }
+
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
             if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
                 player.setStars(player.getStars() + 1);
                 StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
                 remove(star);
+            }
+            if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
+                MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                if (egg.getType().equals("kill")) {
+                    System.out.println("U GOT KILLED");
+                    player.setX(0);
+                    player.setY(0);
+                    player.setStars(0);
+                    edit(player);
+                    return true;
+                } else {
+                    player.setFrozen(true);
+                }
             }
         }
         player.setX(toX);
