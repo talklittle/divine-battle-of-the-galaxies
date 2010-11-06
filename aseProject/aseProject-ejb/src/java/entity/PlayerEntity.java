@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 @Entity
 public class PlayerEntity extends GameEntity implements Serializable {

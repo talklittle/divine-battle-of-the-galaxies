@@ -12,7 +12,7 @@ import javax.persistence.Id;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 @Entity
 public class GameEntity implements Serializable {
@@ -27,6 +27,30 @@ public class GameEntity implements Serializable {
     private boolean collision;
     private boolean stop;
     private boolean isMoving;
+
+    public boolean isCollision() {
+        return collision;
+    }
+
+    public boolean isIsDown() {
+        return isDown;
+    }
+
+    public boolean isIsLeft() {
+        return isLeft;
+    }
+
+    public boolean isIsMoving() {
+        return isMoving;
+    }
+
+    public boolean isIsRight() {
+        return isRight;
+    }
+
+    public boolean isIsUp() {
+        return isUp;
+    }
 
     public GameEntity() {
     }
