@@ -31,7 +31,7 @@ import session.GameEntityFacadeRemote;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 public class drawPanel extends JPanel implements KeyListener {
 
@@ -45,7 +45,8 @@ public class drawPanel extends JPanel implements KeyListener {
 
     public drawPanel() {
         GameSession = lookupGameEntityFacadeRemote();
-//        GameSession.initGameBoard();
+        GameSession.gameBoard();
+        GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -99,7 +100,6 @@ public class drawPanel extends JPanel implements KeyListener {
             } catch (IOException ex) {
                 Logger.getLogger(drawPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println(entity.getId());
 
         }
         b.dispose();
