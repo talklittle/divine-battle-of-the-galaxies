@@ -212,7 +212,7 @@ public class registerPanel extends JPanel implements ActionListener {
     private PlayerEntityFacadeRemote lookupPlayerEntityFacadeRemote() {
         try {
             Context c = new InitialContext();
-            return (PlayerEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/PlayerEntityFacade");
+            return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
