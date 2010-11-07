@@ -167,15 +167,15 @@ public class registerPanel extends JPanel implements ActionListener {
         account = (accountInfo) accountInfoFacade.find(username);
         if (account == null) {
             String input = newAccountPsw.getText();
-            PlayerEntity user = new PlayerEntity();
+            User = new PlayerEntity();
             account = new accountInfo();
             account.setId(username);
             account.setPsw(input);
-            user.setId(username);
+            User.setId(username);
             Random ranColor = new Random();
             String random_color = spriteColor[ranColor.nextInt(8)];
-            user.setColor(random_color);
-            playerFacade.create(user);
+            User.setColor(random_color);
+            playerFacade.create(User);
             accountInfoFacade.create(account);
             JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
             nFlag_registered = true;
@@ -202,15 +202,15 @@ public class registerPanel extends JPanel implements ActionListener {
             isCorrect = Arrays.equals(input, charPsw);
             if (isCorrect) {
                 nFlag_registered = true;
-                PlayerEntity oldUser = playerFacade.find(username);
-                if (oldUser == null) {
+                User = playerFacade.find(username);
+                if (User == null) {
                     System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
-                    oldUser = new PlayerEntity();
-                    oldUser.setId(username);
+                    User = new PlayerEntity();
+                    User.setId(username);
                     Random ranColor = new Random();
                     String random_color = spriteColor[ranColor.nextInt(8)];
-                    oldUser.setColor(random_color);
-                    playerFacade.create(oldUser);
+                    User.setColor(random_color);
+                    playerFacade.create(User);
                 }
                 System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
