@@ -59,7 +59,7 @@ public class registerPanel extends JPanel implements ActionListener {
     public registerPanel() {
 
         setBackground(new java.awt.Color(255, 255, 204));
-
+        this.setIgnoreRepaint(true);
         newAccountBtn = new JButton();
         newAccountBtn.setFont(new java.awt.Font("Algerian", 1, 12));
         newAccountBtn.setText("NEW ACCOUNT");
@@ -203,7 +203,6 @@ public class registerPanel extends JPanel implements ActionListener {
             if (isCorrect) {
                 nFlag_registered = true;
                 PlayerEntity oldUser = playerFacade.find(username);
-                System.out.println(""+oldUser.getColor());
                 if (oldUser == null) {
                     System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
                     oldUser = new PlayerEntity();

@@ -2,25 +2,34 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package aseproject;
 
+import entity.GameEntity;
+import entity.PlayerEntity;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import session.GameEntityFacadeRemote;
 
 /**
  *
  * @author Administrator
  */
-public class Main implements ActionListener
-{
+public class Main implements ActionListener {
 
     JFrame window;
     drawPanel gamePanel;
     registerPanel regPanel;
+    GameEntityFacadeRemote gameSession;
 
     public Main() {
 
@@ -33,10 +42,15 @@ public class Main implements ActionListener
     }
 
     public void go() {
-        window.setContentPane(regPanel);
-        while (true) {
 
-            if (regPanel.nFlag_registered && gamePanel.nFlag_gameOver == false) {
+        while (true) {
+            if (regPanel.nFlag_registered == false) {
+                window.setContentPane(regPanel);
+                while (regPanel.nFlag_registered == false) {
+                }
+            }
+
+            if (regPanel.nFlag_registered == true && gamePanel.nFlag_gameOver == false) {
 
                 window.setContentPane(gamePanel);
                 gamePanel.activate();
@@ -48,7 +62,7 @@ public class Main implements ActionListener
 
             if (gamePanel.nFlag_gameOver == true) {
                 System.out.print("Game over");
-                JButton endBtn = new JButton("Game over, start again?");
+                JButton endBtn = new JButton("Game over.");
                 endBtn.addActionListener(this);
                 JPanel endPanel = new JPanel();
                 endPanel.add(endBtn);
@@ -56,8 +70,8 @@ public class Main implements ActionListener
                 window.validate();
                 window.repaint();
                 System.out.print("Game over");
-                while(gamePanel.nFlag_gameOver == true)
-                {}
+                while (gamePanel.nFlag_gameOver == true) {
+                }
             }
         }
     }
@@ -68,6 +82,28 @@ public class Main implements ActionListener
     }
 
     public void actionPerformed(ActionEvent e) {
-        gamePanel.nFlag_gameOver=false;
+        //delete all player entity in the board
+        gameSession = lookupGameEntityFacadeRemote();
+        List playerEntities = gameSession.findAll();
+        Iterator it = playerEntities.iterator();
+        while (it.hasNext()) {
+            GameEntity player = (GameEntity) it.next();
+            if (player instanceof PlayerEntity) {
+                gameSession.remove(player);
+            }
+        }
+        System.out.print("restart the game");
+        gamePanel.nFlag_gameOver = false;
+        regPanel.nFlag_registered = false;
+    }
+
+    private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
+        try {
+            Context c = new InitialContext();
+            return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 }
