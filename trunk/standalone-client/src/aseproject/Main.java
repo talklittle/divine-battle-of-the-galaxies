@@ -62,15 +62,11 @@ public class Main implements ActionListener {
 
     public void go() {
 
+        window.add(regPanel);
+        window.setContentPane(regPanel);
+        window.setVisible(true);
+
         while (true) {
-            if (regPanel.nFlag_registered == false) {
-                window.setContentPane(regPanel);
-
-
-                while (regPanel.nFlag_registered == false) {
-                }
-            }
-
             if (regPanel.nFlag_registered == true && gamePanel.nFlag_gameOver == false) {
 
                 window.setContentPane(gamePanel);
