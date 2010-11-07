@@ -94,7 +94,7 @@ public class drawPanel extends JPanel implements KeyListener {
             try {
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
-                    img = ImageIO.read(new File("assets/sprite-blue.png"));
+                    img = ImageIO.read(new File("assets/sprite-"+player.getColor()+".png"));
                     b.drawString("STAR"+player.getStars(), player.getX()+50, player.getY()+50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
