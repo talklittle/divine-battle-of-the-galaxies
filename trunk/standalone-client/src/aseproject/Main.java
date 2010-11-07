@@ -61,15 +61,14 @@ public class Main implements ActionListener {
             }
 
             if (gamePanel.nFlag_gameOver == true) {
-                System.out.print("Game over");
-                JButton endBtn = new JButton("Game over.");
+                System.out.println("Game over");
+                JButton endBtn = new JButton("Game over, Restart?");
                 endBtn.addActionListener(this);
                 JPanel endPanel = new JPanel();
                 endPanel.add(endBtn);
                 window.setContentPane(endPanel);
                 window.validate();
                 window.repaint();
-                System.out.print("Game over");
                 while (gamePanel.nFlag_gameOver == true) {
                 }
             }
