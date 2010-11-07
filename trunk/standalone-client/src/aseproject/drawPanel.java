@@ -52,7 +52,7 @@ public class drawPanel extends JPanel implements KeyListener {
     public drawPanel() {
         GameSession = lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
-//        GameSession.initGameBoard();
+        GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -84,7 +84,6 @@ public class drawPanel extends JPanel implements KeyListener {
         }
 
         // TODO draw entities on buffer b
-        GameSession.gameBoard();
         List gameEntities = GameSession.findAll();
 
         Iterator iter = gameEntities.iterator();

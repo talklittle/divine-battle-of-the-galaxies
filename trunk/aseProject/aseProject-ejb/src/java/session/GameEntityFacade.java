@@ -118,11 +118,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             GameEntity elem = (GameEntity) it.next();
             gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem.getId();
         }
-        for (int i = 0; i < 16; i++) {
+        /*for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 12; j++) {
                 System.out.println(i + " " + j + " " + gameBoardOcc[i][j]);
             }
-        }
+        }*/
     }
 
     public boolean playerLogic(PlayerEntity player, int toX, int toY) {
@@ -132,6 +132,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             player.setX(toX);
             player.setY(toY);
             edit(player);
+            
             remove(star);
         }
 
@@ -163,6 +164,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean moveUp(String id) {
+        gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
         int fromX = entity.getX();
         int fromY = entity.getY();
@@ -195,6 +197,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean moveLeft(String id) {
+        gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
         int fromX = entity.getX();
         int fromY = entity.getY();
@@ -229,6 +232,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean moveDown(String id) {
+        gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
         int fromX = entity.getX();
         int fromY = entity.getY();
@@ -261,6 +265,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean moveRight(String id) {
+        gameBoard();
         GameEntity entity = (GameEntity) find(id);
         int fromX = entity.getX();
         int fromY = entity.getY();
