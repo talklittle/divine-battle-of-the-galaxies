@@ -36,10 +36,12 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     private String[][] gameBoardOcc = new String[16][12];
     private Timer myTimer;
 
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
+    @Override
     public String[][] getOcc() {
         return gameBoardOcc;
     }
@@ -48,6 +50,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         super(GameEntity.class);
     }
 
+    @Override
     public void initGameBoard() {
         // TODO initialize the Game Board
         // initialize Stars
@@ -119,9 +122,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem.getId();
         }
         /*for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 12; j++) {
-                System.out.println(i + " " + j + " " + gameBoardOcc[i][j]);
-            }
+        for (int j = 0; j < 12; j++) {
+        System.out.println(i + " " + j + " " + gameBoardOcc[i][j]);
+        }
         }*/
     }
 
@@ -132,8 +135,18 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             player.setX(toX);
             player.setY(toY);
             edit(player);
-            
+
             remove(star);
+            int starx = 0;
+            int stary = 0;
+            do {
+                Random starnew = new Random();
+                starx = starnew.nextInt(16);
+                stary = starnew.nextInt(12);
+            } while (gameBoardOcc[starx][stary] != null);
+            star.setX(starx*50);
+            star.setY(stary*50);
+            create(star);
         }
 
         if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
@@ -144,7 +157,6 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 player.setY(0);
                 player.setStars(0);
                 edit(player);
-
                 return true;
             } else {
                 player.setFrozen(true);
@@ -163,6 +175,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         }
     }
 
+    @Override
     public boolean moveUp(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
@@ -183,9 +196,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 return true;
             }
         }
-        if(entity instanceof MonsterEggEntity) {
+        if (entity instanceof MonsterEggEntity) {
             moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
-            if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
+            if (moveOk) {
+                gameBoardOcc[fromX / 50][fromY / 50] = null;
+            }
         }
 
         entity.setX(toX);
@@ -196,6 +211,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         return true;
     }
 
+    @Override
     public boolean moveLeft(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
@@ -218,10 +234,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             if (moveOk) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
             }
-        }
-        else if(entity instanceof MonsterEggEntity) {
+        } else if (entity instanceof MonsterEggEntity) {
             moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
-            if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
+            if (moveOk) {
+                gameBoardOcc[fromX / 50][fromY / 50] = null;
+            }
         }
         entity.setX(toX);
         entity.setY(toY);
@@ -231,6 +248,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         return true;
     }
 
+    @Override
     public boolean moveDown(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
@@ -252,9 +270,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 return true;
             }
         }
-        if(entity instanceof MonsterEggEntity) {
+        if (entity instanceof MonsterEggEntity) {
             moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
-            if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
+            if (moveOk) {
+                gameBoardOcc[fromX / 50][fromY / 50] = null;
+            }
         }
         entity.setX(toX);
         entity.setY(toY);
@@ -264,6 +284,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         return true;
     }
 
+    @Override
     public boolean moveRight(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) find(id);
@@ -285,9 +306,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 return true;
             }
         }
-        if(entity instanceof MonsterEggEntity) {
+        if (entity instanceof MonsterEggEntity) {
             moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
-            if(moveOk) gameBoardOcc[fromX/50][fromY/50] = null;
+            if (moveOk) {
+                gameBoardOcc[fromX / 50][fromY / 50] = null;
+            }
         }
         entity.setX(toX);
         entity.setY(toY);
