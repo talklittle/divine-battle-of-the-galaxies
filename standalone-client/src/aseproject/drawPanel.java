@@ -38,7 +38,6 @@ import session.GameEntityFacadeRemote;
 public class drawPanel extends JPanel implements KeyListener {
 
     public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
-
     BufferedImage buffer;
     public boolean nFlag_gameOver = false;
     GridLayout layout = new GridLayout(16, 12);
@@ -46,13 +45,12 @@ public class drawPanel extends JPanel implements KeyListener {
     private String username;
     private GameEntityFacadeRemote GameSession;
 //    PlayerEntity player;
-
     private Timer myTimer;
 
     public drawPanel() {
         GameSession = lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
-        GameSession.initGameBoard();
+//        GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -93,8 +91,11 @@ public class drawPanel extends JPanel implements KeyListener {
             try {
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
-                    img = ImageIO.read(new File("assets/sprite-"+player.getColor()+".png"));
-                    b.drawString("STAR"+player.getStars(), player.getX()+50, player.getY()+50);
+                    img = ImageIO.read(new File("assets/sprite-" + player.getColor() + ".png"));
+                    if (player.getStars() == 10) {
+                        nFlag_gameOver = true;
+                    }
+                    b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 }
                 if (entity instanceof MonsterEntity) {
@@ -122,9 +123,11 @@ public class drawPanel extends JPanel implements KeyListener {
         }
         b.setColor(Color.red);
         String[][] occ = GameSession.getOcc();
-        for(int i=0; i<16; i++) {
-            for(int j=0; j<12; j++) {
-                if(occ[i][j] != null) b.drawString(occ[i][j], i*50, j*50+25);
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 12; j++) {
+                if (occ[i][j] != null) {
+                    b.drawString(occ[i][j], i * 50, j * 50 + 25);
+                }
             }
         }
         b.dispose();
@@ -185,16 +188,17 @@ public class drawPanel extends JPanel implements KeyListener {
     }
 
     class monsterTask extends TimerTask {
-    	public void run() {
+
+        public void run() {
             List entities = GameSession.findAll();
             Iterator iter = entities.iterator();
             Random rand = new Random();
             int direction;
-            while(iter.hasNext()) {
+            while (iter.hasNext()) {
                 GameEntity entity = (GameEntity) iter.next();
-                if(entity instanceof MonsterEggEntity) {
-                    direction = rand.nextInt(1920)%4;
-                    switch(direction) {
+                if (entity instanceof MonsterEggEntity) {
+                    direction = rand.nextInt(1920) % 4;
+                    switch (direction) {
                         case 0://up
                             GameSession.moveUp(entity.getId());
                             break;
@@ -210,7 +214,7 @@ public class drawPanel extends JPanel implements KeyListener {
                     }
                 }
             }
-    	}
+        }
     }
 
     public void initTimer() {
