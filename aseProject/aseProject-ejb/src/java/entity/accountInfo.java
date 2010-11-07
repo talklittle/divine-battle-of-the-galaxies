@@ -13,7 +13,7 @@ import javax.persistence.Id;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 @Entity
 public class accountInfo implements Serializable {

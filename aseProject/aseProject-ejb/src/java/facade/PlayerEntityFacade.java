@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 @Stateless
 public class PlayerEntityFacade extends AbstractFacade<PlayerEntity> implements PlayerEntityFacadeRemote {

@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 @Stateless
 public class accountInfoFacade extends AbstractFacade<accountInfo> implements accountInfoFacadeRemote {
