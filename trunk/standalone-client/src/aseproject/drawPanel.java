@@ -95,9 +95,9 @@ public class drawPanel extends JPanel implements KeyListener {
                 } else if (entity instanceof MonsterEntity) {
                     MonsterEntity egg = (MonsterEntity) entity;
                     if (egg.getType().equals("kill")) {
-                        img = ImageIO.read(new File("assets/kill-yellow.png"));
+                        img = ImageIO.read(new File("assets/kill-"+egg.getColor()+".png"));
                     } else {
-                        img = ImageIO.read(new File("assets/freeze-kiwi.png"));
+                        img = ImageIO.read(new File("assets/freeze-"+egg.getColor()+".png"));
                     }
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 } else if (entity instanceof StarEntity) {

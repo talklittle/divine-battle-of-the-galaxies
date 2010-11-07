@@ -17,6 +17,7 @@ import java.util.Timer;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.Colors;
 
 /**
  *
@@ -56,13 +57,12 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public void initGameBoard() {
         // TODO initialize the Game Board
         // initialize Stars
-        Random widthRand = new Random(19580427);
-        Random heightRand = new Random(19580427);
+        Random rand = new Random();
         int x, y;
         StarEntity star;
         for (int i = 0; i < INIT_STARS; i++) {
-            x = widthRand.nextInt(15) * 50;
-            y = heightRand.nextInt(11) * 50;
+            x = rand.nextInt(15) * 50;
+            y = rand.nextInt(11) * 50;
             star = new StarEntity(x, y);
             star.setId("star-" + numStars);
             numStars += 1;
@@ -73,13 +73,14 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             }
             create(star);
         }
-        // initialize MonsterEggs
+        // initialize Monsters
         MonsterEntity monster;
         for (int i = 0; i < INIT_MONSTERS_KILL; i++) {
-            x = widthRand.nextInt(15) * 50;
-            y = heightRand.nextInt(11) * 50;
+            x = rand.nextInt(15) * 50;
+            y = rand.nextInt(11) * 50;
             monster = new MonsterEntity(x, y, "kill");
             monster.setId("monster-" + numMonsters);
+            monster.setColor(Colors.COLOR_STRINGS[rand.nextInt(Colors.COLOR_STRINGS.length)]);
             numMonsters += 1;
             if (gameBoardOcc[x / 50][y / 50] == null) {
                 gameBoardOcc[x / 50][y / 50] = monster.getId();
@@ -89,10 +90,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             create(monster);
         }
         for (int i = 0; i < INIT_MONSTERS_FREEZE; i++) {
-            x = widthRand.nextInt(15) * 50;
-            y = heightRand.nextInt(11) * 50;
+            x = rand.nextInt(15) * 50;
+            y = rand.nextInt(11) * 50;
             monster = new MonsterEntity(x, y, "freeze");
             monster.setId("monster-" + numMonsters);
+            monster.setColor(Colors.COLOR_STRINGS[rand.nextInt(Colors.COLOR_STRINGS.length)]);
             numMonsters += 1;
             if (gameBoardOcc[x / 50][y / 50] == null) {
                 gameBoardOcc[x / 50][y / 50] = monster.getId();
