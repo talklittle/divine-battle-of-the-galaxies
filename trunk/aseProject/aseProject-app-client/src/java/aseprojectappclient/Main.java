@@ -24,8 +24,6 @@ public class Main implements ActionListener {
 
     public Main() {
         window = new JFrame("DIVINE BATTLE OF THE GALAXIES - Game Master.");
-        window.setSize(900, 700);
-        window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         window.addWindowListener(new WindowAdapter() {
 
@@ -46,13 +44,13 @@ public class Main implements ActionListener {
                 }
             }
         });
-        window.setVisible(true);
         gameMasterPanel = new GameMasterPanel();
     }
 
     private void go() {
         window.add(gameMasterPanel);
         window.setContentPane(gameMasterPanel);
+        window.pack();
         window.setVisible(true);
     }
 
