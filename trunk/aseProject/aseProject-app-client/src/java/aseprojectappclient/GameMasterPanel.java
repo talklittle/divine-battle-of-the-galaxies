@@ -11,13 +11,7 @@
 
 package aseprojectappclient;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import facade.Lookup;
 import session.GameEntityFacadeRemote;
 
 /**
@@ -31,7 +25,7 @@ public class GameMasterPanel extends javax.swing.JPanel {
     /** Creates new form GameMasterPanel */
     public GameMasterPanel() {
         initComponents();
-        gameSession = lookupGameEntityFacadeRemote();
+        gameSession = Lookup.lookupGameEntityFacadeRemote();
 
     }
 
@@ -72,6 +66,7 @@ public class GameMasterPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void initBoardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_initBoardButtonActionPerformed
+        gameSession = Lookup.lookupGameEntityFacadeRemote();
         gameSession.initGameBoard();
     }//GEN-LAST:event_initBoardButtonActionPerformed
 
@@ -80,14 +75,5 @@ public class GameMasterPanel extends javax.swing.JPanel {
     private javax.swing.JButton initBoardButton;
     // End of variables declaration//GEN-END:variables
 
-    private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
-    try {
-        Context c = new InitialContext();
-        return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
-    } catch (NamingException ne) {
-        Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-        throw new RuntimeException(ne);
-    }
-}
 
 }

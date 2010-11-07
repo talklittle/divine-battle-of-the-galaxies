@@ -6,6 +6,7 @@
 package aseproject;
 
 import entity.accountInfo;
+import facade.Lookup;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -65,7 +66,7 @@ public class adminPanel extends JPanel implements ActionListener {
 
     public adminPanel(Main m) {
         parent = m;
-        AcctSession = lookupAcctInfoFacadeRemote();
+        AcctSession = Lookup.lookupaccountInfoFacadeRemote();
         
         layout = new BorderLayout();
         this.setLayout(layout);
@@ -273,15 +274,5 @@ public class adminPanel extends JPanel implements ActionListener {
 
         revalidate();
         repaint();
-    }
-
-    private accountInfoFacadeRemote lookupAcctInfoFacadeRemote() {
-        try {
-            Context c = new InitialContext();
-            return (accountInfoFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/accountInfoFacade");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
     }
 }

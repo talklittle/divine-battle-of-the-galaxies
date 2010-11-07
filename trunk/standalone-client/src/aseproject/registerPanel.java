@@ -17,6 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import entity.PlayerEntity;
 import entity.accountInfo;
+import facade.Lookup;
 import facade.PlayerEntityFacadeRemote;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -137,8 +138,8 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         add(loginBtn);
         newAccountBtn.addActionListener(this);
         loginBtn.addActionListener(this);
-        playerFacade = lookupPlayerEntityFacadeRemote();
-        accountInfoFacade = lookupaccountInfoFacadeRemote();
+        playerFacade = Lookup.lookupPlayerEntityFacadeRemote();
+        accountInfoFacade = Lookup.lookupaccountInfoFacadeRemote();
     }
 
     public void rebuildPanel() {
@@ -257,26 +258,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             doLoginOK();
         }
 
-    }
-
-    private PlayerEntityFacadeRemote lookupPlayerEntityFacadeRemote() {
-        try {
-            Context c = new InitialContext();
-            return (PlayerEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/PlayerEntityFacade");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
-
-    private accountInfoFacadeRemote lookupaccountInfoFacadeRemote() {
-        try {
-            Context c = new InitialContext();
-            return (accountInfoFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/accountInfoFacade");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
     }
 
     public void mouseEntered(MouseEvent e) {

@@ -9,6 +9,7 @@ import entity.GameEntity;
 import entity.MonsterEntity;
 import entity.PlayerEntity;
 import entity.StarEntity;
+import facade.Lookup;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -20,15 +21,10 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.swing.*;
 import session.GameEntityFacadeRemote;
 
@@ -52,7 +48,7 @@ public class drawPanel extends JPanel implements KeyListener {
     private static final Object seenCollisionEventsLock = new Object();
 
     public drawPanel() {
-        GameSession = lookupGameEntityFacadeRemote();
+        GameSession = Lookup.lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
         //GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
@@ -60,10 +56,6 @@ public class drawPanel extends JPanel implements KeyListener {
         this.setFocusable(true);
         this.setLayout(layout);
 
-    }
-
-    public void activate() {
-        initTimer();
     }
 
     public void Initialize(String username) {
@@ -229,50 +221,5 @@ public class drawPanel extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // nothing
-    }
-
-    class monsterTask extends TimerTask {
-
-        public void run() {
-            List entities = GameSession.findAll();
-            Iterator iter = entities.iterator();
-            Random rand = new Random();
-            int direction;
-            while (iter.hasNext()) {
-                GameEntity entity = (GameEntity) iter.next();
-                if (entity instanceof MonsterEntity) {
-                    direction = rand.nextInt(1920) % 4;
-                    switch (direction) {
-                        case 0://up
-                            GameSession.moveUp(entity.getId());
-                            break;
-                        case 1://down
-                            GameSession.moveDown(entity.getId());
-                            break;
-                        case 2://left
-                            GameSession.moveLeft(entity.getId());
-                            break;
-                        case 3://right
-                            GameSession.moveRight(entity.getId());
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
-    public void initTimer() {
-        myTimer = new Timer();
-        myTimer.scheduleAtFixedRate(new monsterTask(), 1000, 1000);
-    }
-
-    private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
-        try {
-            Context c = new InitialContext();
-            return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
     }
 }
