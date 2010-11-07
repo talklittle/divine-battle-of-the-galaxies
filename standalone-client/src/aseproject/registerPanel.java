@@ -39,7 +39,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     static final int PANEL_MODE_NEW_ACCOUNT = 1;
     static final int PANEL_MODE_LOGIN = 2;
     public boolean nFlag_registered = false;
-    public boolean nFlag_admin = false;
     int panelMode = PANEL_MODE_DEFAULT;
     JLabel gameTitle;
     JLabel newAccountUserLabel;
