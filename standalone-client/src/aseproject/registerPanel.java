@@ -20,6 +20,8 @@ import entity.accountInfo;
 import facade.PlayerEntityFacadeRemote;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.Random;
 import javax.swing.BoxLayout;
@@ -31,7 +33,7 @@ import session.accountInfoFacadeRemote;
  *
  * @author _yy
  */
-public class registerPanel extends JPanel implements ActionListener {
+public class registerPanel extends JPanel implements ActionListener, MouseListener {
 
     static final int PANEL_MODE_DEFAULT = 0;
     static final int PANEL_MODE_NEW_ACCOUNT = 1;
@@ -65,11 +67,13 @@ public class registerPanel extends JPanel implements ActionListener {
         newAccountBtn.setText("NEW ACCOUNT");
         newAccountBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         newAccountBtn.setMinimumSize(new Dimension(300, 60));
+        newAccountBtn.addMouseListener(this);
 
         loginBtn = new JButton();
         loginBtn.setFont(new java.awt.Font("Algerian", 1, 12));
         loginBtn.setText("LOG ON");
         loginBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loginBtn.addMouseListener(this);
 
         gameTitle = new JLabel();
         gameTitle.setFont(new java.awt.Font("Algerian", 1, 36)); // NOI18N
@@ -83,7 +87,8 @@ public class registerPanel extends JPanel implements ActionListener {
         loginOKBtn.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
         loginOKBtn.setText("OK");
         loginOKBtn.addActionListener(this);
-        loginBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loginOKBtn.addMouseListener(this);
+        loginOKBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         newAccountUserLabel = new JLabel();
         newAccountUserLabel.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
@@ -116,6 +121,7 @@ public class registerPanel extends JPanel implements ActionListener {
         newAccountOK.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
         newAccountOK.setText("OK");
         newAccountOK.addActionListener(this);
+        newAccountOK.addMouseListener(this);
         newAccountOK.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         pswField = new JPasswordField(20);
@@ -228,12 +234,16 @@ public class registerPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
         if (src == loginBtn) {
+            SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
             doLogin();
         } else if (src == newAccountBtn) {
+            SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
             doNewAccount();
         } else if (src == newAccountOK || src == newAccountUser || src == newAccountPsw) {
+            SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
             doNewAccountOK();
         } else if (src == loginOKBtn || src == loginUserName || src == pswField) {
+            SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
             doLoginOK();
         }
 
@@ -257,5 +267,21 @@ public class registerPanel extends JPanel implements ActionListener {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
+    }
+
+    public void mouseEntered(MouseEvent e) {
+        SoundEffects.playSound("49206__tombola__Fisher_Price22.wav");
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
+
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
     }
 }

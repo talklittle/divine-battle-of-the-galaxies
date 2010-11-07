@@ -4,6 +4,7 @@
  */
 package aseproject;
 
+import entity.CollisionEventEntity;
 import entity.GameEntity;
 import entity.MonsterEggEntity;
 import entity.MonsterEntity;
@@ -17,6 +18,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -46,6 +48,9 @@ public class drawPanel extends JPanel implements KeyListener {
     private GameEntityFacadeRemote GameSession;
 //    PlayerEntity player;
     private Timer myTimer;
+
+    private HashSet<CollisionEventEntity> seenCollisionEvents = new HashSet<CollisionEventEntity>();
+    private static final Object seenCollisionEventsLock = new Object();
 
     public drawPanel() {
         GameSession = lookupGameEntityFacadeRemote();
@@ -81,7 +86,7 @@ public class drawPanel extends JPanel implements KeyListener {
             b.drawLine(0, i * 50, 800, i * 50);
         }
 
-        // TODO draw entities on buffer b
+        // draw entities on buffer b
         List gameEntities = GameSession.findAll();
 
         Iterator iter = gameEntities.iterator();
@@ -97,23 +102,28 @@ public class drawPanel extends JPanel implements KeyListener {
                     }
                     b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
-                }
-                if (entity instanceof MonsterEntity) {
+                } else if (entity instanceof MonsterEntity) {
                     img = ImageIO.read(new File("assets/freeze-red.png"));
                     b.drawImage(img, entity.getX(), entity.getY(), null);
-                }
-                if (entity instanceof MonsterEggEntity) {
+                } else if (entity instanceof MonsterEggEntity) {
                     MonsterEggEntity egg = (MonsterEggEntity) entity;
                     if (egg.getType().equals("kill")) {
-                        img = ImageIO.read(new File("assets/freeze-kiwi.png"));
-                    } else {
                         img = ImageIO.read(new File("assets/kill-yellow.png"));
+                    } else {
+                        img = ImageIO.read(new File("assets/freeze-kiwi.png"));
                     }
                     b.drawImage(img, entity.getX(), entity.getY(), null);
-                }
-                if (entity instanceof StarEntity) {
+                } else if (entity instanceof StarEntity) {
                     img = ImageIO.read(new File("assets/star.png"));
                     b.drawImage(img, entity.getX(), entity.getY(), null);
+                } else if (entity instanceof CollisionEventEntity) {
+                    CollisionEventEntity collision = (CollisionEventEntity) entity;
+
+                    synchronized (seenCollisionEventsLock) {
+                        if (!isEventAlreadySeen(collision)) {
+                            handleCollisionEvent(collision);
+                        }
+                    }
                 }
 
             } catch (IOException ex) {
@@ -139,6 +149,44 @@ public class drawPanel extends JPanel implements KeyListener {
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
 
+    }
+
+    private boolean isEventAlreadySeen(CollisionEventEntity event) {
+        boolean seen;
+        seen = seenCollisionEvents.contains(event);
+        return seen;
+    }
+
+    private void handleCollisionEvent(CollisionEventEntity event) {
+        int type = event.getCollisionType();
+        int x = event.getX();
+        int y = event.getY();
+        String id1 = event.getGameEntityId1();
+        String id2 = event.getGameEntityId2();
+
+        seenCollisionEvents.add(event);
+        
+        // play sounds for events involving this player
+        if (username.equals(id1) || username.equals(id2)) {
+            switch (type) {
+//                case CollisionEventEntity.COLLISION_PLAYER_EGG:
+//                    SoundEffects.playSound("playerGetEgg.wav");
+//                    break;
+                case CollisionEventEntity.COLLISION_PLAYER_KILL:
+                    SoundEffects.playSound("44430__thecheeseman__hurt3.wav");
+                    break;
+                case CollisionEventEntity.COLLISION_PLAYER_FREEZE:
+                    // XXX For now, Freeze is same as Kill
+                    SoundEffects.playSound("44430__thecheeseman__hurt3.wav");
+                    break;
+                case CollisionEventEntity.COLLISION_PLAYER_PLAYER:
+                    SoundEffects.playSound("17934__zippi1__sound_hello1.wav");
+                    break;
+                case CollisionEventEntity.COLLISION_PLAYER_STAR:
+                    SoundEffects.playSound("ting.wav");
+                    break;
+            }
+        }
     }
 
     public void startGame(String username) {
