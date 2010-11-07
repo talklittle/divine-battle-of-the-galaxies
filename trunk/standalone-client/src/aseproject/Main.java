@@ -35,12 +35,16 @@ public class Main implements ActionListener {
     adminPanel adminConsole;
     GameEntityFacadeRemote gameSession;
 
+    public boolean nFlag_adminLogout;
+
     public Main() {
+
+        nFlag_adminLogout = false;
 
         window = new JFrame("DIVINE BATTLE OF THE GALAXIES.");
         gamePanel = new drawPanel();
         regPanel = new registerPanel(this);
-        adminConsole = new adminPanel();
+        adminConsole = new adminPanel(this);
         window.setSize(900, 700);
         gameSession = lookupGameEntityFacadeRemote();
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -72,13 +76,16 @@ public class Main implements ActionListener {
     }
 
     public void go() {
-
-        window.add(regPanel);
         window.setContentPane(regPanel);
         window.setVisible(true);
 
         while (true) {
-            if(regPanel.nFlag_admin == false && regPanel.nFlag_registered && (gamePanel.nFlag_gameOver == false)) {
+            if(nFlag_adminLogout) {
+                nFlag_adminLogout = false;
+                System.out.println("break!");
+                return;
+            }
+            else if(regPanel.nFlag_registered && (gamePanel.nFlag_gameOver == false)) {
                 window.setContentPane(gamePanel);
                 gamePanel.activate();
                 window.validate();

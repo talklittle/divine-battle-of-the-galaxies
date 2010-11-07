@@ -50,6 +50,7 @@ public class adminPanel extends JPanel implements ActionListener {
     JButton editButton;
     JButton deleteButton;
     JButton saveButton;
+    JButton logoutButton;
     JTextField editPswField;
     JLabel userLabel;
     JLabel userDisp;
@@ -60,8 +61,10 @@ public class adminPanel extends JPanel implements ActionListener {
     int rowIndex;
 
     private accountInfoFacadeRemote AcctSession;
+    private Main parent;
 
-    public adminPanel() {
+    public adminPanel(Main m) {
+        parent = m;
         AcctSession = lookupAcctInfoFacadeRemote();
         
         layout = new BorderLayout();
@@ -75,6 +78,12 @@ public class adminPanel extends JPanel implements ActionListener {
 
         loadTable();
         //add(scrollPane, BorderLayout.CENTER);
+
+        logoutButton = new JButton();
+        logoutButton.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
+        logoutButton.setText("LOGOUT ADMIN CONSOLE");
+        logoutButton.addActionListener(this);
+        add(logoutButton, BorderLayout.SOUTH);
 
         //edit panel
         editPane = new JPanel();
@@ -252,6 +261,11 @@ public class adminPanel extends JPanel implements ActionListener {
                 myTableModel model = (myTableModel)acctTable.getModel();
                 model.removeRow(rowIndex);
             }
+        }
+
+        else if(src == logoutButton) {
+            parent.nFlag_adminLogout = true;
+            parent.go();
         }
 
         revalidate();
