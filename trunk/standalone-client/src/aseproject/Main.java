@@ -50,7 +50,8 @@ public class Main implements ActionListener {
                 if (JOptionPane.YES_OPTION == flag) {
                     //delete its own player
                     PlayerEntity currentPlayer = regPanel.User;
-                    gameSession.remove(currentPlayer);
+                    if (currentPlayer != null)
+                        gameSession.remove(currentPlayer);
                     System.exit(0);
                 } else {
                     return;
