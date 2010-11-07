@@ -32,6 +32,10 @@ public interface GameEntityFacadeRemote {
 
     void initGameBoard();
 
+    void clearGameBoard();
+
+    void cleanOldCollisionEvents();
+
     boolean moveUp(String username);
 
     boolean moveLeft(String username);
