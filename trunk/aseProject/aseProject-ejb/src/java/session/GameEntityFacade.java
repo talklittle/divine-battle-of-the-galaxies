@@ -108,6 +108,31 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         //initTimer();
     }
 
+    @Override
+    public void clearGameBoard() {
+        List<GameEntity> gameEntities = findAll();
+        for (GameEntity gameEntity : gameEntities) {
+            if (!(gameEntity instanceof PlayerEntity)) {
+                remove(gameEntity);
+            }
+        }
+    }
+
+    @Override
+    public void cleanOldCollisionEvents() {
+        long time = System.currentTimeMillis();
+        List<GameEntity> gameEntities = findAll();
+        for (GameEntity gameEntity : gameEntities) {
+            if (gameEntity instanceof CollisionEventEntity) {
+                CollisionEventEntity collisionEvent = (CollisionEventEntity) gameEntity;
+                long expireTime = collisionEvent.getEventTime() + collisionEvent.getEventDurationMillis();
+                if (time >= expireTime) {
+                    remove(collisionEvent);
+                }
+            }
+        }
+    }
+
     public boolean isValidMove(int fromX, int fromY, int toX, int toY) {
         //boundaries
         if (toX < 0 || toY < 0 || toX >= 800 || toY >= 600) {

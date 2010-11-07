@@ -33,7 +33,8 @@ public class Main implements ActionListener {
 
     private long debugMonsterMovements = 0;
 
-    Timer myTimer;
+    Timer monsterTimer;
+    Timer cleanTimer;
 
 
     public Main() {
@@ -69,11 +70,10 @@ public class Main implements ActionListener {
 
         gameSession = Lookup.lookupGameEntityFacadeRemote();
 
-        initTimer();
+        initTimers();
     }
 
-    class monsterTask extends TimerTask {
-
+    class MonsterTask extends TimerTask {
         public void run() {
             List entities = gameSession.findAll();
             Iterator iter = entities.iterator();
@@ -103,9 +103,17 @@ public class Main implements ActionListener {
         }
     }
 
-    public void initTimer() {
-        myTimer = new Timer();
-        myTimer.scheduleAtFixedRate(new monsterTask(), 1000, 1000);
+    class CleanTask extends TimerTask {
+        public void run() {
+            gameSession.cleanOldCollisionEvents();
+        }
+    }
+
+    public void initTimers() {
+        monsterTimer = new Timer();
+        monsterTimer.scheduleAtFixedRate(new MonsterTask(), 1000, 1000);
+        cleanTimer = new Timer();
+        cleanTimer.scheduleAtFixedRate(new CleanTask(), 200, 200);
     }
 
 
