@@ -29,7 +29,7 @@ import session.accountInfoFacadeRemote;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 public class registerPanel extends JPanel implements ActionListener {
 

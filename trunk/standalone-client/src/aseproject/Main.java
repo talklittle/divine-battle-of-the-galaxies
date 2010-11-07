@@ -25,7 +25,7 @@ import session.GameEntityFacadeRemote;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 public class Main implements ActionListener {
 
