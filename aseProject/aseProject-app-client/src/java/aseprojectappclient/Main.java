@@ -5,12 +5,21 @@
 
 package aseprojectappclient;
 
+import entity.GameEntity;
+import entity.MonsterEntity;
+import facade.Lookup;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import session.GameEntityFacadeRemote;
 
 /**
  *
@@ -20,6 +29,9 @@ public class Main implements ActionListener {
 
     JFrame window;
     GameMasterPanel gameMasterPanel;
+    private GameEntityFacadeRemote gameSession;
+
+    Timer myTimer;
 
 
     public Main() {
@@ -52,7 +64,48 @@ public class Main implements ActionListener {
         window.setContentPane(gameMasterPanel);
         window.pack();
         window.setVisible(true);
+
+        gameSession = Lookup.lookupGameEntityFacadeRemote();
+
+        initTimer();
     }
+
+    class monsterTask extends TimerTask {
+
+        public void run() {
+            List entities = gameSession.findAll();
+            Iterator iter = entities.iterator();
+            Random rand = new Random();
+            int direction;
+            while (iter.hasNext()) {
+                GameEntity entity = (GameEntity) iter.next();
+                if (entity instanceof MonsterEntity) {
+                    direction = rand.nextInt(1920) % 4;
+                    switch (direction) {
+                        case 0://up
+                            gameSession.moveUp(entity.getId());
+                            break;
+                        case 1://down
+                            gameSession.moveDown(entity.getId());
+                            break;
+                        case 2://left
+                            gameSession.moveLeft(entity.getId());
+                            break;
+                        case 3://right
+                            gameSession.moveRight(entity.getId());
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void initTimer() {
+        myTimer = new Timer();
+        myTimer.scheduleAtFixedRate(new monsterTask(), 1000, 1000);
+    }
+
+
 
 
     public void actionPerformed(ActionEvent e) {

@@ -6,6 +6,7 @@ package aseproject;
 
 import entity.GameEntity;
 import entity.PlayerEntity;
+import facade.Lookup;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -46,7 +47,7 @@ public class Main implements ActionListener {
         regPanel = new registerPanel(this);
         adminConsole = new adminPanel(this);
         window.setSize(900, 700);
-        gameSession = lookupGameEntityFacadeRemote();
+        gameSession = Lookup.lookupGameEntityFacadeRemote();
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         window.addWindowListener(new WindowAdapter() {
 
@@ -89,7 +90,6 @@ public class Main implements ActionListener {
             if(regPanel.nFlag_registered && !gamePanel.nFlag_gameOver && !nFlag_admin) {
                 window.remove(regPanel);
                 window.add(gamePanel);
-                gamePanel.activate();
                 window.validate();
                 window.repaint();
                 gamePanel.requestFocusInWindow();
@@ -145,13 +145,4 @@ public class Main implements ActionListener {
 
     }
 
-    private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
-        try {
-            Context c = new InitialContext();
-            return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
 }
