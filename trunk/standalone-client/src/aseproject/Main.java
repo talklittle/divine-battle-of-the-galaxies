@@ -13,13 +13,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import session.GameEntityFacadeRemote;
@@ -98,18 +94,29 @@ public class Main implements ActionListener {
 
             if (gamePanel.nFlag_gameOver == true) {
                 System.out.println("Game over");
+
                 JButton endBtn = new JButton("Game over, Restart?");
                 endBtn.addActionListener(this);
+                JLabel winnerLabel = new JLabel("Winner: " + gamePanel.winner + " (" + gamePanel.winnerColor + ")");
+
                 JPanel endPanel = new JPanel();
                 endPanel.add(endBtn);
+                endPanel.add(winnerLabel);
+
                 window.remove(gamePanel);
                 window.add(endPanel);
                 window.validate();
                 window.repaint();
 
-
+                // Busy wait while Game Over screen is showing
                 while (gamePanel.nFlag_gameOver == true) {
                 }
+
+                // Bring back to Register/Login page
+                window.remove(endPanel);
+                window.add(regPanel);
+                window.validate();
+                window.repaint();
             }
         }
     }
@@ -138,9 +145,9 @@ public class Main implements ActionListener {
 
             }
         }
-        System.out.print("restart the game");
-        gamePanel.nFlag_gameOver = false;
+        System.out.println("restart the game");
         regPanel.nFlag_registered = false;
+        gamePanel.nFlag_gameOver = false;
 
 
     }

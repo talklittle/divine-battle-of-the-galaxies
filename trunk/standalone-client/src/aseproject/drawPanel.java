@@ -37,6 +37,8 @@ public class drawPanel extends JPanel implements KeyListener {
     public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
     BufferedImage buffer;
     public boolean nFlag_gameOver = false;
+    public String winner = "";
+    public String winnerColor = "";
     GridLayout layout = new GridLayout(16, 12);
     private long lastSuccessfulMoveTime = 0;
     private String username;
@@ -89,6 +91,8 @@ public class drawPanel extends JPanel implements KeyListener {
                     img = ImageIO.read(new File("assets/sprite-" + player.getColor() + ".png"));
                     if (player.getStars() == 10) {
                         nFlag_gameOver = true;
+                        winner = player.getId();
+                        winnerColor = player.getColor();
                     }
                     b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
