@@ -5,6 +5,7 @@
  */
 package session;
 
+import entity.CollisionEventEntity;
 import entity.GameEntity;
 import entity.MonsterEggEntity;
 import entity.PlayerEntity;
@@ -33,6 +34,8 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     private int numStars = 0;
     private int numEggs = 0;
     private int numMonsters = 0;
+    private int numCollisions = 0;
+    private static final Object numCollisionsLock = new Object();
     private String[][] gameBoardOcc = new String[16][12];
     private Timer myTimer;
 
@@ -130,8 +133,21 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
 
     public boolean playerLogic(PlayerEntity player, int toX, int toY) {
         if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
-            player.setStars(player.getStars() + 1);
             StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+
+            CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
+                    CollisionEventEntity.COLLISION_PLAYER_STAR,
+                    player.getId(),
+                    star.getId(),
+                    System.currentTimeMillis(),
+                    500);
+            synchronized (numCollisionsLock) {
+                collision.setId("collision-" + numCollisions);
+                numCollisions += 1;
+            }
+            create(collision);
+
+            player.setStars(player.getStars() + 1);
             player.setX(toX);
             player.setY(toY);
             edit(player);
@@ -153,6 +169,19 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
             if (egg.getType().equals("kill")) {
                 System.out.println("U GOT KILLED");
+
+                CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
+                        CollisionEventEntity.COLLISION_PLAYER_KILL,
+                        player.getId(),
+                        egg.getId(),
+                        System.currentTimeMillis(),
+                        500);
+                synchronized (numCollisionsLock) {
+                    collision.setId("collision-" + numCollisions);
+                    numCollisions += 1;
+                }
+                create(collision);
+
                 player.setX(0);
                 player.setY(0);
                 player.setStars(0);
