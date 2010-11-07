@@ -50,6 +50,7 @@ public class adminPanel extends JPanel implements ActionListener {
     JPanel subEditPane;
     JButton editButton;
     JButton deleteButton;
+    JButton refreshButton;
     JButton saveButton;
     JButton logoutButton;
     JTextField editPswField;
@@ -105,6 +106,13 @@ public class adminPanel extends JPanel implements ActionListener {
         deleteButton.addActionListener(this);
         deleteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         editPane.add(deleteButton);
+
+        refreshButton = new JButton();
+        refreshButton.setFont(new java.awt.Font("Algerian", 1, 12));
+        refreshButton.setText("REFRESH");
+        refreshButton.addActionListener(this);
+        refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        editPane.add(refreshButton);
 
         subEditPane = new JPanel();
         BoxLayout subLayout = new BoxLayout(subEditPane, BoxLayout.Y_AXIS);
@@ -262,6 +270,11 @@ public class adminPanel extends JPanel implements ActionListener {
                 myTableModel model = (myTableModel)acctTable.getModel();
                 model.removeRow(rowIndex);
             }
+        }
+
+        else if(src == refreshButton) {
+            acctTable.setModel(new myTableModel());
+            acctTable.invalidate();
         }
 
         else if(src == logoutButton) {
