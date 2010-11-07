@@ -39,6 +39,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     static final int PANEL_MODE_NEW_ACCOUNT = 1;
     static final int PANEL_MODE_LOGIN = 2;
     public boolean nFlag_registered = false;
+    public boolean nFlag_admin = false;
     int panelMode = PANEL_MODE_DEFAULT;
     JLabel gameTitle;
     JLabel newAccountUserLabel;
@@ -58,7 +59,11 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     String username;
     String[] spriteColor = {"blue", "red", "kiwi", "yellow", "pink", "purple", "green", "gray"};
 
-    public registerPanel() {
+    Main parent;
+
+    public registerPanel(Main m) {
+
+        parent = m;
 
         setBackground(new java.awt.Color(255, 255, 204));
         this.setIgnoreRepaint(true);
@@ -208,6 +213,11 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             isCorrect = Arrays.equals(input, charPsw);
             if (isCorrect) {
                 nFlag_registered = true;
+                if(username.equals("admin")) {
+                    parent.adminConsole();
+                    return;
+                }
+                //System.out.println("nFlag_admin="+nFlag_admin);
                 User = playerFacade.find(username);
                 if (User == null) {
                     System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
