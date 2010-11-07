@@ -31,6 +31,8 @@ public class Main implements ActionListener {
     GameMasterPanel gameMasterPanel;
     private GameEntityFacadeRemote gameSession;
 
+    private long debugMonsterMovements = 0;
+
     Timer myTimer;
 
 
@@ -97,6 +99,7 @@ public class Main implements ActionListener {
                     }
                 }
             }
+            gameMasterPanel.setUpdateCounter(++debugMonsterMovements);
         }
     }
 
