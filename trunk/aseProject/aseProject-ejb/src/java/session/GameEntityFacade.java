@@ -34,8 +34,8 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     private int numStars = 0;
     private int numEggs = 0;
     private int numMonsters = 0;
-    private int numCollisions = 0;
-    private static final Object numCollisionsLock = new Object();
+    private long lastCollisionTime = 0;
+    private static final Object collisionTimeLock = new Object();
     private String[][] gameBoardOcc = new String[16][12];
     private Timer myTimer;
 
@@ -143,9 +143,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                     star.getId(),
                     System.currentTimeMillis(),
                     500);
-            synchronized (numCollisionsLock) {
-                collision.setId("collision-" + numCollisions);
-                numCollisions += 1;
+            long currentTimeMillis = System.currentTimeMillis();
+            synchronized (collisionTimeLock) {
+                if (currentTimeMillis <= lastCollisionTime)
+                    currentTimeMillis = lastCollisionTime + 1;
+                collision.setId("collision-" + currentTimeMillis);
             }
             create(collision);
 
@@ -178,9 +180,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                         egg.getId(),
                         System.currentTimeMillis(),
                         500);
-                synchronized (numCollisionsLock) {
-                    collision.setId("collision-" + numCollisions);
-                    numCollisions += 1;
+                long currentTimeMillis = System.currentTimeMillis();
+                synchronized (collisionTimeLock) {
+                    if (currentTimeMillis <= lastCollisionTime)
+                        currentTimeMillis = lastCollisionTime + 1;
+                    collision.setId("collision-" + currentTimeMillis);
                 }
                 create(collision);
 
