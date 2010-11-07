@@ -29,6 +29,7 @@ public class PlayerEntity extends GameEntity implements Serializable {
     private int y; //Start and character moveControl and regenerate
 //    private Vector Mon;  //collectMonster monsterTimeout
     private boolean frozen; // freezePlayer and freezeTimeout
+    private long frozentime;
 
 //    public PlayerEntity() {
 //
@@ -98,6 +99,14 @@ public class PlayerEntity extends GameEntity implements Serializable {
 
     public void setStars(int stars) {
         this.stars = stars;
+    }
+
+    public void setFrozentime(long f_time) {
+        this.frozentime = f_time;
+    }
+
+    public long getFrozentime() {
+        return frozentime;
     }
 
 
