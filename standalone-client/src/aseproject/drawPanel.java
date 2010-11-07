@@ -42,7 +42,6 @@ public class drawPanel extends JPanel implements KeyListener {
     private String username;
     private GameEntityFacadeRemote GameSession;
 //    PlayerEntity player;
-    private Timer myTimer;
 
     private HashSet<CollisionEventEntity> seenCollisionEvents = new HashSet<CollisionEventEntity>();
     private static final Object seenCollisionEventsLock = new Object();
