@@ -11,7 +11,7 @@ import javax.ejb.Remote;
 
 /**
  *
- * @author Administrator
+ * @author _yy
  */
 @Remote
 public interface GameEntityFacadeRemote {
