@@ -173,17 +173,25 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         account = (accountInfo) accountInfoFacade.find(username);
         if (account == null) {
             String input = newAccountPsw.getText();
-            User = new PlayerEntity();
+            
+            // Insert record in accountInfo
             account = new accountInfo();
             account.setId(username);
             account.setPsw(input);
+            accountInfoFacade.create(account);
+            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
+            if ("admin".equals(username)) {
+                parent.window.remove(this);
+                parent.adminConsole();
+                return;
+            }
+            // Insert record in GameEntity
+            User = new PlayerEntity();
             User.setId(username);
             Random ranColor = new Random();
             String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
             User.setColor(random_color);
             playerFacade.create(User);
-            accountInfoFacade.create(account);
-            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
             nFlag_registered = true;
         } else {
             System.out.println("Try another user ID.");
