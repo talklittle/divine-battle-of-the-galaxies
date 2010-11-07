@@ -138,17 +138,10 @@ public class Main implements ActionListener {
     private GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
         try {
             Context c = new InitialContext();
-
-
             return (GameEntityFacadeRemote) c.lookup("java:global/aseProject/aseProject-ejb/GameEntityFacade");
-
-
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-
-
             throw new RuntimeException(ne);
-
         }
     }
 }
