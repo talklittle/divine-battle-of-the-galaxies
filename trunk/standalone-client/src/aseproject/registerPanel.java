@@ -211,11 +211,12 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             char[] charPsw = correctPassword.toCharArray();
             isCorrect = Arrays.equals(input, charPsw);
             if (isCorrect) {
-                nFlag_registered = true;
                 if(username.equals("admin")) {
+                    parent.window.remove(this);
                     parent.adminConsole();
                     return;
                 }
+                nFlag_registered = true;
                 //System.out.println("nFlag_admin="+nFlag_admin);
                 User = playerFacade.find(username);
                 if (User == null) {

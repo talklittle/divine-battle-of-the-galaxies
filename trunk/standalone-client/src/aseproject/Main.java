@@ -35,11 +35,11 @@ public class Main implements ActionListener {
     adminPanel adminConsole;
     GameEntityFacadeRemote gameSession;
 
-    public boolean nFlag_adminLogout;
+    boolean nFlag_admin;
 
     public Main() {
 
-        nFlag_adminLogout = false;
+        nFlag_admin = false;
 
         window = new JFrame("DIVINE BATTLE OF THE GALAXIES.");
         gamePanel = new drawPanel();
@@ -69,24 +69,26 @@ public class Main implements ActionListener {
 
     public void adminConsole() {
         System.out.println("add admin console");
-        window.setContentPane(adminConsole);
+        nFlag_admin = true;
+        window.add(adminConsole);
         window.validate();
         window.repaint();
         adminConsole.requestFocusInWindow();
     }
 
     public void go() {
-        window.setContentPane(regPanel);
+        window.add(regPanel);
         window.setVisible(true);
 
         while (true) {
-            if(nFlag_adminLogout) {
-                nFlag_adminLogout = false;
-                System.out.println("break!");
-                return;
-            }
-            else if(regPanel.nFlag_registered && (gamePanel.nFlag_gameOver == false)) {
-                window.setContentPane(gamePanel);
+//            if(nFlag_adminLogout) {
+//                nFlag_adminLogout = false;
+//                System.out.println("break!");
+//                return;
+//            }
+            if(regPanel.nFlag_registered && !gamePanel.nFlag_gameOver && !nFlag_admin) {
+                window.remove(regPanel);
+                window.add(gamePanel);
                 gamePanel.activate();
                 window.validate();
                 window.repaint();
@@ -100,7 +102,8 @@ public class Main implements ActionListener {
                 endBtn.addActionListener(this);
                 JPanel endPanel = new JPanel();
                 endPanel.add(endBtn);
-                window.setContentPane(endPanel);
+                window.remove(gamePanel);
+                window.add(endPanel);
                 window.validate();
                 window.repaint();
 
