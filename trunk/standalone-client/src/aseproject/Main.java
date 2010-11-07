@@ -48,7 +48,7 @@ public class Main implements ActionListener {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                int flag = JOptionPane.showConfirmDialog(window, "R U SURE TO EXIT?", "ATTENTION", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                int flag = JOptionPane.showConfirmDialog(window, "Really exit?", "Exit Game", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (JOptionPane.YES_OPTION == flag) {
                     //delete its own player
                     PlayerEntity currentPlayer = regPanel.User;
