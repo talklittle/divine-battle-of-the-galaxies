@@ -211,6 +211,11 @@ public class registerPanel extends JPanel implements ActionListener {
                     String random_color = spriteColor[ranColor.nextInt(8)];
                     User.setColor(random_color);
                     playerFacade.create(User);
+                } else {
+                    User.setX(0);
+                    User.setY(0);
+                    User.setStars(0);
+                    playerFacade.edit(User);
                 }
                 System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
