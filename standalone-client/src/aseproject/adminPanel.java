@@ -264,8 +264,11 @@ public class adminPanel extends JPanel implements ActionListener {
         }
 
         else if(src == logoutButton) {
-            parent.nFlag_adminLogout = true;
-            parent.go();
+            parent.nFlag_admin = false;
+            parent.window.remove(this);
+            parent.window.add(parent.regPanel);
+            parent.window.validate();
+            parent.window.repaint();
         }
 
         revalidate();
