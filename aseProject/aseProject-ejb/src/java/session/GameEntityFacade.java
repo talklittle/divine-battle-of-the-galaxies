@@ -7,7 +7,7 @@ package session;
 
 import entity.CollisionEventEntity;
 import entity.GameEntity;
-import entity.MonsterEggEntity;
+import entity.MonsterEntity;
 import entity.PlayerEntity;
 import entity.StarEntity;
 import java.util.Iterator;
@@ -29,10 +29,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     private EntityManager em;
     public static final long PUBLISH_INTERVAL_MILLIS = 50;
     public static final int INIT_STARS = 15;
-    public static final int INIT_EGGS_KILL = 5;
-    public static final int INIT_EGGS_FREEZE = 5;
+    public static final int INIT_MONSTERS_KILL = 5;
+    public static final int INIT_MONSTERS_FREEZE = 5;
     private int numStars = 0;
-    private int numEggs = 0;
     private int numMonsters = 0;
     private long lastCollisionTime = 0;
     private static final Object collisionTimeLock = new Object();
@@ -75,32 +74,32 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             create(star);
         }
         // initialize MonsterEggs
-        MonsterEggEntity egg;
-        for (int i = 0; i < INIT_EGGS_KILL; i++) {
+        MonsterEntity monster;
+        for (int i = 0; i < INIT_MONSTERS_KILL; i++) {
             x = widthRand.nextInt(15) * 50;
             y = heightRand.nextInt(11) * 50;
-            egg = new MonsterEggEntity(x, y, "kill");
-            egg.setId("egg-" + numEggs);
-            numEggs += 1;
+            monster = new MonsterEntity(x, y, "kill");
+            monster.setId("monster-" + numMonsters);
+            numMonsters += 1;
             if (gameBoardOcc[x / 50][y / 50] == null) {
-                gameBoardOcc[x / 50][y / 50] = egg.getId();
+                gameBoardOcc[x / 50][y / 50] = monster.getId();
             } else {
                 i -= 1;
             }
-            create(egg);
+            create(monster);
         }
-        for (int i = 0; i < INIT_EGGS_FREEZE; i++) {
+        for (int i = 0; i < INIT_MONSTERS_FREEZE; i++) {
             x = widthRand.nextInt(15) * 50;
             y = heightRand.nextInt(11) * 50;
-            egg = new MonsterEggEntity(x, y, "freeze");
-            egg.setId("egg-" + numEggs);
-            numEggs += 1;
+            monster = new MonsterEntity(x, y, "freeze");
+            monster.setId("monster-" + numMonsters);
+            numMonsters += 1;
             if (gameBoardOcc[x / 50][y / 50] == null) {
-                gameBoardOcc[x / 50][y / 50] = egg.getId();
+                gameBoardOcc[x / 50][y / 50] = monster.getId();
             } else {
                 i -= 1;
             }
-            create(egg);
+            create(monster);
         }
 
         //setup timer for monsters
@@ -134,7 +133,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean playerLogic(PlayerEntity player, int toX, int toY) {
-        if (gameBoardOcc[toX / 50][toY / 50].contains("star")) {
+        if (gameBoardOcc[toX / 50][toY / 50].startsWith("star")) {
             StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
 
             CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
@@ -169,15 +168,15 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             create(star);
         }
 
-        if (gameBoardOcc[toX / 50][toY / 50].contains("egg")) {
-            MonsterEggEntity egg = (MonsterEggEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-            if (egg.getType().equals("kill")) {
+        if (gameBoardOcc[toX / 50][toY / 50].startsWith("monster")) {
+            MonsterEntity monster = (MonsterEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+            if (monster.getType().equals("kill")) {
                 System.out.println("U GOT KILLED");
 
                 CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
                         CollisionEventEntity.COLLISION_PLAYER_KILL,
                         player.getId(),
-                        egg.getId(),
+                        monster.getId(),
                         System.currentTimeMillis(),
                         500);
                 long currentTimeMillis = System.currentTimeMillis();
@@ -200,8 +199,8 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         return true;
     }
 
-    public boolean monsterLogic(MonsterEggEntity monster, int toX, int toY) {
-        if (gameBoardOcc[toX / 50][toY / 50] != null && gameBoardOcc[toX / 50][toY / 50].contains("star")) {
+    public boolean monsterLogic(MonsterEntity monster, int toX, int toY) {
+        if (gameBoardOcc[toX / 50][toY / 50] != null && gameBoardOcc[toX / 50][toY / 50].startsWith("star")) {
             System.out.println("star encountered, don't move");
             return false;
         } else {
@@ -231,8 +230,8 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 return true;
             }
         }
-        if (entity instanceof MonsterEggEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
+        if (entity instanceof MonsterEntity) {
+            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
             if (moveOk) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
             }
@@ -264,13 +263,13 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
             playerLogic((PlayerEntity) entity, toX, toY);
             return true;
-        } else if (entity instanceof MonsterEggEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
+        } else if (entity instanceof MonsterEntity) {
+            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
             if (moveOk) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
             }
-        } else if (entity instanceof MonsterEggEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
+        } else if (entity instanceof MonsterEntity) {
+            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
             if (moveOk) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
             }
@@ -305,8 +304,8 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 return true;
             }
         }
-        if (entity instanceof MonsterEggEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
+        if (entity instanceof MonsterEntity) {
+            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
             if (moveOk) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
             }
@@ -341,8 +340,8 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 return true;
             }
         }
-        if (entity instanceof MonsterEggEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEggEntity) entity, toX, toY);
+        if (entity instanceof MonsterEntity) {
+            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
             if (moveOk) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
             }

@@ -15,44 +15,21 @@ import javax.persistence.Entity;
 @Entity
 public class MonsterEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private int x, y;
 
-    private String type; //generateItem
-    private int lifespan; //ms
-    private String ownerId; //collectMonster
-    private String color; //collectMonster
-    //whether picked up by a player
-//    private boolean mode; //collectMonster
-//    private int x; //generateItem and moveMonster
-//    private int y; //generateItem and moveMonster
+    private String type;
+    private String ownerId;
+    private int timeToHatch;    //ms
 
     public MonsterEntity() {
         
     }
 
-    public MonsterEntity(int x, int y, String type, String ownerId, String color) {
+    public MonsterEntity(int x, int y, String type) {
         super(x,y);
         this.type = type;
-        this.ownerId = ownerId;
-        this.color = color;
-        this.lifespan = 20000;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public int getLifespan() {
-        return lifespan;
-    }
-
-    public void setLifespan(int lifespan) {
-        this.lifespan = lifespan;
+        this.timeToHatch = 10000;
     }
 
     public String getOwnerId() {
@@ -63,6 +40,14 @@ public class MonsterEntity extends GameEntity implements Serializable {
         this.ownerId = ownerId;
     }
 
+    public int getTimeToHatch() {
+        return timeToHatch;
+    }
+
+    public void setTimeToHatch(int timeToHatch) {
+        this.timeToHatch = timeToHatch;
+    }
+
     public String getType() {
         return type;
     }
@@ -70,6 +55,5 @@ public class MonsterEntity extends GameEntity implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
-
 
 }

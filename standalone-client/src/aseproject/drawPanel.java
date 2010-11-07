@@ -6,7 +6,6 @@ package aseproject;
 
 import entity.CollisionEventEntity;
 import entity.GameEntity;
-import entity.MonsterEggEntity;
 import entity.MonsterEntity;
 import entity.PlayerEntity;
 import entity.StarEntity;
@@ -103,10 +102,7 @@ public class drawPanel extends JPanel implements KeyListener {
                     b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 } else if (entity instanceof MonsterEntity) {
-                    img = ImageIO.read(new File("assets/freeze-red.png"));
-                    b.drawImage(img, entity.getX(), entity.getY(), null);
-                } else if (entity instanceof MonsterEggEntity) {
-                    MonsterEggEntity egg = (MonsterEggEntity) entity;
+                    MonsterEntity egg = (MonsterEntity) entity;
                     if (egg.getType().equals("kill")) {
                         img = ImageIO.read(new File("assets/kill-yellow.png"));
                     } else {
@@ -244,7 +240,7 @@ public class drawPanel extends JPanel implements KeyListener {
             int direction;
             while (iter.hasNext()) {
                 GameEntity entity = (GameEntity) iter.next();
-                if (entity instanceof MonsterEggEntity) {
+                if (entity instanceof MonsterEntity) {
                     direction = rand.nextInt(1920) % 4;
                     switch (direction) {
                         case 0://up
