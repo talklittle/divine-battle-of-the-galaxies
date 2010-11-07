@@ -122,7 +122,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         gameBoardOcc = new String[16][12];
         while (it.hasNext()) {
             GameEntity elem = (GameEntity) it.next();
-            gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem.getId();
+            if (!(elem instanceof CollisionEventEntity)) {
+                gameBoardOcc[elem.getX() / 50][elem.getY() / 50] = elem.getId();
+            }
         }
         /*for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 12; j++) {
