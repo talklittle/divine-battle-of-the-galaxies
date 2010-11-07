@@ -20,6 +20,8 @@ public class MonsterEntity extends GameEntity implements Serializable {
 
     private String type;
     private String ownerId;
+    private String color;
+
     private int timeToHatch;    //ms
 
     public MonsterEntity() {
@@ -56,4 +58,11 @@ public class MonsterEntity extends GameEntity implements Serializable {
         this.type = type;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

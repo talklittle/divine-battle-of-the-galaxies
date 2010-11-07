@@ -16,6 +16,7 @@ import javax.persistence.Id;
  */
 @Entity
 public class GameEntity implements Serializable {
+
     @Id
     private String id;
 

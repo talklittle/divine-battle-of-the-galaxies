@@ -6,11 +6,6 @@ package aseproject;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -29,6 +24,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import session.accountInfoFacadeRemote;
+import util.Colors;
 
 /**
  *
@@ -57,7 +53,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     accountInfo account;
     accountInfoFacadeRemote accountInfoFacade;
     String username;
-    String[] spriteColor = {"blue", "red", "kiwi", "yellow", "pink", "purple", "green", "gray"};
 
     Main parent;
 
@@ -184,7 +179,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             account.setPsw(input);
             User.setId(username);
             Random ranColor = new Random();
-            String random_color = spriteColor[ranColor.nextInt(8)];
+            String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
             User.setColor(random_color);
             playerFacade.create(User);
             accountInfoFacade.create(account);
@@ -225,7 +220,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     User = new PlayerEntity();
                     User.setId(username);
                     Random ranColor = new Random();
-                    String random_color = spriteColor[ranColor.nextInt(8)];
+                    String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
                     User.setColor(random_color);
                     playerFacade.create(User);
                 } else {
