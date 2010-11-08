@@ -9,7 +9,6 @@ import entity.GameEntity;
 import entity.MonsterEntity;
 import entity.PlayerEntity;
 import entity.StarEntity;
-import facade.Lookup;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
