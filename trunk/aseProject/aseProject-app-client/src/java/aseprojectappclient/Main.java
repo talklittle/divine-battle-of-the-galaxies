@@ -7,7 +7,6 @@ package aseprojectappclient;
 
 import entity.GameEntity;
 import entity.MonsterEntity;
-import facade.Lookup;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;

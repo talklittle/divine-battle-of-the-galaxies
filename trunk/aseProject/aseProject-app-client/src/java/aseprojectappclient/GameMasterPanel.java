@@ -11,7 +11,6 @@
 
 package aseprojectappclient;
 
-import facade.Lookup;
 import session.GameEntityFacadeRemote;
 
 /**
