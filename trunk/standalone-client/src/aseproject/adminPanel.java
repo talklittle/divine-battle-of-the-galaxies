@@ -6,7 +6,6 @@
 package aseproject;
 
 import entity.accountInfo;
-import facade.Lookup;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;

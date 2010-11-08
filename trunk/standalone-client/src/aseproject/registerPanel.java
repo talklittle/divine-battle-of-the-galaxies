@@ -12,7 +12,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import entity.PlayerEntity;
 import entity.accountInfo;
-import facade.Lookup;
 import facade.PlayerEntityFacadeRemote;
 import java.awt.Component;
 import java.awt.Dimension;
