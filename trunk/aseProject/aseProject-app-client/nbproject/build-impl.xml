@@ -497,9 +497,13 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
         <ant antfile="${project.aseProject-ejb}/build.xml" inheritall="false" target="dist"/>
+        <ant antfile="${project.aseProject-ejb-1}/build.xml" inheritall="false" target="dist"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
         <ant antfile="${project.aseProject-ejb}/build.xml" inheritall="false" target="dist-ear">
+            <property location="${build.dir}" name="dist.ear.dir"/>
+        </ant>
+        <ant antfile="${project.aseProject-ejb-1}/build.xml" inheritall="false" target="dist-ear">
             <property location="${build.dir}" name="dist.ear.dir"/>
         </ant>
     </target>
@@ -514,11 +518,13 @@ exists or setup the property manually. For example like this:
     <target depends="compile" name="library-inclusion-in-archive">
         <mkdir dir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${reference.aseProject-ejb.dist}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copyfiles files="${reference.aseProject-ejb-1.dist}" todir="${build.classes.dir}/META-INF/lib"/>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${reference.aseProject-ejb.dist}" manifestproperty="manifest.reference.aseProject-ejb.dist" todir="${dist.ear.dir}"/>
+        <copyfiles files="${reference.aseProject-ejb-1.dist}" manifestproperty="manifest.reference.aseProject-ejb-1.dist" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.reference.aseProject-ejb.dist} "/>
+            <attribute name="Class-Path" value="${manifest.reference.aseProject-ejb.dist} ${manifest.reference.aseProject-ejb-1.dist} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -968,6 +974,7 @@ exists or setup the property manually. For example like this:
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
         <ant antfile="${project.aseProject-ejb}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.aseProject-ejb-1}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
