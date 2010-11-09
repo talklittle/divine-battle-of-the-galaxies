@@ -113,6 +113,8 @@ public class Main implements ActionListener {
                 window.validate();
                 window.repaint();
 
+                SoundEffects.playSound("gameover.wav");
+
                 // Busy wait while Game Over screen is showing
                 while (gamePanel.isGameOver() == true) {
                 }
