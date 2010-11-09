@@ -315,6 +315,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public boolean moveUp(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
+        if (entity == null)
+            return false;
+
         int fromX = entity.getX();
         int fromY = entity.getY();
 
@@ -351,6 +354,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public boolean moveLeft(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
+        if (entity == null)
+            return false;
+
         int fromX = entity.getX();
         int fromY = entity.getY();
 
@@ -388,6 +394,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public boolean moveDown(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
+        if (entity == null)
+            return false;
+
         int fromX = entity.getX();
         int fromY = entity.getY();
 
@@ -424,6 +433,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public boolean moveRight(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) find(id);
+        if (entity == null)
+            return false;
+
         int fromX = entity.getX();
         int fromY = entity.getY();
 
