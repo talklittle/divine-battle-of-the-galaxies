@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -59,6 +58,7 @@ public class drawPanel extends JPanel implements KeyListener {
     }
 
     public void Initialize(String username) {
+        System.out.println("drawpanel: "+username);
         this.username = username;
 //        player = (PlayerEntity) GameSession.find(username);
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
@@ -93,7 +93,7 @@ public class drawPanel extends JPanel implements KeyListener {
                         winner = player.getId();
                         winnerColor = player.getColor();
                     }
-                    b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
+                    //b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 } else if (entity instanceof MonsterEntity) {
                     MonsterEntity egg = (MonsterEntity) entity;
@@ -121,7 +121,7 @@ public class drawPanel extends JPanel implements KeyListener {
             }
 
         }
-        b.setColor(Color.red);
+        /*b.setColor(Color.red);
         String[][] occ = GameSession.getOcc();
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 12; j++) {
@@ -129,7 +129,7 @@ public class drawPanel extends JPanel implements KeyListener {
                     b.drawString(occ[i][j], i * 50, j * 50 + 25);
                 }
             }
-        }
+        }*/
         b.dispose();
     }
 
@@ -181,8 +181,10 @@ public class drawPanel extends JPanel implements KeyListener {
 
     public void startGame(String username) {
         Initialize(username);
+        boardPanel parent = (boardPanel)this.getParent();
         while (true) {
             try {
+                parent.iPanel.updateInfo();
                 drawBuffer();
                 drawScreen();
                 Thread.sleep(15);

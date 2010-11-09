@@ -219,7 +219,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     parent.adminConsole();
                     return;
                 }
-                nFlag_registered = true;
                 //System.out.println("nFlag_admin="+nFlag_admin);
                 User = playerFacade.find(username);
                 if (User == null) {
@@ -236,6 +235,8 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     User.setStars(0);
                     playerFacade.edit(User);
                 }
+                parent.gamePanel.iPanel.initInfo(User.getId());
+                nFlag_registered = true;
                 System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
                 JOptionPane.showMessageDialog(null, "Password Error");
