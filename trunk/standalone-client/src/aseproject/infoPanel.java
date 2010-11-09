@@ -29,6 +29,7 @@ public class infoPanel extends JPanel {
     JLabel starsLabel;
     JLabel spriteLabel;
     JLabel numStarsLabel;
+    JLabel frozenLabel;
     PlayerEntityFacadeRemote playerSession;
 
     public infoPanel() {
@@ -49,6 +50,12 @@ public class infoPanel extends JPanel {
         numStarsLabel.setFont(new java.awt.Font("Algerian", 0, 36));
         numStarsLabel.setText(""+numStars);
         numStarsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        frozenLabel = new JLabel();
+        frozenLabel.setFont(new java.awt.Font("Algerian", 0, 24));
+        frozenLabel.setForeground(new java.awt.Color(51, 51, 255));
+        frozenLabel.setText("");
+        frozenLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
     public void initInfo(String id) {
@@ -67,6 +74,7 @@ public class infoPanel extends JPanel {
             add(spriteLabel);
             add(starsLabel);
             add(numStarsLabel);
+            add(frozenLabel);
             initialized = (user!=null);
         }
         catch (Exception ex) {
@@ -80,8 +88,13 @@ public class infoPanel extends JPanel {
         user = playerSession.find(username);
         if(user != null) {
             numStars = user.getStars();
+            numStarsLabel.setText(""+numStars);
+            if (user.isFrozen()) {
+                frozenLabel.setText("Frozen");
+            } else {
+                frozenLabel.setText("");
+            }
         }
-        numStarsLabel.setText(""+numStars);
         repaint();
     }
 

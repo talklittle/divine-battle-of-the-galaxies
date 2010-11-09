@@ -161,10 +161,6 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     }
 
     public boolean playerLogic(PlayerEntity player, int toX, int toY) {
-        if (player.isFrozen() && ((System.currentTimeMillis() - player.getFrozentime()) > 5000)) {
-            player.setFrozen(false);
-            player.setFrozentime(0);
-        }
         if (!player.isFrozen()) {
             if (gameBoardOcc[toX / 50][toY / 50] == null) {
                 player.setX(toX);
