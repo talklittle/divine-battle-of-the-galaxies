@@ -7,6 +7,8 @@ package aseproject;
 
 import entity.GameEntity;
 import entity.MonsterEntity;
+import entity.PlayerEntity;
+import facade.PlayerEntityFacadeRemote;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -26,9 +28,12 @@ import session.GameEntityFacadeRemote;
  */
 public class Main implements ActionListener {
 
+    public static final long FREEZE_DURATION_MILLIS = 3000;
+
     JFrame window;
     GameMasterPanel gameMasterPanel;
     private GameEntityFacadeRemote gameSession;
+    private PlayerEntityFacadeRemote playerSession;
 
     private long debugMonsterMovements = 0;
 
@@ -68,6 +73,7 @@ public class Main implements ActionListener {
         window.setVisible(true);
 
         gameSession = Lookup.lookupGameEntityFacadeRemote();
+        playerSession = Lookup.lookupPlayerEntityFacadeRemote();
 
         initTimers();
     }
@@ -105,6 +111,17 @@ public class Main implements ActionListener {
     class CleanTask extends TimerTask {
         public void run() {
             gameSession.cleanOldCollisionEvents();
+
+            List players = playerSession.findAll();
+            Iterator iter = players.iterator();
+            while (iter.hasNext()) {
+                PlayerEntity player = (PlayerEntity) iter.next();
+                if (player.isFrozen() && ((System.currentTimeMillis() - player.getFrozentime()) > FREEZE_DURATION_MILLIS)) {
+                    player.setFrozen(false);
+                    player.setFrozentime(0);
+                    playerSession.edit(player);
+                }
+            }
         }
     }
 
