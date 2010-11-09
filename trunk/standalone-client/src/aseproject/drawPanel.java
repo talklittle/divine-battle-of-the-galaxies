@@ -89,6 +89,7 @@ public class drawPanel extends JPanel implements KeyListener {
                     img = ImageIO.read(new File("assets/sprite-" + player.getColor() + ".png"));
                     if (player.getStars() == 10) {
                         nFlag_gameOver = true;
+//                        GameSession.gameOver(nFlag_gameOver);
                         winner = player.getId();
                         winnerColor = player.getColor();
                     }
