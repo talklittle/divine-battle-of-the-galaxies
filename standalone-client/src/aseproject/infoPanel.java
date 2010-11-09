@@ -78,7 +78,9 @@ public class infoPanel extends JPanel {
         if(!initialized)
             return;
         user = playerSession.find(username);
-        numStars = user.getStars();
+        if(user != null) {
+            numStars = user.getStars();
+        }
         numStarsLabel.setText(""+numStars);
         repaint();
     }
