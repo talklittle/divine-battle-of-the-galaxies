@@ -109,12 +109,7 @@ public class Main implements ActionListener {
 
                 // Busy wait while Game Over screen is showing
                 while (gamePanel.isGameOver() == true) {
-                    try {
-                        Thread.sleep(10);
-                    }
-                    catch(Exception e) {
-                        e.printStackTrace();
-                    }
+                    //System.out.print("stalling");
                 }
 
                 // Bring back to Register/Login page
