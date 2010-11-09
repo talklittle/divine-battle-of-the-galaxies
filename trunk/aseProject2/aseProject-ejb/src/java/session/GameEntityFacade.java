@@ -38,6 +38,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     private static final Object collisionTimeLock = new Object();
     private String[][] gameBoardOcc = new String[16][12];
     private Timer myTimer;
+    public boolean gameOverFlag;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -315,8 +316,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public boolean moveUp(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
-        if (entity == null)
+        if (entity == null) {
             return false;
+        }
 
         int fromX = entity.getX();
         int fromY = entity.getY();
@@ -354,8 +356,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public boolean moveLeft(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
-        if (entity == null)
+        if (entity == null) {
             return false;
+        }
 
         int fromX = entity.getX();
         int fromY = entity.getY();
@@ -394,8 +397,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public boolean moveDown(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) em.find(GameEntity.class, id);
-        if (entity == null)
+        if (entity == null) {
             return false;
+        }
 
         int fromX = entity.getX();
         int fromY = entity.getY();
@@ -433,8 +437,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
     public boolean moveRight(String id) {
         gameBoard();
         GameEntity entity = (GameEntity) find(id);
-        if (entity == null)
+        if (entity == null) {
             return false;
+        }
 
         int fromX = entity.getX();
         int fromY = entity.getY();
@@ -466,5 +471,10 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             edit(entity);
         }
         return true;
+    }
+
+    @Override
+    public boolean gameOver(boolean flag) {
+        return flag;
     }
 }
