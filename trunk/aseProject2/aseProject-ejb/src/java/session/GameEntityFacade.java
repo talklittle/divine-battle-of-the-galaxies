@@ -266,47 +266,51 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                 return false;
             } else {
                 PlayerEntity player = (PlayerEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-                if (monster.getType().equals("kill")) {
-                    System.out.println("U GOT KILLED");
-                    CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
-                            CollisionEventEntity.COLLISION_PLAYER_KILL,
-                            player.getId(),
-                            monster.getId(),
-                            System.currentTimeMillis(),
-                            500);
-                    long currentTimeMillis = System.currentTimeMillis();
-                    synchronized (collisionTimeLock) {
-                        if (currentTimeMillis <= lastCollisionTime) {
-                            currentTimeMillis = lastCollisionTime + 1;
+                if (player != null) {
+                    if (monster.getType().equals("kill")) {
+                        System.out.println("U GOT KILLED");
+                        CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
+                                CollisionEventEntity.COLLISION_PLAYER_KILL,
+                                player.getId(),
+                                monster.getId(),
+                                System.currentTimeMillis(),
+                                500);
+                        long currentTimeMillis = System.currentTimeMillis();
+                        synchronized (collisionTimeLock) {
+                            if (currentTimeMillis <= lastCollisionTime) {
+                                currentTimeMillis = lastCollisionTime + 1;
+                            }
+                            collision.setId("collision-" + currentTimeMillis);
                         }
-                        collision.setId("collision-" + currentTimeMillis);
-                    }
-                    create(collision);
+                        create(collision);
 
-                    player.setX(0);
-                    player.setY(0);
-                    player.setStars(0);
-                    edit(player);
-                } else {
-                    System.out.println("U GOT FROZEN");
-                    CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
-                            CollisionEventEntity.COLLISION_PLAYER_FREEZE,
-                            player.getId(),
-                            monster.getId(),
-                            System.currentTimeMillis(),
-                            500);
-                    long currentTimeMillis = System.currentTimeMillis();
-                    synchronized (collisionTimeLock) {
-                        if (currentTimeMillis <= lastCollisionTime) {
-                            currentTimeMillis = lastCollisionTime + 1;
+                        player.setX(0);
+                        player.setY(0);
+                        player.setStars(0);
+                        edit(player);
+                    } else {
+                        if (!player.isFrozen()) {
+                            System.out.println("U GOT FROZEN");
+                            CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
+                                    CollisionEventEntity.COLLISION_PLAYER_FREEZE,
+                                    player.getId(),
+                                    monster.getId(),
+                                    System.currentTimeMillis(),
+                                    500);
+                            long currentTimeMillis = System.currentTimeMillis();
+                            synchronized (collisionTimeLock) {
+                                if (currentTimeMillis <= lastCollisionTime) {
+                                    currentTimeMillis = lastCollisionTime + 1;
+                                }
+                                collision.setId("collision-" + currentTimeMillis);
+                            }
+                            create(collision);
+
+                            player.setFrozen(true);
+                            player.setFrozentime(System.currentTimeMillis());
+                            edit(player);
                         }
-                        collision.setId("collision-" + currentTimeMillis);
                     }
-                    create(collision);
-
-                    player.setFrozen(true);
-                    player.setFrozentime(System.currentTimeMillis());
-                    edit(player);
                 }
                 return true;
             }
