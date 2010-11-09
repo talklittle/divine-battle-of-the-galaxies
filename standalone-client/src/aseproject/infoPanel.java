@@ -30,6 +30,7 @@ public class infoPanel extends JPanel {
     JLabel spriteLabel;
     JLabel numStarsLabel;
     JLabel frozenLabel;
+    JLabel userLabel;
     PlayerEntityFacadeRemote playerSession;
 
     public infoPanel() {
@@ -41,6 +42,10 @@ public class infoPanel extends JPanel {
         this.setMaximumSize(getPreferredSize());
         numStars = 0;
         initialized = false;
+        userLabel = new JLabel();
+        userLabel.setFont(new java.awt.Font("Algerian", 0, 18));
+        userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        userLabel.setForeground(new java.awt.Color(51, 51, 255));
         starsLabel = new JLabel();
         starsLabel.setFont(new java.awt.Font("Algerian", 0, 18));
         starsLabel.setText("# of Stars: ");
@@ -53,7 +58,7 @@ public class infoPanel extends JPanel {
 
         frozenLabel = new JLabel();
         frozenLabel.setFont(new java.awt.Font("Algerian", 0, 24));
-        frozenLabel.setForeground(new java.awt.Color(51, 51, 255));
+        frozenLabel.setForeground(new java.awt.Color(202, 0, 0));
         frozenLabel.setText("");
         frozenLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
@@ -61,6 +66,7 @@ public class infoPanel extends JPanel {
     public void initInfo(String id) {
         this.username = id;
         this.user = playerSession.find(username);
+        userLabel.setText(user.getId());
         System.out.println("initinfo: "+user.getId());
         numStars = user.getStars();
         try {
@@ -71,6 +77,7 @@ public class infoPanel extends JPanel {
             spriteLabel = new JLabel(img,JLabel.CENTER);
             spriteLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             removeAll();
+            add(userLabel);
             add(spriteLabel);
             add(starsLabel);
             add(numStarsLabel);
