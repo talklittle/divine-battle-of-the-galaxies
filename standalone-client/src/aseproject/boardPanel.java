@@ -8,6 +8,7 @@ package aseproject;
 import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import session.GameEntityFacadeRemote;
 
 /**
  *
@@ -16,6 +17,8 @@ import javax.swing.JPanel;
 public class boardPanel extends JPanel {
     drawPanel gamePanel;
     infoPanel iPanel;
+    private GameEntityFacadeRemote GameSession;
+
 
     public boardPanel() {
         this.setLayout(new BorderLayout());
@@ -24,7 +27,8 @@ public class boardPanel extends JPanel {
 
         iPanel = new infoPanel();
         iPanel.setBorder(BorderFactory.createEmptyBorder(70,30,30,30));
-
+        GameSession = Lookup.lookupGameEntityFacadeRemote();
+        GameSession.gameBoard();
         add(iPanel, BorderLayout.EAST);
     }
 
@@ -34,7 +38,7 @@ public class boardPanel extends JPanel {
     }
 
     public boolean isGameOver() {
-        return gamePanel.nFlag_gameOver;
+        return GameSession.gameOver(gamePanel.nFlag_gameOver);
     }
 
     public void setGameOver(boolean val) {

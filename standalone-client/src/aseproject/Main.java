@@ -113,7 +113,6 @@ public class Main implements ActionListener {
 
                 // Busy wait while Game Over screen is showing
                 while (gamePanel.isGameOver() == true) {
-                    //System.out.print("stalling");
                 }
 
                 // Bring back to Register/Login page
@@ -137,16 +136,10 @@ public class Main implements ActionListener {
 
         List playerEntities = gameSession.findAll();
         Iterator it = playerEntities.iterator();
-
-
         while (it.hasNext()) {
             GameEntity player = (GameEntity) it.next();
-
-
             if (player instanceof PlayerEntity) {
                 gameSession.remove(player);
-
-
             }
         }
         System.out.println("restart the game");
