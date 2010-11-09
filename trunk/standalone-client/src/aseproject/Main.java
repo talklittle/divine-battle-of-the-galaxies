@@ -51,9 +51,13 @@ public class Main implements ActionListener {
                 int flag = JOptionPane.showConfirmDialog(window, "Really exit?", "Exit Game", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (JOptionPane.YES_OPTION == flag) {
                     //delete its own player
-                    PlayerEntity currentPlayer = regPanel.User;
-                    if (currentPlayer != null)
-                        gameSession.remove(currentPlayer);
+                    try {
+                        PlayerEntity currentPlayer = regPanel.User;
+                        if (currentPlayer != null)
+                            gameSession.remove(currentPlayer);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     System.exit(0);
                 } else {
                     return;
