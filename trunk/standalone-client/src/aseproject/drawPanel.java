@@ -170,7 +170,7 @@ public class drawPanel extends JPanel implements KeyListener {
                     break;
                 case CollisionEventEntity.COLLISION_PLAYER_FREEZE:
                     // XXX For now, Freeze is same as Kill
-                    SoundEffects.playSound("44430__thecheeseman__hurt3.wav");
+                    SoundEffects.playSound("freeze.wav");
                     break;
                 case CollisionEventEntity.COLLISION_PLAYER_PLAYER:
                     SoundEffects.playSound("17934__zippi1__sound_hello1.wav");
