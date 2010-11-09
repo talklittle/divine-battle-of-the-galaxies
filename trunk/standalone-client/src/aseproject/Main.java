@@ -26,7 +26,7 @@ import session.GameEntityFacadeRemote;
 public class Main implements ActionListener {
 
     JFrame window;
-    drawPanel gamePanel;
+    boardPanel gamePanel;
     registerPanel regPanel;
     adminPanel adminConsole;
     GameEntityFacadeRemote gameSession;
@@ -38,10 +38,10 @@ public class Main implements ActionListener {
         nFlag_admin = false;
 
         window = new JFrame("DIVINE BATTLE OF THE GALAXIES.");
-        gamePanel = new drawPanel();
+        gamePanel = new boardPanel();
         regPanel = new registerPanel(this);
         adminConsole = new adminPanel(this);
-        window.setSize(900, 700);
+        window.setSize(1000, 640);
         gameSession = Lookup.lookupGameEntityFacadeRemote();
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         window.addWindowListener(new WindowAdapter() {
@@ -82,21 +82,21 @@ public class Main implements ActionListener {
 //                System.out.println("break!");
 //                return;
 //            }
-            if(regPanel.nFlag_registered && !gamePanel.nFlag_gameOver && !nFlag_admin) {
+            if(regPanel.nFlag_registered && !gamePanel.isGameOver() && !nFlag_admin) {
                 window.remove(regPanel);
                 window.add(gamePanel);
                 window.validate();
                 window.repaint();
-                gamePanel.requestFocusInWindow();
+                gamePanel.gamePanel.requestFocusInWindow();
                 gamePanel.startGame(regPanel.username);
             }
 
-            if (gamePanel.nFlag_gameOver == true) {
+            if (gamePanel.isGameOver() == true) {
                 System.out.println("Game over");
 
                 JButton endBtn = new JButton("Game over, Restart?");
                 endBtn.addActionListener(this);
-                JLabel winnerLabel = new JLabel("Winner: " + gamePanel.winner + " (" + gamePanel.winnerColor + ")");
+                JLabel winnerLabel = new JLabel("Winner: " + gamePanel.getWinner() + " (" + gamePanel.getWinnerColor() + ")");
 
                 JPanel endPanel = new JPanel();
                 endPanel.add(endBtn);
@@ -108,7 +108,7 @@ public class Main implements ActionListener {
                 window.repaint();
 
                 // Busy wait while Game Over screen is showing
-                while (gamePanel.nFlag_gameOver == true) {
+                while (gamePanel.isGameOver() == true) {
                 }
 
                 // Bring back to Register/Login page
@@ -146,7 +146,7 @@ public class Main implements ActionListener {
         }
         System.out.println("restart the game");
         regPanel.nFlag_registered = false;
-        gamePanel.nFlag_gameOver = false;
+        gamePanel.setGameOver(false);
 
 
     }
