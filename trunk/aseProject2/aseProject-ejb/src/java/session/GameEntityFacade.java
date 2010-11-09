@@ -166,51 +166,18 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             player.setFrozentime(0);
         }
         if (!player.isFrozen()) {
-            if (gameBoardOcc[toX / 50][toY / 50].startsWith("star")) {
-                StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-
-                CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
-                        CollisionEventEntity.COLLISION_PLAYER_STAR,
-                        player.getId(),
-                        star.getId(),
-                        System.currentTimeMillis(),
-                        500);
-                long currentTimeMillis = System.currentTimeMillis();
-                synchronized (collisionTimeLock) {
-                    if (currentTimeMillis <= lastCollisionTime) {
-                        currentTimeMillis = lastCollisionTime + 1;
-                    }
-                    collision.setId("collision-" + currentTimeMillis);
-                }
-                create(collision);
-
-                player.setStars(player.getStars() + 1);
+            if (gameBoardOcc[toX / 50][toY / 50] == null) {
                 player.setX(toX);
                 player.setY(toY);
                 edit(player);
-
-                remove(star);
-                int starx = 0;
-                int stary = 0;
-                do {
-                    Random starnew = new Random();
-                    starx = starnew.nextInt(16);
-                    stary = starnew.nextInt(12);
-                } while (gameBoardOcc[starx][stary] != null);
-                star.setX(starx * 50);
-                star.setY(stary * 50);
-                create(star);
-            }
-
-            if (gameBoardOcc[toX / 50][toY / 50].startsWith("monster")) {
-                MonsterEntity monster = (MonsterEntity) find(gameBoardOcc[toX / 50][toY / 50]);
-                if (monster.getType().equals("kill")) {
-                    System.out.println("U GOT KILLED");
+            } else {
+                if (gameBoardOcc[toX / 50][toY / 50].startsWith("star")) {
+                    StarEntity star = (StarEntity) find(gameBoardOcc[toX / 50][toY / 50]);
 
                     CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
-                            CollisionEventEntity.COLLISION_PLAYER_KILL,
+                            CollisionEventEntity.COLLISION_PLAYER_STAR,
                             player.getId(),
-                            monster.getId(),
+                            star.getId(),
                             System.currentTimeMillis(),
                             500);
                     long currentTimeMillis = System.currentTimeMillis();
@@ -222,29 +189,69 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                     }
                     create(collision);
 
-                    player.setX(0);
-                    player.setY(0);
-                    player.setStars(0);
+                    player.setStars(player.getStars() + 1);
+                    player.setX(toX);
+                    player.setY(toY);
                     edit(player);
-                } else {
-                    System.out.println("U GOT FROZEN");
-                    CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
-                            CollisionEventEntity.COLLISION_PLAYER_FREEZE,
-                            player.getId(),
-                            monster.getId(),
-                            System.currentTimeMillis(),
-                            500);
-                    long currentTimeMillis = System.currentTimeMillis();
-                    synchronized (collisionTimeLock) {
-                        if (currentTimeMillis <= lastCollisionTime) {
-                            currentTimeMillis = lastCollisionTime + 1;
-                        }
-                        collision.setId("collision-" + currentTimeMillis);
-                    }
-                    create(collision);
 
-                    player.setFrozen(true);
-                    player.setFrozentime(System.currentTimeMillis());
+                    remove(star);
+                    int starx = 0;
+                    int stary = 0;
+                    do {
+                        Random starnew = new Random();
+                        starx = starnew.nextInt(16);
+                        stary = starnew.nextInt(12);
+                    } while (gameBoardOcc[starx][stary] != null);
+                    star.setX(starx * 50);
+                    star.setY(stary * 50);
+                    create(star);
+                }
+
+                if (gameBoardOcc[toX / 50][toY / 50].startsWith("monster")) {
+                    MonsterEntity monster = (MonsterEntity) find(gameBoardOcc[toX / 50][toY / 50]);
+                    if (monster.getType().equals("kill")) {
+                        System.out.println("U GOT KILLED");
+
+                        CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
+                                CollisionEventEntity.COLLISION_PLAYER_KILL,
+                                player.getId(),
+                                monster.getId(),
+                                System.currentTimeMillis(),
+                                500);
+                        long currentTimeMillis = System.currentTimeMillis();
+                        synchronized (collisionTimeLock) {
+                            if (currentTimeMillis <= lastCollisionTime) {
+                                currentTimeMillis = lastCollisionTime + 1;
+                            }
+                            collision.setId("collision-" + currentTimeMillis);
+                        }
+                        create(collision);
+
+                        player.setX(0);
+                        player.setY(0);
+                        player.setStars(0);
+                        edit(player);
+                    } else {
+                        System.out.println("U GOT FROZEN");
+                        CollisionEventEntity collision = new CollisionEventEntity(toX, toY,
+                                CollisionEventEntity.COLLISION_PLAYER_FREEZE,
+                                player.getId(),
+                                monster.getId(),
+                                System.currentTimeMillis(),
+                                500);
+                        long currentTimeMillis = System.currentTimeMillis();
+                        synchronized (collisionTimeLock) {
+                            if (currentTimeMillis <= lastCollisionTime) {
+                                currentTimeMillis = lastCollisionTime + 1;
+                            }
+                            collision.setId("collision-" + currentTimeMillis);
+                        }
+                        create(collision);
+
+                        player.setFrozen(true);
+                        player.setFrozentime(System.currentTimeMillis());
+                        edit(player);
+                    }
                 }
             }
             return true;
@@ -303,6 +310,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
 
                     player.setFrozen(true);
                     player.setFrozentime(System.currentTimeMillis());
+                    edit(player);
                 }
                 return true;
             }
@@ -330,12 +338,14 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         }
 
         boolean moveOk = true;
+
+        // DEBUG
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            if (entity instanceof PlayerEntity) {
-                playerLogic((PlayerEntity) entity, toX, toY);
-                return true;
-            }
+        }
+
+        if (entity instanceof PlayerEntity) {
+            return playerLogic((PlayerEntity) entity, toX, toY);
         }
         if (entity instanceof MonsterEntity) {
             moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
@@ -370,16 +380,16 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         }
 
         boolean moveOk = true;
-        if (entity instanceof PlayerEntity && gameBoardOcc[toX / 50][toY / 50] != null) {
+
+        // DEBUG
+        if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            playerLogic((PlayerEntity) entity, toX, toY);
-            return true;
-        } else if (entity instanceof MonsterEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
-            if (moveOk) {
-                gameBoardOcc[fromX / 50][fromY / 50] = null;
-            }
-        } else if (entity instanceof MonsterEntity) {
+        }
+
+        if (entity instanceof PlayerEntity) {
+            return playerLogic((PlayerEntity) entity, toX, toY);
+        }
+        if (entity instanceof MonsterEntity) {
             moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
             if (moveOk) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
@@ -412,12 +422,14 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         }
 
         boolean moveOk = true;
+
+        // DEBUG
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            if (entity instanceof PlayerEntity) {
-                playerLogic((PlayerEntity) entity, toX, toY);
-                return true;
-            }
+        }
+
+        if (entity instanceof PlayerEntity) {
+            return playerLogic((PlayerEntity) entity, toX, toY);
         }
         if (entity instanceof MonsterEntity) {
             moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
@@ -446,18 +458,20 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
 
         int toX = fromX + 50;
         int toY = fromY;
-//
+
         if (!isValidMove(fromX, fromY, toX, toY)) {
             return false;
         }
 
         boolean moveOk = true;
+
+        // DEBUG
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
             System.out.println(gameBoardOcc[toX / 50][toY / 50]);
-            if (entity instanceof PlayerEntity) {
-                playerLogic((PlayerEntity) entity, toX, toY);
-                return true;
-            }
+        }
+
+        if (entity instanceof PlayerEntity) {
+            return playerLogic((PlayerEntity) entity, toX, toY);
         }
         if (entity instanceof MonsterEntity) {
             moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
@@ -472,7 +486,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         }
         return true;
     }
-
+    
     @Override
     public boolean gameOver() {
         return true;
