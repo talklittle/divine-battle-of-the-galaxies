@@ -44,8 +44,8 @@ public class infoPanel extends JPanel {
         initialized = false;
         userLabel = new JLabel();
         userLabel.setFont(new java.awt.Font("Algerian", 0, 18));
+        userLabel.setForeground(new java.awt.Color(202, 0, 0));
         userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        userLabel.setForeground(new java.awt.Color(51, 51, 255));
         starsLabel = new JLabel();
         starsLabel.setFont(new java.awt.Font("Algerian", 0, 18));
         starsLabel.setText("# of Stars: ");
@@ -58,7 +58,7 @@ public class infoPanel extends JPanel {
 
         frozenLabel = new JLabel();
         frozenLabel.setFont(new java.awt.Font("Algerian", 0, 24));
-        frozenLabel.setForeground(new java.awt.Color(202, 0, 0));
+        frozenLabel.setForeground(new java.awt.Color(51, 51, 255));
         frozenLabel.setText("");
         frozenLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
