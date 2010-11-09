@@ -64,6 +64,7 @@ public class infoPanel extends JPanel {
 
             spriteLabel = new JLabel(img,JLabel.CENTER);
             spriteLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            removeAll();
             add(spriteLabel);
             add(starsLabel);
             add(numStarsLabel);
