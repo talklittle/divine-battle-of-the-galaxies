@@ -12,6 +12,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,7 +32,6 @@ public class Main implements ActionListener {
     registerPanel regPanel;
     adminPanel adminConsole;
     GameEntityFacadeRemote gameSession;
-
     boolean nFlag_admin;
 
     public Main() {
@@ -53,8 +54,9 @@ public class Main implements ActionListener {
                     //delete its own player
                     try {
                         PlayerEntity currentPlayer = regPanel.User;
-                        if (currentPlayer != null)
+                        if (currentPlayer != null) {
                             gameSession.remove(currentPlayer);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -86,7 +88,7 @@ public class Main implements ActionListener {
 //                System.out.println("break!");
 //                return;
 //            }
-            if(regPanel.nFlag_registered && !gamePanel.isGameOver() && !nFlag_admin) {
+            if (regPanel.nFlag_registered && !gamePanel.isGameOver() && !nFlag_admin) {
                 window.remove(regPanel);
                 window.add(gamePanel);
                 window.validate();
@@ -132,21 +134,23 @@ public class Main implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        //delete all player entity in the board
 
-        List playerEntities = gameSession.findAll();
-        Iterator it = playerEntities.iterator();
-        while (it.hasNext()) {
-            GameEntity player = (GameEntity) it.next();
-            if (player instanceof PlayerEntity) {
-                gameSession.remove(player);
-            }
-        }
+        //delete all player entity in the board
+//        List playerEntities = gameSession.findAll();
+//        Iterator it = playerEntities.iterator();
+//        while (it.hasNext()) {
+//            GameEntity player = (GameEntity) it.next();
+//            if (player instanceof PlayerEntity) {
+//                gameSession.remove(player);
+//            }
+//        }
+        PlayerEntity currentPlayer = regPanel.User;
+        gameSession.remove(currentPlayer);
         System.out.println("restart the game");
         regPanel.nFlag_registered = false;
         gamePanel.setGameOver(false);
 
 
-    }
 
+    }
 }

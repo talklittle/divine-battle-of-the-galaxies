@@ -42,7 +42,6 @@ public class drawPanel extends JPanel implements KeyListener {
     private String username;
     private GameEntityFacadeRemote GameSession;
 //    PlayerEntity player;
-
     private HashSet<CollisionEventEntity> seenCollisionEvents = new HashSet<CollisionEventEntity>();
     private static final Object seenCollisionEventsLock = new Object();
 
@@ -58,7 +57,7 @@ public class drawPanel extends JPanel implements KeyListener {
     }
 
     public void Initialize(String username) {
-        System.out.println("drawpanel: "+username);
+        System.out.println("drawpanel: " + username);
         this.username = username;
 //        player = (PlayerEntity) GameSession.find(username);
         buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
@@ -90,18 +89,20 @@ public class drawPanel extends JPanel implements KeyListener {
                     img = ImageIO.read(new File("assets/sprite-" + player.getColor() + ".png"));
                     if (player.getStars() == 10) {
                         nFlag_gameOver = true;
-//                        GameSession.gameOver(nFlag_gameOver);
                         winner = player.getId();
                         winnerColor = player.getColor();
+                    }
+                    if (player.getStars() == 11) {
+                        nFlag_gameOver = true;
                     }
                     //b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 } else if (entity instanceof MonsterEntity) {
                     MonsterEntity egg = (MonsterEntity) entity;
                     if (egg.getType().equals("kill")) {
-                        img = ImageIO.read(new File("assets/kill-"+egg.getColor()+".png"));
+                        img = ImageIO.read(new File("assets/kill-" + egg.getColor() + ".png"));
                     } else {
-                        img = ImageIO.read(new File("assets/freeze-"+egg.getColor()+".png"));
+                        img = ImageIO.read(new File("assets/freeze-" + egg.getColor() + ".png"));
                     }
                     b.drawImage(img, entity.getX(), entity.getY(), null);
                 } else if (entity instanceof StarEntity) {
@@ -125,11 +126,11 @@ public class drawPanel extends JPanel implements KeyListener {
         /*b.setColor(Color.red);
         String[][] occ = GameSession.getOcc();
         for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 12; j++) {
-                if (occ[i][j] != null) {
-                    b.drawString(occ[i][j], i * 50, j * 50 + 25);
-                }
-            }
+        for (int j = 0; j < 12; j++) {
+        if (occ[i][j] != null) {
+        b.drawString(occ[i][j], i * 50, j * 50 + 25);
+        }
+        }
         }*/
         b.dispose();
     }
@@ -156,7 +157,7 @@ public class drawPanel extends JPanel implements KeyListener {
         String id2 = event.getGameEntityId2();
 
         seenCollisionEvents.add(event);
-        
+
         // play sounds for events involving this player
         if (username.equals(id1) || username.equals(id2)) {
             switch (type) {
@@ -182,7 +183,7 @@ public class drawPanel extends JPanel implements KeyListener {
 
     public void startGame(String username) {
         Initialize(username);
-        boardPanel parent = (boardPanel)this.getParent();
+        boardPanel parent = (boardPanel) this.getParent();
         while (true) {
             try {
                 parent.iPanel.updateInfo();

@@ -37,11 +37,7 @@ public class boardPanel extends JPanel {
     }
 
     public boolean isGameOver() {
-        if (gamePanel.nFlag_gameOver) {
-            return GameSession.gameOver();
-        } else {
-            return false;
-        }
+        return gamePanel.nFlag_gameOver;
     }
 
     public void setGameOver(boolean val) {
