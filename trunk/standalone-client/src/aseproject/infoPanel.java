@@ -6,7 +6,6 @@
 package aseproject;
 
 import entity.PlayerEntity;
-import facade.Lookup;
 import facade.PlayerEntityFacadeRemote;
 import java.awt.Component;
 import java.awt.Dimension;
