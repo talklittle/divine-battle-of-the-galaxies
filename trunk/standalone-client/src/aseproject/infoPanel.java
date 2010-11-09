@@ -67,7 +67,7 @@ public class infoPanel extends JPanel {
             add(spriteLabel);
             add(starsLabel);
             add(numStarsLabel);
-            initialized = true;
+            initialized = (user!=null);
         }
         catch (Exception ex) {
             ex.printStackTrace();
