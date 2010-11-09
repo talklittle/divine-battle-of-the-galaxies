@@ -46,7 +46,7 @@ public interface GameEntityFacadeRemote {
 
     void gameBoard();
 
-    boolean gameOver(boolean flag);
+    boolean gameOver();
 
     int count();
 }
