@@ -52,7 +52,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     accountInfo account;
     accountInfoFacadeRemote accountInfoFacade;
     String username;
-
     Main parent;
 
     public registerPanel(Main m) {
@@ -167,60 +166,66 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         panelMode = PANEL_MODE_NEW_ACCOUNT;
     }
 
-    private void doNewAccountOK() {
-        username = newAccountUser.getText();
+    protected boolean createNewAccount(String newAccount, String input) {
+        username = newAccount;
+//        System.out.println(username);
         account = (accountInfo) accountInfoFacade.find(username);
         if (account == null) {
-            String input = newAccountPsw.getText();
-            
             // Insert record in accountInfo
             account = new accountInfo();
             account.setId(username);
             account.setPsw(input);
             accountInfoFacade.create(account);
-            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
+//            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
             if ("admin".equals(username)) {
-                parent.window.remove(this);
-                parent.adminConsole();
-                return;
+//                parent.window.remove(this);
+//                parent.adminConsole();
+                return true;
             }
             // Insert record in GameEntity
-            User = new PlayerEntity();
-            User.setId(username);
-            Random ranColor = new Random();
-            String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
-            User.setColor(random_color);
-            playerFacade.create(User);
+//            System.out.println("Hello World");
+//            User = new PlayerEntity();
+//            User.setId(username);
+//            Random ranColor = new Random();
+//            String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
+//            User.setColor(random_color);
+//            playerFacade.create(User);
+//            parent.gamePanel.iPanel.initInfo(User.getId());
             nFlag_registered = true;
         } else {
             System.out.println("Try another user ID.");
-            JOptionPane.showMessageDialog(null, "this ID already exists, please try another one.");
+//            JOptionPane.showMessageDialog(null, "this ID already exists, please try another one.");
             username = null;
+            return false;
         }
+        return nFlag_registered;
     }
 
-    private void doLoginOK() {
-        username = loginUserName.getText();
-        System.out.println(username);
-        char[] input = pswField.getPassword();
+    protected boolean verifyOldAccount(String oldAccount, char[] input) {
+        username = oldAccount;
+//        System.out.println(username);
         account = accountInfoFacade.find(username);
 
         if (account == null) {
-            JOptionPane.showMessageDialog(null, "User does not exist");
+//            JOptionPane.showMessageDialog(null, "User does not exist");
             username = null;
+            return false;
         } else {
             boolean isCorrect;
             String correctPassword = account.getPsw();
             char[] charPsw = correctPassword.toCharArray();
             isCorrect = Arrays.equals(input, charPsw);
+            //after verify the psw and account
             if (isCorrect) {
-                if(username.equals("admin")) {
+                //if it's the admin account
+                if (username.equals("admin")) {
                     parent.window.remove(this);
                     parent.adminConsole();
-                    return;
+                    return true;
                 }
-                //System.out.println("nFlag_admin="+nFlag_admin);
+                //see if the user already has a character on the gameboard
                 User = playerFacade.find(username);
+                //if he doesn't, create a new character on the board
                 if (User == null) {
                     System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
                     User = new PlayerEntity();
@@ -230,18 +235,21 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     User.setColor(random_color);
                     playerFacade.create(User);
                 } else {
+                    //or just reset the position & number of stars
                     User.setX(0);
                     User.setY(0);
                     User.setStars(0);
                     playerFacade.edit(User);
                 }
-                parent.gamePanel.iPanel.initInfo(User.getId());
+//                parent.gamePanel.iPanel.initInfo(User.getId());
                 nFlag_registered = true;
                 System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
-                JOptionPane.showMessageDialog(null, "Password Error");
+//                JOptionPane.showMessageDialog(null, "Password Error");
+                return nFlag_registered;
             }
         }
+        return nFlag_registered;
     }
 
     @Override
@@ -255,10 +263,10 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             doNewAccount();
         } else if (src == newAccountOK || src == newAccountUser || src == newAccountPsw) {
             SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
-            doNewAccountOK();
+            createNewAccount(newAccountUser.getText(), newAccountPsw.getText());
         } else if (src == loginOKBtn || src == loginUserName || src == pswField) {
             SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
-            doLoginOK();
+            verifyOldAccount(loginUserName.getText(), pswField.getPassword());
         }
 
     }
