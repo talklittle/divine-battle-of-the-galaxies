@@ -332,7 +332,7 @@ public class registerPanelTest {
         System.out.println("JUnit - test of verifyOldAccount: 12");
         registerPanel instance = new registerPanel(null);
         String oldAccount = "abcd";
-        String input = "a".toCharArray();
+        String input = "a";
         assertTrue(instance.createNewAccount(oldAccount, input));
     }
 	
