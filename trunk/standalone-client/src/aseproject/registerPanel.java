@@ -22,6 +22,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -201,6 +203,20 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                 JOptionPane.showMessageDialog(null, "Invalid password: length must be between 6 and 20 (inclusive).");
                 return false;
             }
+            // Check for characters and numbers only
+            Pattern p = Pattern.compile("[^a-zA-Z_0-9]");
+            Matcher m = p.matcher(newAccount);
+
+            if(m.find()) {
+                JOptionPane.showMessageDialog(null, "Invalid username: Must contain only letters and numbers");
+                return false;
+            }
+            m = p.matcher(input);
+            if(m.find()) {
+                JOptionPane.showMessageDialog(null, "Invalid password: Must contain only letters and numbers");
+                return false;
+            }
+
             // Insert record in accountInfo
             account = new accountInfo();
             account.setId(username);
