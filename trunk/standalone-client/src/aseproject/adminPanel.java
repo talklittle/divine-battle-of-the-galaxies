@@ -17,6 +17,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -264,8 +266,14 @@ public class adminPanel extends JPanel implements ActionListener {
         else if(src == saveButton) {
             accountInfo user = (accountInfo)AcctSession.find(selectUser);
             int passwordLength = editPswField.getText().length();
+            // Check for characters and numbers only
+            Pattern p = Pattern.compile("[^a-zA-Z_0-9]");
+            Matcher m = p.matcher(editPswField.getText());
             if (passwordLength < 6 || passwordLength > 20) {
                 JOptionPane.showMessageDialog(null, "Invalid password: length must be between 6 and 20 (inclusive).");
+            }
+            else if(m.find()) {
+                JOptionPane.showMessageDialog(null, "Invalid password: Must contain only letters and numbers");
             }
 
             else {
