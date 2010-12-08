@@ -4,8 +4,6 @@
  */
 package aseproject;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -73,43 +71,7 @@ public class registerPanelTest {
         String input = "xxxxx";
         assertTrue(instance.createNewAccount(newAccount, input));
     }
-	
-	@Test
-    public void testCreateNewAccount_True_4() {
-        System.out.println("JUnit - test of createNewAccount: 8");
-        registerPanel instance = new registerPanel(null);
-        String newAccount = superString;
-        String input = "xxxxx";
-        assertTrue(instance.createNewAccount(newAccount, input));
-    }
-	
-    @Test
-    public void testCreateNewAccount_True_5() {
-        System.out.println("JUnit - test of createNewAccount: 9");
-        registerPanel instance = new registerPanel(null);
-        String newAccount = "dasfasfasf";
-        String input = superString;
-        assertTrue(instance.createNewAccount(newAccount, input));
-    }
-	
-	@Test
-    public void testCreateNewAccount_True_6() {
-        System.out.println("JUnit - test of createNewAccount: 9");
-        registerPanel instance = new registerPanel(null);
-        String newAccount = "l";
-        String input = "xxxxx";
-        assertTrue(instance.createNewAccount(newAccount, input));
-    }
 
-	@Test
-    public void testCreateNewAccount_True_7() {
-        System.out.println("JUnit - test of createNewAccount: 9");
-        registerPanel instance = new registerPanel(null);
-        String newAccount = "abcd";
-        String input = "a";
-        assertTrue(instance.createNewAccount(newAccount, input));
-    }
-	
     @Test
     public void testCreateNewAccount_False_1() {
         System.out.println("JUnit - test of createNewAccount: 1");
@@ -173,9 +135,26 @@ public class registerPanelTest {
         assertFalse(instance.createNewAccount(newAccount, input));
     }
 
-
     @Test
     public void testCreateNewAccount_False_8() {
+        System.out.println("JUnit - test of createNewAccount: 8");
+        registerPanel instance = new registerPanel(null);
+        String newAccount = superString;
+        String input = "xxxxx";
+        assertFalse(instance.createNewAccount(newAccount, input));
+    }
+
+    @Test
+    public void testCreateNewAccount_False_9() {
+        System.out.println("JUnit - test of createNewAccount: 9");
+        registerPanel instance = new registerPanel(null);
+        String newAccount = "dasfasfasf";
+        String input = superString;
+        assertFalse(instance.createNewAccount(newAccount, input));
+    }
+
+    @Test
+    public void testCreateNewAccount_False_10() {
         // null username
         System.out.println("JUnit - test of createNewAccount: 10");
         registerPanel instance = new registerPanel(null);
@@ -185,7 +164,7 @@ public class registerPanelTest {
     }
 
     @Test
-    public void testCreateNewAccount_False_9() {
+    public void testCreateNewAccount_False_11() {
         System.out.println("JUnit - test of createNewAccount: 11");
         registerPanel instance = new registerPanel(null);
         String newAccount = "SUperman";
@@ -194,7 +173,7 @@ public class registerPanelTest {
     }
 
     @Test
-    public void testCreateNewAccount_False_10() {
+    public void testCreateNewAccount_False_12() {
         System.out.println("JUnit - test of createNewAccount: 12");
         registerPanel instance = new registerPanel(null);
         String newAccount = superString + "0";
@@ -203,7 +182,7 @@ public class registerPanelTest {
     }
 
     @Test
-    public void testCreateNewAccount_False_11() {
+    public void testCreateNewAccount_False_13() {
         System.out.println("JUnit - test of createNewAccount: 9");
         registerPanel instance = new registerPanel(null);
         String newAccount = "abcde";
@@ -283,7 +262,7 @@ public class registerPanelTest {
         registerPanel instance = new registerPanel(null);
 
         String oldAccount = superString;
-        char[] input = "xxxxx".toCharArray();
+        char[] input = null;
         assertTrue(instance.verifyOldAccount(oldAccount, input));
     }
 
@@ -318,138 +297,4 @@ public class registerPanelTest {
         char[] input = superString.toCharArray();
         assertTrue(instance.verifyOldAccount(oldAccount, input));
     }
-	
-	@Test
-    public void testVerifyOldAccount_11() {
-        System.out.println("JUnit - test of verifyOldAccount: 11");
-        registerPanel instance = new registerPanel(null);
-		
-        String oldAccount = "l";
-        char[] input = "xxxxx".toCharArray();
-        assertTrue(instance.verifyOldAccount(oldAccount, input));
-    }
-	
-	@Test
-    public void testVerifyOldAccount_12() {
-        System.out.println("JUnit - test of verifyOldAccount: 12");
-        registerPanel instance = new registerPanel(null);
-        String oldAccount = "abcd";
-        String input = "a";
-        assertTrue(instance.createNewAccount(oldAccount, input));
-    }
-
-
-    /**
-     * Test of actionPerformed method, of class registerPanel.
-     */
-    @Test
-    public void testActionPerformed_1() {
-        System.out.println("JUnit - test of actionPerformed: 1");
-        registerPanel instance = new registerPanel(null);
-        ActionEvent e = new ActionEvent(instance.loginBtn, 0, "");
-        instance.actionPerformed(e);
-        assertTrue(true);
-    }
-
-    /**
-     * Test of actionPerformed method, of class registerPanel.
-     */
-    @Test
-    public void testActionPerformed_2() {
-        System.out.println("JUnit - test of actionPerformed: 2");
-        registerPanel instance = new registerPanel(null);
-        ActionEvent e = new ActionEvent(instance.newAccountBtn, 0, "");
-        instance.actionPerformed(e);
-        assertTrue(true);
-    }
-
-    /**
-     * Test of actionPerformed method, of class registerPanel.
-     */
-    @Test
-    public void testActionPerformed_3() {
-        System.out.println("JUnit - test of actionPerformed: 3");
-        registerPanel instance = new registerPanel(null);
-        ActionEvent e = new ActionEvent(instance.newAccountOK, 0, "");
-        instance.actionPerformed(e);
-        assertTrue(true);
-    }
-
-    /**
-     * Test of actionPerformed method, of class registerPanel.
-     */
-    @Test
-    public void testActionPerformed_4() {
-        System.out.println("JUnit - test of actionPerformed: 4");
-        registerPanel instance = new registerPanel(null);
-        ActionEvent e = new ActionEvent(instance.loginOKBtn, 0, "");
-        instance.actionPerformed(e);
-        assertTrue(true);
-    }
-
-    /**
-     * Test of mouseEntered method, of class registerPanel.
-     */
-    @Test
-    public void testMouseEntered() {
-        System.out.println("mouseEntered");
-        MouseEvent e = null;
-        registerPanel instance = new registerPanel(null);
-        instance.mouseEntered(e);
-        assertTrue(true);
-    }
-
-//    /**
-//     * Test of mouseExited method, of class registerPanel.
-//     */
-//    @Test
-//    public void testMouseExited() {
-//        System.out.println("mouseExited");
-//        MouseEvent e = null;
-//        registerPanel instance = null;
-//        instance.mouseExited(e);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of mouseClicked method, of class registerPanel.
-//     */
-//    @Test
-//    public void testMouseClicked() {
-//        System.out.println("mouseClicked");
-//        MouseEvent e = null;
-//        registerPanel instance = null;
-//        instance.mouseClicked(e);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of mousePressed method, of class registerPanel.
-//     */
-//    @Test
-//    public void testMousePressed() {
-//        System.out.println("mousePressed");
-//        MouseEvent e = null;
-//        registerPanel instance = null;
-//        instance.mousePressed(e);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of mouseReleased method, of class registerPanel.
-//     */
-//    @Test
-//    public void testMouseReleased() {
-//        System.out.println("mouseReleased");
-//        MouseEvent e = null;
-//        registerPanel instance = null;
-//        instance.mouseReleased(e);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-
 }
