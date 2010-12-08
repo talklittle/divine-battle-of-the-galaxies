@@ -237,8 +237,8 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             }
             // Insert record in GameEntity
             System.out.println("Hello World");
-
-            if (numPlayers() <= 3) {
+                  
+            if (numPlayers() <= 4) {
                 User = new PlayerEntity();
                 User.setId(username);
                 Random ranColor = new Random();
@@ -251,7 +251,8 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             }
             else
             {
-                JOptionPane.showMessageDialog(null, "GAME FULL, ENTER AUDITING MODE.");
+                JOptionPane.showMessageDialog(null, "GAME FULL, PLEASE LOGIN LATER");
+                nFlag_registered = false;
             }
 
         } else {
@@ -294,28 +295,29 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                 //see if the user already has a character on the gameboard
                 User = playerFacade.find(username);
                 //if he doesn't, create a new character on the board
-                if (User == null && numPlayers() <= 3) {
-                    //System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
-                    User = new PlayerEntity();
-                    User.setId(username);
-                    Random ranColor = new Random();
-                    String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
-                    User.setColor(random_color);
-                    User.setNewGameTime(System.currentTimeMillis());
-                    playerFacade.create(User);
-                } else if (User != null && numPlayers() >= 4) {
-                    System.out.print("game is full, go to auditing mode");
-                } else {
-                    //or just reset the position & number of stars
+                if (User != null) {
                     User.setX(0);
                     User.setY(0);
                     User.setStars(0);
                     User.setNewGameTime(System.currentTimeMillis());
                     playerFacade.edit(User);
+                    nFlag_registered = true;
+                    parent.gamePanel.iPanel.initInfo(User.getId());
+                } else {
+                    if (numPlayers() <= 4) {
+                        User = new PlayerEntity();
+                        User.setId(username);
+                        Random ranColor = new Random();
+                        String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
+                        User.setColor(random_color);
+                        playerFacade.create(User);
+                        nFlag_registered = true;
+                        parent.gamePanel.iPanel.initInfo(User.getId());
+                    } else {
+                        JOptionPane.showMessageDialog(null, "GAME FULL, PLEASE LOGIN LATER");
+                        nFlag_registered = false;
+                    }
                 }
-                parent.gamePanel.iPanel.initInfo(User.getId());
-                nFlag_registered = true;
-                //System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
                 JOptionPane.showMessageDialog(null, "Password Incorrect");
                 return nFlag_registered;
