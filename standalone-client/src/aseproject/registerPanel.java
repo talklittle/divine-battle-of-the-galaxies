@@ -211,28 +211,27 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println(input+" = "+pass);
             account.setPsw(pass);
             accountInfoFacade.create(account);
-//            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
+            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
             if ("admin".equals(username)) {
-//                parent.window.remove(this);
-//                parent.adminConsole();
+                parent.window.remove(this);
+                parent.adminConsole();
                 return true;
             }
             // Insert record in GameEntity
-//            System.out.println("Hello World");
-//            User = new PlayerEntity();
-//            User.setId(username);
-//            Random ranColor = new Random();
-//            String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
-//            User.setColor(random_color);
-//            playerFacade.create(User);
-//            parent.gamePanel.iPanel.initInfo(User.getId());
+            System.out.println("Hello World");
+            User = new PlayerEntity();
+            User.setId(username);
+            Random ranColor = new Random();
+            String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
+            User.setColor(random_color);
+            playerFacade.create(User);
+            parent.gamePanel.iPanel.initInfo(User.getId());
             nFlag_registered = true;
         } else {
             System.out.println("Try another user ID.");
-//            JOptionPane.showMessageDialog(null, "this ID already exists, please try another one.");
+            JOptionPane.showMessageDialog(null, "this ID already exists, please try another one.");
             username = null;
             return false;
         }
@@ -245,7 +244,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         account = accountInfoFacade.find(username);
 
         if (account == null) {
-//            JOptionPane.showMessageDialog(null, "User does not exist");
+            JOptionPane.showMessageDialog(null, "User does not exist");
             username = null;
             return false;
         } else {
@@ -258,7 +257,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println("verifying: "+input+","+charPsw);
             isCorrect = correctPassword.equals(charPsw);
             //after verify the psw and account
             if (isCorrect) {
@@ -286,11 +284,11 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     User.setStars(0);
                     playerFacade.edit(User);
                 }
-//                parent.gamePanel.iPanel.initInfo(User.getId());
+                parent.gamePanel.iPanel.initInfo(User.getId());
                 nFlag_registered = true;
                 //System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
-//                JOptionPane.showMessageDialog(null, "Password Error");
+                JOptionPane.showMessageDialog(null, "Password Incorrect");
                 return nFlag_registered;
             }
         }

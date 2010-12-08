@@ -11,14 +11,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -51,6 +49,7 @@ public class adminPanel extends JPanel implements ActionListener {
     JButton deleteButton;
     JButton refreshButton;
     JButton saveButton;
+    JButton cancelButton;
     JButton logoutButton;
     JTextField editPswField;
     JLabel userLabel;
@@ -131,7 +130,7 @@ public class adminPanel extends JPanel implements ActionListener {
 
         pwdLabel = new JLabel();
         pwdLabel.setFont(new java.awt.Font("Algerian", 0, 14));
-        pwdLabel.setText("PASSWORD:");
+        pwdLabel.setText("RESET PASSWORD:");
         pwdLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         editPswField = new JTextField(20);
@@ -140,12 +139,20 @@ public class adminPanel extends JPanel implements ActionListener {
         //editPswField.addActionListener(this);
         editPswField.setMaximumSize(editPswField.getPreferredSize());
         editPswField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        editPswField.setDocument(new JTextFieldLimit(20));
 
         saveButton = new JButton();
         saveButton.setFont(new java.awt.Font("Algerian", 1, 12));
         saveButton.setText("SAVE USER INFO");
         saveButton.addActionListener(this);
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        cancelButton = new JButton();
+        cancelButton.setFont(new java.awt.Font("Algerian", 1, 12));
+        cancelButton.setText("CANCEL");
+        cancelButton.addActionListener(this);
+        cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
     }
 
     class myTableModel extends AbstractTableModel {
@@ -230,30 +237,53 @@ public class adminPanel extends JPanel implements ActionListener {
         }
     }
 
+    public String MD5(String pass) throws NoSuchAlgorithmException {
+	MessageDigest m = MessageDigest.getInstance("MD5");
+	byte[] data = pass.getBytes();
+	m.update(data,0,data.length);
+	BigInteger i = new BigInteger(1,m.digest());
+	return String.format("%1$032X", i);
+    }
+
     public void actionPerformed(ActionEvent e) {
         subEditPane.removeAll();
         Object src = e.getSource();
 
         if(src == editButton && selectPwd!=null && selectUser!=null) {
             userDisp.setText(selectUser);
-            editPswField.setText(selectPwd);
+            editPswField.setText("");
 
             subEditPane.add(userLabel);
             subEditPane.add(userDisp);
             subEditPane.add(pwdLabel);
             subEditPane.add(editPswField);
             subEditPane.add(saveButton);
+            subEditPane.add(cancelButton);
         }
 
         else if(src == saveButton) {
             accountInfo user = (accountInfo)AcctSession.find(selectUser);
-            user.setPsw(editPswField.getText());
-            AcctSession.edit(user);
-            JLabel editMsg = new JLabel();
-            editMsg.setText("User ["+selectUser+"]\n updated!");
-            editMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
-            subEditPane.add(editMsg);
-            acctTable.setValueAt(editPswField.getText(),rowIndex, 1);
+            int passwordLength = editPswField.getText().length();
+            if (passwordLength < 6 || passwordLength > 20) {
+                JOptionPane.showMessageDialog(null, "Invalid password: length must be between 6 and 20 (inclusive).");
+            }
+
+            else {
+                String password = "";
+                try {
+                    password = MD5(editPswField.getText());
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                user.setPsw(password);
+                AcctSession.edit(user);
+                JLabel editMsg = new JLabel();
+                editMsg.setText("User ["+selectUser+"]\n updated!");
+                editMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
+                subEditPane.add(editMsg);
+                acctTable.setValueAt(password,rowIndex, 1);
+            }
         }
 
         else if(src == deleteButton) {

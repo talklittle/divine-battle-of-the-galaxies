@@ -514,13 +514,13 @@ exists or setup the property manually. For example like this:
     <target depends="compile" name="library-inclusion-in-archive">
         <mkdir dir="${build.classes.dir}/META-INF/lib"/>
         <copyfiles files="${reference.aseProject-ejb.dist}" todir="${build.classes.dir}/META-INF/lib"/>
-        <copyfiles files="${file.reference.gf-client.jar}" todir="${build.classes.dir}/META-INF/lib"/>
+        <copyfiles files="${file.reference.gf-client.jar-1}" todir="${build.classes.dir}/META-INF/lib"/>
     </target>
     <target depends="compile" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${reference.aseProject-ejb.dist}" manifestproperty="manifest.reference.aseProject-ejb.dist" todir="${dist.ear.dir}"/>
-        <copyfiles files="${file.reference.gf-client.jar}" manifestproperty="manifest.file.reference.gf-client.jar" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.gf-client.jar-1}" manifestproperty="manifest.file.reference.gf-client.jar-1" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.reference.aseProject-ejb.dist} ${manifest.file.reference.gf-client.jar} lib/${manifest.file.reference.gf-client.jar} "/>
+            <attribute name="Class-Path" value="${manifest.reference.aseProject-ejb.dist} ${manifest.file.reference.gf-client.jar-1} lib/${manifest.file.reference.gf-client.jar-1} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
