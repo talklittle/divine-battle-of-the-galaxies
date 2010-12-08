@@ -252,6 +252,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             }
             return true;
         } else {
+            System.out.println("FROZEN CAN'T MOVE");
             return false;
         }
     }
@@ -316,7 +317,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             }
         } else {
             gameBoardOcc[toX / 50][toY / 50] = monster.getId();
-            return true;
+            return false;
         }
     }
 

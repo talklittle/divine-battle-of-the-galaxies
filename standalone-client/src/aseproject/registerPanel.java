@@ -17,6 +17,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Random;
 import javax.swing.BoxLayout;
@@ -175,6 +178,14 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         panelMode = PANEL_MODE_NEW_ACCOUNT;
     }
 
+    public String MD5(String pass) throws NoSuchAlgorithmException {
+	MessageDigest m = MessageDigest.getInstance("MD5");
+	byte[] data = pass.getBytes();
+	m.update(data,0,data.length);
+	BigInteger i = new BigInteger(1,m.digest());
+	return String.format("%1$032X", i);
+    }
+
     protected boolean createNewAccount(String newAccount, String input) {
         username = newAccount;
 //        System.out.println(username);
@@ -193,7 +204,15 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             // Insert record in accountInfo
             account = new accountInfo();
             account.setId(username);
-            account.setPsw(input);
+            String pass="";
+            try {
+                pass = MD5(input);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(input+" = "+pass);
+            account.setPsw(pass);
             accountInfoFacade.create(account);
 //            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
             if ("admin".equals(username)) {
@@ -232,8 +251,15 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         } else {
             boolean isCorrect;
             String correctPassword = account.getPsw();
-            char[] charPsw = correctPassword.toCharArray();
-            isCorrect = Arrays.equals(input, charPsw);
+            String charPsw = "";
+            try {
+                charPsw = MD5(new String(input));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("verifying: "+input+","+charPsw);
+            isCorrect = correctPassword.equals(charPsw);
             //after verify the psw and account
             if (isCorrect) {
                 //if it's the admin account
@@ -246,7 +272,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                 User = playerFacade.find(username);
                 //if he doesn't, create a new character on the board
                 if (User == null) {
-                    System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
+                    //System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
                     User = new PlayerEntity();
                     User.setId(username);
                     Random ranColor = new Random();
@@ -262,7 +288,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                 }
 //                parent.gamePanel.iPanel.initInfo(User.getId());
                 nFlag_registered = true;
-                System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
+                //System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
 //                JOptionPane.showMessageDialog(null, "Password Error");
                 return nFlag_registered;

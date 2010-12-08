@@ -117,6 +117,7 @@ public class Main implements ActionListener {
 
                 // Busy wait while Game Over screen is showing
                 while (gamePanel.isGameOver() == true) {
+                    System.out.print(" ");
                 }
 
                 // Bring back to Register/Login page
