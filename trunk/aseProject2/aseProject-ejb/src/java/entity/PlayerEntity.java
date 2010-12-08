@@ -30,6 +30,8 @@ public class PlayerEntity extends GameEntity implements Serializable {
 //    private Vector Mon;  //collectMonster monsterTimeout
     private boolean frozen; // freezePlayer and freezeTimeout
     private long frozentime;
+    private long newGameTime;
+    private long gameOverTime;
 
 //    public PlayerEntity() {
 //
@@ -109,6 +111,21 @@ public class PlayerEntity extends GameEntity implements Serializable {
         return frozentime;
     }
 
+    public long getGameOverTime() {
+        return gameOverTime;
+    }
+
+    public void setGameOverTime(long gameOverTime) {
+        this.gameOverTime = gameOverTime;
+    }
+
+    public long getNewGameTime() {
+        return newGameTime;
+    }
+
+    public void setNewGameTime(long newGameTime) {
+        this.newGameTime = newGameTime;
+    }
 
 //    @Override
 //    public int hashCode() {

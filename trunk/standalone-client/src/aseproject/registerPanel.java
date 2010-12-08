@@ -244,6 +244,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                 Random ranColor = new Random();
                 String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
                 User.setColor(random_color);
+                User.setNewGameTime(System.currentTimeMillis());
                 playerFacade.create(User);
                 parent.gamePanel.iPanel.initInfo(User.getId());
                 nFlag_registered = true;
@@ -300,6 +301,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     Random ranColor = new Random();
                     String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
                     User.setColor(random_color);
+                    User.setNewGameTime(System.currentTimeMillis());
                     playerFacade.create(User);
                 } else if (User != null && numPlayers() >= 4) {
                     System.out.print("game is full, go to auditing mode");
@@ -308,6 +310,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     User.setX(0);
                     User.setY(0);
                     User.setStars(0);
+                    User.setNewGameTime(System.currentTimeMillis());
                     playerFacade.edit(User);
                 }
                 parent.gamePanel.iPanel.initInfo(User.getId());
