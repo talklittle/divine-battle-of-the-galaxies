@@ -21,32 +21,44 @@ import session.accountInfoFacadeRemote;
 public class Lookup {
     public static GameEntityFacadeRemote lookupGameEntityFacadeRemote() {
         try {
-            Context c = new InitialContext();
-            return (GameEntityFacadeRemote) c.lookup("java:global/aseProject2/aseProject-ejb/GameEntityFacade");
+            return _lookupGameEntityFacadeRemote();
         } catch (NamingException ne) {
             Logger.getLogger(Lookup.class.getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
+    }
+
+    public static GameEntityFacadeRemote _lookupGameEntityFacadeRemote() throws NamingException {
+        Context c = new InitialContext();
+        return (GameEntityFacadeRemote) c.lookup("java:global/aseProject2/aseProject-ejb/GameEntityFacade");
     }
 
     public static PlayerEntityFacadeRemote lookupPlayerEntityFacadeRemote() {
         try {
-            Context c = new InitialContext();
-            return (PlayerEntityFacadeRemote) c.lookup("java:global/aseProject2/aseProject-ejb/PlayerEntityFacade");
+            return _lookupPlayerEntityFacadeRemote();
         } catch (NamingException ne) {
             Logger.getLogger(Lookup.class.getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
     }
 
+    public static PlayerEntityFacadeRemote _lookupPlayerEntityFacadeRemote() throws NamingException {
+        Context c = new InitialContext();
+        return (PlayerEntityFacadeRemote) c.lookup("java:global/aseProject2/aseProject-ejb/PlayerEntityFacade");
+    }
+
     public static accountInfoFacadeRemote lookupaccountInfoFacadeRemote() {
         try {
-            Context c = new InitialContext();
-            return (accountInfoFacadeRemote) c.lookup("java:global/aseProject2/aseProject-ejb/accountInfoFacade");
+            return _lookupaccountInfoFacadeRemote();
         } catch (NamingException ne) {
             Logger.getLogger(Lookup.class.getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
+    }
+
+    public static accountInfoFacadeRemote _lookupaccountInfoFacadeRemote() throws NamingException {
+        Context c = new InitialContext();
+        return (accountInfoFacadeRemote) c.lookup("java:global/aseProject2/aseProject-ejb/accountInfoFacade");
     }
 
 
