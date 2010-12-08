@@ -78,6 +78,7 @@ public class drawPanel extends JPanel implements KeyListener {
 
         // draw entities on buffer b
         List gameEntities = GameSession.findAll();
+        PlayerEntity myPlayer = (PlayerEntity) GameSession.find(username);
 
         Iterator iter = gameEntities.iterator();
         while (iter.hasNext()) {
@@ -87,14 +88,21 @@ public class drawPanel extends JPanel implements KeyListener {
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
                     img = ImageIO.read(new File("assets/sprite-" + player.getColor() + ".png"));
-                    if (player.getStars() == 10) {
+                    if (player.getStars() >= 10 && (player.getId().equals(username)
+                            || player.getGameOverTime() > myPlayer.getNewGameTime())) {
                         nFlag_gameOver = true;
+                        if (player.getId().equals(username)) {
+                            // when I get game over, save my game over time
+                            myPlayer.setGameOverTime(System.currentTimeMillis());
+                        } else {
+                            // if someone else won, copy their game over time
+                            myPlayer.setGameOverTime(player.getGameOverTime());
+                        }
+                        GameSession.edit(myPlayer);
+                        
 //                        GameSession.gameOver(nFlag_gameOver);
                         winner = player.getId();
                         winnerColor = player.getColor();
-                    }
-                    if (player.getStars() == 11) {
-                        nFlag_gameOver = true;
                     }
                     //b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
                     b.drawImage(img, entity.getX(), entity.getY(), null);
