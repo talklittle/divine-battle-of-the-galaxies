@@ -20,7 +20,7 @@ import java.awt.event.MouseListener;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -221,14 +221,22 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             }
             // Insert record in GameEntity
             System.out.println("Hello World");
-            User = new PlayerEntity();
-            User.setId(username);
-            Random ranColor = new Random();
-            String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
-            User.setColor(random_color);
-            playerFacade.create(User);
-            parent.gamePanel.iPanel.initInfo(User.getId());
-            nFlag_registered = true;
+
+            if (numPlayers() <= 3) {
+                User = new PlayerEntity();
+                User.setId(username);
+                Random ranColor = new Random();
+                String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
+                User.setColor(random_color);
+                playerFacade.create(User);
+                parent.gamePanel.iPanel.initInfo(User.getId());
+                nFlag_registered = true;
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "GAME FULL, ENTER AUDITING MODE.");
+            }
+
         } else {
             System.out.println("Try another user ID.");
             JOptionPane.showMessageDialog(null, "this ID already exists, please try another one.");
@@ -269,7 +277,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                 //see if the user already has a character on the gameboard
                 User = playerFacade.find(username);
                 //if he doesn't, create a new character on the board
-                if (User == null) {
+                if (User == null && numPlayers() <= 3) {
                     //System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
                     User = new PlayerEntity();
                     User.setId(username);
@@ -277,6 +285,8 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
                     User.setColor(random_color);
                     playerFacade.create(User);
+                } else if (User != null && numPlayers() >= 4) {
+                    System.out.print("game is full, go to auditing mode");
                 } else {
                     //or just reset the position & number of stars
                     User.setX(0);
@@ -294,6 +304,19 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         }
         return nFlag_registered;
     }
+
+    private int numPlayers() {
+        int num = 0;
+        Iterator it = playerFacade.findAll().iterator();
+        while (it.hasNext()) {
+            if (it.next() instanceof PlayerEntity) {
+                num++;
+            }
+        }
+        return num;
+
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
