@@ -66,13 +66,13 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             y = rand.nextInt(11) * 50;
             star = new StarEntity(x, y);
             star.setId("star-" + numStars);
-            numStars += 1;
             if (gameBoardOcc[x / 50][y / 50] == null) {
                 gameBoardOcc[x / 50][y / 50] = star.getId();
+                numStars += 1;
+                create(star);
             } else {
                 i -= 1;
-            }
-            create(star);
+            } 
         }
         // initialize Monsters
         MonsterEntity monster;
@@ -82,13 +82,13 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             monster = new MonsterEntity(x, y, "kill");
             monster.setId("monster-" + numMonsters);
             monster.setColor(Colors.COLOR_STRINGS[rand.nextInt(Colors.COLOR_STRINGS.length)]);
-            numMonsters += 1;
             if (gameBoardOcc[x / 50][y / 50] == null) {
                 gameBoardOcc[x / 50][y / 50] = monster.getId();
+                numMonsters += 1;
+                create(monster);
             } else {
                 i -= 1;
             }
-            create(monster);
         }
         for (int i = 0; i < INIT_MONSTERS_FREEZE; i++) {
             x = rand.nextInt(15) * 50;
@@ -96,13 +96,14 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             monster = new MonsterEntity(x, y, "freeze");
             monster.setId("monster-" + numMonsters);
             monster.setColor(Colors.COLOR_STRINGS[rand.nextInt(Colors.COLOR_STRINGS.length)]);
-            numMonsters += 1;
             if (gameBoardOcc[x / 50][y / 50] == null) {
                 gameBoardOcc[x / 50][y / 50] = monster.getId();
+                numMonsters += 1;
+                create(monster);
             } else {
                 i -= 1;
             }
-            create(monster);
+            
         }
 
         //setup timer for monsters
@@ -313,11 +314,17 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
                         }
                     }
                 }
+                monster.setX(toX);
+                monster.setY(toY);
+                edit(monster);
                 return true;
             }
         } else {
             gameBoardOcc[toX / 50][toY / 50] = monster.getId();
-            return false;
+            monster.setX(toX);
+            monster.setY(toY);
+            edit(monster);
+            return true;
         }
     }
 
@@ -338,7 +345,6 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             return false;
         }
 
-        boolean moveOk = true;
 
         // DEBUG
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
@@ -349,17 +355,12 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             return playerLogic((PlayerEntity) entity, toX, toY);
         }
         if (entity instanceof MonsterEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
-            if (moveOk) {
+            if (monsterLogic((MonsterEntity) entity, toX, toY)) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
+                edit(entity);
             }
         }
 
-        entity.setX(toX);
-        entity.setY(toY);
-        if (moveOk) {
-            edit(entity);
-        }
         return true;
     }
 
@@ -380,7 +381,6 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             return false;
         }
 
-        boolean moveOk = true;
 
         // DEBUG
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
@@ -391,15 +391,10 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             return playerLogic((PlayerEntity) entity, toX, toY);
         }
         if (entity instanceof MonsterEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
-            if (moveOk) {
+           if (monsterLogic((MonsterEntity) entity, toX, toY)) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
+                edit(entity);
             }
-        }
-        entity.setX(toX);
-        entity.setY(toY);
-        if (moveOk) {
-            edit(entity);
         }
         return true;
     }
@@ -421,8 +416,7 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
         if (!isValidMove(fromX, fromY, toX, toY)) {
             return false;
         }
-
-        boolean moveOk = true;
+        
 
         // DEBUG
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
@@ -433,15 +427,10 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             return playerLogic((PlayerEntity) entity, toX, toY);
         }
         if (entity instanceof MonsterEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
-            if (moveOk) {
+            if (monsterLogic((MonsterEntity) entity, toX, toY)) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
+                edit(entity);
             }
-        }
-        entity.setX(toX);
-        entity.setY(toY);
-        if (moveOk) {
-            edit(entity);
         }
         return true;
     }
@@ -464,7 +453,6 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             return false;
         }
 
-        boolean moveOk = true;
 
         // DEBUG
         if (gameBoardOcc[toX / 50][toY / 50] != null) {
@@ -475,15 +463,10 @@ public class GameEntityFacade extends AbstractFacade<GameEntity> implements Game
             return playerLogic((PlayerEntity) entity, toX, toY);
         }
         if (entity instanceof MonsterEntity) {
-            moveOk = moveOk && monsterLogic((MonsterEntity) entity, toX, toY);
-            if (moveOk) {
+            if (monsterLogic((MonsterEntity) entity, toX, toY)) {
                 gameBoardOcc[fromX / 50][fromY / 50] = null;
+                edit(entity);
             }
-        }
-        entity.setX(toX);
-        entity.setY(toY);
-        if (moveOk) {
-            edit(entity);
         }
         return true;
     }
