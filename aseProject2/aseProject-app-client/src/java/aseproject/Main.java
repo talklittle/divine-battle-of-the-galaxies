@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.ejb.EJBException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import session.GameEntityFacadeRemote;
@@ -80,47 +81,57 @@ public class Main implements ActionListener {
 
     class MonsterTask extends TimerTask {
         public void run() {
-            List entities = gameSession.findAll();
-            Iterator iter = entities.iterator();
-            Random rand = new Random();
-            int direction;
-            while (iter.hasNext()) {
-                GameEntity entity = (GameEntity) iter.next();
-                if (entity instanceof MonsterEntity) {
-                    direction = rand.nextInt(1920) % 4;
-                    switch (direction) {
-                        case 0://up
-                            gameSession.moveUp(entity.getId());
-                            break;
-                        case 1://down
-                            gameSession.moveDown(entity.getId());
-                            break;
-                        case 2://left
-                            gameSession.moveLeft(entity.getId());
-                            break;
-                        case 3://right
-                            gameSession.moveRight(entity.getId());
-                            break;
+            try {
+                List entities = gameSession.findAll();
+                Iterator iter = entities.iterator();
+                Random rand = new Random();
+                int direction;
+
+                while (iter.hasNext()) {
+                    GameEntity entity = (GameEntity) iter.next();
+                    if (entity instanceof MonsterEntity) {
+                        direction = rand.nextInt(1920) % 4;
+                        switch (direction) {
+                            case 0://up
+                                gameSession.moveUp(entity.getId());
+                                break;
+                            case 1://down
+                                gameSession.moveDown(entity.getId());
+                                break;
+                            case 2://left
+                                gameSession.moveLeft(entity.getId());
+                                break;
+                            case 3://right
+                                gameSession.moveRight(entity.getId());
+                                break;
+                        }
                     }
                 }
+            } catch (EJBException ex) {
+                gameSession = Lookup.lookupGameEntityFacadeRemote();
             }
+
             gameMasterPanel.setUpdateCounter(++debugMonsterMovements);
         }
     }
 
     class CleanTask extends TimerTask {
         public void run() {
-            gameSession.cleanOldCollisionEvents();
+            try {
+                gameSession.cleanOldCollisionEvents();
 
-            List players = playerSession.findAll();
-            Iterator iter = players.iterator();
-            while (iter.hasNext()) {
-                PlayerEntity player = (PlayerEntity) iter.next();
-                if (player.isFrozen() && ((System.currentTimeMillis() - player.getFrozentime()) > FREEZE_DURATION_MILLIS)) {
-                    player.setFrozen(false);
-                    player.setFrozentime(0);
-                    playerSession.edit(player);
+                List players = playerSession.findAll();
+                Iterator iter = players.iterator();
+                while (iter.hasNext()) {
+                    PlayerEntity player = (PlayerEntity) iter.next();
+                    if (player.isFrozen() && ((System.currentTimeMillis() - player.getFrozentime()) > FREEZE_DURATION_MILLIS)) {
+                        player.setFrozen(false);
+                        player.setFrozentime(0);
+                        playerSession.edit(player);
+                    }
                 }
+            } catch (EJBException ex) {
+                gameSession = Lookup.lookupGameEntityFacadeRemote();
             }
         }
     }
