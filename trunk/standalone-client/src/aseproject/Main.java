@@ -4,16 +4,11 @@
  */
 package aseproject;
 
-import entity.GameEntity;
 import entity.PlayerEntity;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -83,11 +78,6 @@ public class Main implements ActionListener {
         window.setVisible(true);
 
         while (true) {
-//            if(nFlag_adminLogout) {
-//                nFlag_adminLogout = false;
-//                System.out.println("break!");
-//                return;
-//            }
             if (regPanel.nFlag_registered && !gamePanel.isGameOver() && !nFlag_admin) {
                 window.remove(regPanel);
                 window.add(gamePanel);
@@ -138,15 +128,6 @@ public class Main implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
-        //delete all player entity in the board
-//        List playerEntities = gameSession.findAll();
-//        Iterator it = playerEntities.iterator();
-//        while (it.hasNext()) {
-//            GameEntity player = (GameEntity) it.next();
-//            if (player instanceof PlayerEntity) {
-//                gameSession.remove(player);
-//            }
-//        }
         PlayerEntity currentPlayer = regPanel.User;
         gameSession.remove(currentPlayer);
         System.out.println("restart the game");
