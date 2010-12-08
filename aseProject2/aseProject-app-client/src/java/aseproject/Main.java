@@ -19,6 +19,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.ejb.EJBException;
+import javax.naming.NamingException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import session.GameEntityFacadeRemote;
@@ -108,7 +109,14 @@ public class Main implements ActionListener {
                     }
                 }
             } catch (EJBException ex) {
-                gameSession = Lookup.lookupGameEntityFacadeRemote();
+                try {
+                    gameSession = Lookup._lookupGameEntityFacadeRemote();
+                } catch (NamingException ex2) {
+                } finally {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex2) {}
+                }
             }
 
             gameMasterPanel.setUpdateCounter(++debugMonsterMovements);
@@ -131,7 +139,14 @@ public class Main implements ActionListener {
                     }
                 }
             } catch (EJBException ex) {
-                gameSession = Lookup.lookupGameEntityFacadeRemote();
+                try {
+                    gameSession = Lookup._lookupGameEntityFacadeRemote();
+                } catch (NamingException ex2) {
+                } finally {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex2) {}
+                }
             }
         }
     }
