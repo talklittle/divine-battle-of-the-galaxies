@@ -98,6 +98,8 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         newAccountUser.setAlignmentX(Component.CENTER_ALIGNMENT);
         newAccountUser.addActionListener(this);
         newAccountUser.setMaximumSize(newAccountUser.getPreferredSize());
+        // set the max number of chars
+        newAccountUser.setDocument(new JTextFieldLimit(20));
 
         newAccountPswLabel = new JLabel();
         newAccountPswLabel.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
@@ -108,12 +110,16 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         newAccountPsw.setAlignmentX(Component.CENTER_ALIGNMENT);
         newAccountPsw.addActionListener(this);
         newAccountPsw.setMaximumSize(newAccountPsw.getPreferredSize());
+        // set the max number of chars
+        newAccountPsw.setDocument(new JTextFieldLimit(20));
 
         loginUserName = new JTextField(20);
         loginUserName.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
         loginUserName.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginUserName.addActionListener(this);
         loginUserName.setMaximumSize(loginUserName.getPreferredSize());
+        // set the max number of chars
+        loginUserName.setDocument(new JTextFieldLimit(20));
 
         newAccountOK = new JButton("OK");
         newAccountOK.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
@@ -126,6 +132,9 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         pswField.addActionListener(this);
         pswField.setAlignmentX(Component.CENTER_ALIGNMENT);
         pswField.setMaximumSize(pswField.getPreferredSize());
+        // set the max number of chars
+        pswField.setDocument(new JTextFieldLimit(20));
+
         add(gameTitle);
         add(newAccountBtn);
         add(loginBtn);
