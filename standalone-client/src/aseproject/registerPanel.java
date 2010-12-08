@@ -21,7 +21,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -217,25 +216,19 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             accountInfoFacade.create(account);
 //            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
             if ("admin".equals(username)) {
-                parent.window.remove(this);
-                parent.adminConsole();
+//                parent.window.remove(this);
+//                parent.adminConsole();
                 return true;
             }
             // Insert record in GameEntity
-            System.out.println("Hello World");
-            if (numPlayers() <= 3) {
-                User = new PlayerEntity();
-                User.setId(username);
-                Random ranColor = new Random();
-                String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
-                User.setColor(random_color);
-                playerFacade.create(User);
-                parent.gamePanel.iPanel.initInfo(User.getId());
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "GAME FULL, ENTER AUDITING MODE.");
-            }
+//            System.out.println("Hello World");
+//            User = new PlayerEntity();
+//            User.setId(username);
+//            Random ranColor = new Random();
+//            String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
+//            User.setColor(random_color);
+//            playerFacade.create(User);
+//            parent.gamePanel.iPanel.initInfo(User.getId());
             nFlag_registered = true;
         } else {
             System.out.println("Try another user ID.");
@@ -246,21 +239,9 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         return nFlag_registered;
     }
 
-    private int numPlayers() {
-        int num = 0;
-        Iterator it = playerFacade.findAll().iterator();
-        while (it.hasNext()) {
-            if (it.next() instanceof PlayerEntity) {
-                num++;
-            }
-        }
-        return num;
-
-    }
-
     protected boolean verifyOldAccount(String oldAccount, char[] input) {
         username = oldAccount;
-        System.out.println(username);
+//        System.out.println(username);
         account = accountInfoFacade.find(username);
 
         if (account == null) {
@@ -280,7 +261,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             System.out.println("verifying: "+input+","+charPsw);
             isCorrect = correctPassword.equals(charPsw);
             //after verify the psw and account
-            //after verify the psw and account
             if (isCorrect) {
                 //if it's the admin account
                 if (username.equals("admin")) {
@@ -291,7 +271,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                 //see if the user already has a character on the gameboard
                 User = playerFacade.find(username);
                 //if he doesn't, create a new character on the board
-                if (User == null && numPlayers() <= 3) {
+                if (User == null) {
                     //System.out.println("THE USER IS NOT IN GAME, CREATE NEW CHARACTER");
                     User = new PlayerEntity();
                     User.setId(username);
@@ -299,8 +279,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
                     User.setColor(random_color);
                     playerFacade.create(User);
-                } else if (User != null && numPlayers() >= 4) {
-                    System.out.print("game is full, go to auditing mode");
                 } else {
                     //or just reset the position & number of stars
                     User.setX(0);
@@ -313,7 +291,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                 //System.out.println("User authenticated with pwd: " + account.getPsw() + " var: " + nFlag_registered);
             } else {
 //                JOptionPane.showMessageDialog(null, "Password Error");
-                return nFlag_registered;
                 return nFlag_registered;
             }
         }
