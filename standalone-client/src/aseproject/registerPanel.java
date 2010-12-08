@@ -43,7 +43,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     JButton loginBtn;
     JButton newAccountOK;
     JTextField newAccountUser;
-    JTextField newAccountPsw;
+    JPasswordField newAccountPsw;
     JTextField loginUserName;
     JPasswordField pswField;
     JButton loginOKBtn;
@@ -99,7 +99,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         newAccountUser.addActionListener(this);
         newAccountUser.setMaximumSize(newAccountUser.getPreferredSize());
         // set the max number of chars
-        newAccountUser.setDocument(new JTextFieldLimit(20));
+        newAccountUser.setDocument(new JTextFieldLimit(10));
 
         newAccountPswLabel = new JLabel();
         newAccountPswLabel.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
@@ -119,7 +119,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         loginUserName.addActionListener(this);
         loginUserName.setMaximumSize(loginUserName.getPreferredSize());
         // set the max number of chars
-        loginUserName.setDocument(new JTextFieldLimit(20));
+        loginUserName.setDocument(new JTextFieldLimit(10));
 
         newAccountOK = new JButton("OK");
         newAccountOK.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
@@ -180,6 +180,16 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
 //        System.out.println(username);
         account = (accountInfo) accountInfoFacade.find(username);
         if (account == null) {
+            int usernameLength = newAccount.length();
+            int passwordLength = input.length();
+            if (usernameLength < 1 || usernameLength > 10) {
+                JOptionPane.showMessageDialog(null, "Invalid username: length must be between 1 and 10 (inclusive).");
+                return false;
+            }
+            if (passwordLength < 6 || passwordLength > 20) {
+                JOptionPane.showMessageDialog(null, "Invalid password: length must be between 6 and 20 (inclusive).");
+                return false;
+            }
             // Insert record in accountInfo
             account = new accountInfo();
             account.setId(username);
