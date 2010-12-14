@@ -10,7 +10,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 /**
- * http://www.java-tips.org/java-se-tips/javax.swing/limit-jtextfield-input-to-a-maximum-length-3.html
+ * http://www.java-tips.org/java-se-tips/javax.swing/
+ * limit-jtextfield-input-to-a-maximum-length-3.html
  */
 public class JTextFieldLimit extends PlainDocument {
     private int limit;

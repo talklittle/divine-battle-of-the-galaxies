@@ -18,7 +18,8 @@ import sun.audio.AudioStream;
 public class SoundEffects {
     public static void playSound(String filename) {
         try {
-            InputStream in = new FileInputStream("assets/" + filename);
+            InputStream in = new FileInputStream("assets/"
+                                                 + filename);
             AudioStream as = new AudioStream(in);
             AudioPlayer.player.start(as);
         } catch (IOException e) {

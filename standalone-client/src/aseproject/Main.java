@@ -49,7 +49,11 @@ public class Main implements ActionListener {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                int flag = JOptionPane.showConfirmDialog(window, "Really exit?", "Exit Game", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int flag = JOptionPane.showConfirmDialog(
+                           window,
+                           "Really exit?", "Exit Game",
+                           JOptionPane.YES_NO_OPTION,
+                           JOptionPane.QUESTION_MESSAGE);
                 if (JOptionPane.YES_OPTION == flag) {
                     //delete its own player
                     try {
@@ -88,7 +92,8 @@ public class Main implements ActionListener {
 //                System.out.println("break!");
 //                return;
 //            }
-            if (regPanel.nFlag_registered && !gamePanel.isGameOver() && !nFlag_admin) {
+            if (regPanel.nFlag_registered && !gamePanel.isGameOver()
+                                          && !nFlag_admin) {
                 window.remove(regPanel);
                 window.add(gamePanel);
                 window.validate();
@@ -102,7 +107,9 @@ public class Main implements ActionListener {
 
                 JButton endBtn = new JButton("Game over, Restart?");
                 endBtn.addActionListener(this);
-                JLabel winnerLabel = new JLabel("Winner: " + gamePanel.getWinner() + " (" + gamePanel.getWinnerColor() + ")");
+                JLabel winnerLabel = new JLabel(
+                        "Winner: " + gamePanel.getWinner() + " ("
+                        + gamePanel.getWinnerColor() + ")");
 
                 JPanel endPanel = new JPanel();
                 endPanel.add(endBtn);

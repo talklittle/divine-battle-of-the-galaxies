@@ -67,14 +67,14 @@ public class infoPanel extends JPanel {
         this.username = id;
         this.user = playerSession.find(username);
         userLabel.setText(user.getId());
-        System.out.println("initinfo: "+user.getId());
+        //System.out.println("initinfo: " + user.getId());
         numStars = user.getStars();
         try {
-            String path = "assets/sprite-"+user.getColor()+".png";
-            img = new ImageIcon(path,"player sprite");
+            String path = "assets/sprite-" + user.getColor() + ".png";
+            img = new ImageIcon(path, "player sprite");
             //initialized = true;
 
-            spriteLabel = new JLabel(img,JLabel.CENTER);
+            spriteLabel = new JLabel(img, JLabel.CENTER);
             spriteLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             removeAll();
             add(userLabel);
@@ -90,12 +90,13 @@ public class infoPanel extends JPanel {
     }
 
     public void updateInfo() {
-        if(!initialized)
+        if (!initialized) {
             return;
+        }
         user = playerSession.find(username);
         if(user != null) {
             numStars = user.getStars();
-            numStarsLabel.setText(""+numStars);
+            numStarsLabel.setText("" + numStars);
             if (user.isFrozen()) {
                 frozenLabel.setText("Frozen");
             } else {
@@ -104,14 +105,4 @@ public class infoPanel extends JPanel {
         }
         repaint();
     }
-
-    /*@Override
-    public void paintComponent(Graphics g) {
-         super.paintComponent(g);    // paints background
-         if(initialized) {
-             g.drawImage(img, 0, 0, null);
-            numStars = user.getStars();
-        }
-        //g.drawString("Number of Stars:"+numStars, 0, 150);
-    }*/
 }

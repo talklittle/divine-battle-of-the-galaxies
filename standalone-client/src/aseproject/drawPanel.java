@@ -38,6 +38,16 @@ public class drawPanel extends JPanel implements KeyListener {
     public static final int GRID_WIDTH = 16;
     public static final int GRID_HEIGHT = 12;
     public static final int GRID_SQUARE_SIZE = 50;
+
+    public static final String SOUND_KILL
+            = "44430__thecheeseman__hurt3.wav";
+    public static final String SOUND_FREEZE
+            = "freeze.wav";
+    public static final String SOUND_PLAYER_PLAYER
+            = "17934__zippi1__sound_hello1.wav";
+    public static final String SOUND_STAR
+            = "ting.wav";
+
     BufferedImage buffer;
     public boolean nFlag_gameOver = false;
     public String winner = "";
@@ -210,17 +220,17 @@ public class drawPanel extends JPanel implements KeyListener {
 //                    SoundEffects.playSound("playerGetEgg.wav");
 //                    break;
                 case CollisionEventEntity.COLLISION_PLAYER_KILL:
-                    SoundEffects.playSound("44430__thecheeseman__hurt3.wav");
+                    SoundEffects.playSound(SOUND_KILL);
                     break;
                 case CollisionEventEntity.COLLISION_PLAYER_FREEZE:
                     // XXX For now, Freeze is same as Kill
-                    SoundEffects.playSound("freeze.wav");
+                    SoundEffects.playSound(SOUND_FREEZE);
                     break;
                 case CollisionEventEntity.COLLISION_PLAYER_PLAYER:
-                    SoundEffects.playSound("17934__zippi1__sound_hello1.wav");
+                    SoundEffects.playSound(SOUND_PLAYER_PLAYER);
                     break;
                 case CollisionEventEntity.COLLISION_PLAYER_STAR:
-                    SoundEffects.playSound("ting.wav");
+                    SoundEffects.playSound(SOUND_STAR);
                     break;
             }
         }

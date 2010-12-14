@@ -34,11 +34,16 @@ import util.Colors;
  *
  * @author _yy
  */
-public class registerPanel extends JPanel implements ActionListener, MouseListener {
+public class registerPanel extends JPanel
+                           implements ActionListener, MouseListener {
 
     static final int PANEL_MODE_DEFAULT = 0;
     static final int PANEL_MODE_NEW_ACCOUNT = 1;
     static final int PANEL_MODE_LOGIN = 2;
+    static final String SOUND_BUTTON_MOUSECLICK
+            = "49208__tombola__Fisher_Price24.wav";
+    static final String SOUND_BUTTON_MOUSEOVER
+            = "49206__tombola__Fisher_Price22.wav";
     public boolean nFlag_registered = false;
     int panelMode = PANEL_MODE_DEFAULT;
     JLabel gameTitle;
@@ -58,6 +63,8 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     accountInfoFacadeRemote accountInfoFacade;
     String username;
     Main parent;
+
+    private static final Random random = new Random();
 
     public registerPanel(Main m) {
 
@@ -79,7 +86,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         loginBtn.addMouseListener(this);
 
         gameTitle = new JLabel();
-        gameTitle.setFont(new java.awt.Font("Algerian", 1, 36)); // NOI18N
+        gameTitle.setFont(new java.awt.Font("Algerian", 1, 36));
         gameTitle.setForeground(new java.awt.Color(51, 51, 255));
         gameTitle.setText("Divine Battle of the Galaxies");
         gameTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -87,47 +94,52 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
         BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         this.setLayout(layout);
         loginOKBtn = new JButton();
-        loginOKBtn.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
+        loginOKBtn.setFont(new java.awt.Font("Algerian", 1, 12));
         loginOKBtn.setText("OK");
         loginOKBtn.addActionListener(this);
         loginOKBtn.addMouseListener(this);
         loginOKBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         newAccountUserLabel = new JLabel();
-        newAccountUserLabel.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
+        newAccountUserLabel.setFont(
+                            new java.awt.Font("Algerian", 0, 12));
         newAccountUserLabel.setText("ENTER YOUR USERNAME");
         newAccountUserLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         newAccountUser = new JTextField(20);
-        newAccountUser.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
+        newAccountUser.setFont(new java.awt.Font("Algerian", 0, 12));
         newAccountUser.setAlignmentX(Component.CENTER_ALIGNMENT);
         newAccountUser.addActionListener(this);
-        newAccountUser.setMaximumSize(newAccountUser.getPreferredSize());
+        newAccountUser.setMaximumSize(
+                       newAccountUser.getPreferredSize());
         // set the max number of chars
         newAccountUser.setDocument(new JTextFieldLimit(10));
 
         newAccountPswLabel = new JLabel();
-        newAccountPswLabel.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
+        newAccountPswLabel.setFont(
+                           new java.awt.Font("Algerian", 0, 12));
         newAccountPswLabel.setText("ENTER YOUR PASSWORD");
         newAccountPswLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         newAccountPsw = new JPasswordField(20);
         newAccountPsw.setAlignmentX(Component.CENTER_ALIGNMENT);
         newAccountPsw.addActionListener(this);
-        newAccountPsw.setMaximumSize(newAccountPsw.getPreferredSize());
+        newAccountPsw.setMaximumSize(
+                      newAccountPsw.getPreferredSize());
         // set the max number of chars
         newAccountPsw.setDocument(new JTextFieldLimit(20));
 
         loginUserName = new JTextField(20);
-        loginUserName.setFont(new java.awt.Font("Algerian", 0, 12)); // NOI18N
+        loginUserName.setFont(new java.awt.Font("Algerian", 0, 12));
         loginUserName.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginUserName.addActionListener(this);
-        loginUserName.setMaximumSize(loginUserName.getPreferredSize());
+        loginUserName.setMaximumSize(
+                      loginUserName.getPreferredSize());
         // set the max number of chars
         loginUserName.setDocument(new JTextFieldLimit(10));
 
         newAccountOK = new JButton("OK");
-        newAccountOK.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
+        newAccountOK.setFont(new java.awt.Font("Algerian", 1, 12));
         newAccountOK.setText("OK");
         newAccountOK.addActionListener(this);
         newAccountOK.addMouseListener(this);
@@ -183,12 +195,13 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     public String MD5(String pass) throws NoSuchAlgorithmException {
 	MessageDigest m = MessageDigest.getInstance("MD5");
 	byte[] data = pass.getBytes();
-	m.update(data,0,data.length);
-	BigInteger i = new BigInteger(1,m.digest());
+	m.update(data, 0, data.length);
+	BigInteger i = new BigInteger(1, m.digest());
 	return String.format("%1$032X", i);
     }
 
-    protected boolean createNewAccount(String newAccount, String input) {
+    protected boolean createNewAccount(String newAccount,
+                                       String input) {
         username = newAccount;
 //        System.out.println(username);
         account = (accountInfo) accountInfoFacade.find(username);
@@ -196,11 +209,15 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             int usernameLength = newAccount.length();
             int passwordLength = input.length();
             if (usernameLength < 1 || usernameLength > 10) {
-                JOptionPane.showMessageDialog(null, "Invalid username: length must be between 1 and 10 (inclusive).");
+                JOptionPane.showMessageDialog(null,
+                            "Invalid username: length must be between"
+                            + " 1 and 10 (inclusive).");
                 return false;
             }
             if (passwordLength < 6 || passwordLength > 20) {
-                JOptionPane.showMessageDialog(null, "Invalid password: length must be between 6 and 20 (inclusive).");
+                JOptionPane.showMessageDialog(null,
+                            "Invalid password: length must be between"
+                            + " 6 and 20 (inclusive).");
                 return false;
             }
             // Check for characters and numbers only
@@ -208,28 +225,33 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             Matcher m = p.matcher(newAccount);
 
             if(m.find()) {
-                JOptionPane.showMessageDialog(null, "Invalid username: Must contain only letters and numbers");
+                JOptionPane.showMessageDialog(null,
+                            "Invalid username: Must contain only "
+                            + "letters and numbers");
                 return false;
             }
             m = p.matcher(input);
             if(m.find()) {
-                JOptionPane.showMessageDialog(null, "Invalid password: Must contain only letters and numbers");
+                JOptionPane.showMessageDialog(null,
+                            "Invalid password: Must contain only "
+                            + "letters and numbers");
                 return false;
             }
 
             // Insert record in accountInfo
             account = new accountInfo();
             account.setId(username);
-            String pass="";
+            String pass = "";
             try {
                 pass = MD5(input);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             account.setPsw(pass);
             accountInfoFacade.create(account);
-            JOptionPane.showMessageDialog(null, "user ID: " + username + "  " + "Password: " + input);
+            JOptionPane.showMessageDialog(null, "user ID: " + username
+                                                + "  Password: "
+                                                + input);
             if ("admin".equals(username)) {
                 parent.window.remove(this);
                 parent.adminConsole();
@@ -241,36 +263,39 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             if (numPlayers() <= 4) {
                 User = new PlayerEntity();
                 User.setId(username);
-                Random ranColor = new Random();
-                String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
+                String random_color
+                       = Colors.COLOR_STRINGS[random.nextInt(8)];
                 User.setColor(random_color);
                 User.setNewGameTime(System.currentTimeMillis());
                 playerFacade.create(User);
                 parent.gamePanel.iPanel.initInfo(User.getId());
                 nFlag_registered = true;
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "GAME FULL, PLEASE LOGIN LATER");
+            } else {
+                JOptionPane.showMessageDialog(null,
+                            "GAME FULL, PLEASE LOGIN LATER");
                 nFlag_registered = false;
             }
 
         } else {
-            System.out.println("Try another user ID.");
-            JOptionPane.showMessageDialog(null, "this ID already exists, please try another one.");
+            //System.out.println("Try another user ID.");
+            JOptionPane.showMessageDialog(null,
+                        "this ID already exists, "
+                        + "please try another one.");
             username = null;
             return false;
         }
         return nFlag_registered;
     }
 
-    protected boolean verifyOldAccount(String oldAccount, char[] input) {
+    protected boolean verifyOldAccount(String oldAccount,
+                                       char[] input) {
         username = oldAccount;
 //        System.out.println(username);
         account = accountInfoFacade.find(username);
 
         if (account == null) {
-            JOptionPane.showMessageDialog(null, "User does not exist");
+            JOptionPane.showMessageDialog(null,
+                                          "User does not exist");
             username = null;
             return false;
         } else {
@@ -279,8 +304,7 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             String charPsw = "";
             try {
                 charPsw = MD5(new String(input));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             isCorrect = correctPassword.equals(charPsw);
@@ -307,19 +331,22 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
                     if (numPlayers() <= 4) {
                         User = new PlayerEntity();
                         User.setId(username);
-                        Random ranColor = new Random();
-                        String random_color = Colors.COLOR_STRINGS[ranColor.nextInt(8)];
+                        String random_color = Colors.COLOR_STRINGS[
+                                              random.nextInt(8)];
                         User.setColor(random_color);
                         playerFacade.create(User);
                         nFlag_registered = true;
-                        parent.gamePanel.iPanel.initInfo(User.getId());
+                        parent.gamePanel.iPanel
+                                        .initInfo(User.getId());
                     } else {
-                        JOptionPane.showMessageDialog(null, "GAME FULL, PLEASE LOGIN LATER");
+                        JOptionPane.showMessageDialog(null,
+                                    "GAME FULL, PLEASE LOGIN LATER");
                         nFlag_registered = false;
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Password Incorrect");
+                JOptionPane.showMessageDialog(null,
+                                              "Password Incorrect");
                 return nFlag_registered;
             }
         }
@@ -335,7 +362,6 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
             }
         }
         return num;
-
     }
 
 
@@ -343,23 +369,27 @@ public class registerPanel extends JPanel implements ActionListener, MouseListen
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
         if (src == loginBtn) {
-            SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
+            SoundEffects.playSound(SOUND_BUTTON_MOUSECLICK);
             doLogin();
         } else if (src == newAccountBtn) {
-            SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
+            SoundEffects.playSound(SOUND_BUTTON_MOUSECLICK);
             doNewAccount();
-        } else if (src == newAccountOK || src == newAccountUser || src == newAccountPsw) {
-            SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
-            createNewAccount(newAccountUser.getText(), newAccountPsw.getText());
-        } else if (src == loginOKBtn || src == loginUserName || src == pswField) {
-            SoundEffects.playSound("49208__tombola__Fisher_Price24.wav");
-            verifyOldAccount(loginUserName.getText(), pswField.getPassword());
+        } else if (src == newAccountOK || src == newAccountUser
+                                       || src == newAccountPsw) {
+            SoundEffects.playSound(SOUND_BUTTON_MOUSECLICK);
+            createNewAccount(newAccountUser.getText(),
+                             newAccountPsw.getText());
+        } else if (src == loginOKBtn || src == loginUserName
+                                     || src == pswField) {
+            SoundEffects.playSound(SOUND_BUTTON_MOUSECLICK);
+            verifyOldAccount(loginUserName.getText(),
+                             pswField.getPassword());
         }
 
     }
 
     public void mouseEntered(MouseEvent e) {
-        SoundEffects.playSound("49206__tombola__Fisher_Price22.wav");
+        SoundEffects.playSound(SOUND_BUTTON_MOUSEOVER);
     }
 
     public void mouseExited(MouseEvent e) {
