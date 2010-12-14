@@ -7,9 +7,6 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  * An Entity used to represent collision events,
@@ -17,7 +14,8 @@ import javax.persistence.Id;
  * @author Andrew
  */
 @Entity
-public class CollisionEventEntity extends GameEntity implements Serializable {
+public class CollisionEventEntity extends GameEntity
+                                  implements Serializable {
 
     public static final int COLLISION_PLAYER_STAR = 0;
     public static final int COLLISION_PLAYER_KILL = 1;
@@ -38,8 +36,11 @@ public class CollisionEventEntity extends GameEntity implements Serializable {
         
     }
 
-    public CollisionEventEntity(int x, int y, int collisionType,
-            String id1, String id2, long eventTimeMillis, long durationMillis) {
+    public CollisionEventEntity(int x, int y,
+                                int collisionType,
+                                String id1, String id2,
+                                long eventTimeMillis,
+                                long durationMillis) {
         super(x, y);
         this.collisionType = collisionType;
         this.gameEntityId1 = id1;

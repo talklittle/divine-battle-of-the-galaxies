@@ -20,7 +20,7 @@ public class GameEntity implements Serializable {
     @Id
     private String id;
 
-    private int x, y , height, width, speed;
+    private int x, y, height, width, speed;
     private boolean isUp;
     private boolean isDown;
     private boolean isLeft;
@@ -58,15 +58,15 @@ public class GameEntity implements Serializable {
 
     public GameEntity(int x, int y)
     {
-        this.x=x;
-        this.y=y;
-        speed =10;
-        height=50;
-        width=50;
-        isUp=false;
-        isDown=false;
-        isLeft=false;
-        isRight=false;
+        this.x = x;
+        this.y = y;
+        speed = 10;
+        height = 50;
+        width = 50;
+        isUp = false;
+        isDown = false;
+        isLeft = false;
+        isRight = false;
         collision = false;
     }
 
@@ -175,29 +175,29 @@ public class GameEntity implements Serializable {
     public void move()
     {
         if (isMoving) {
-            if (isUp&&y>0) {
-                y-=speed;
+            if (isUp && y > 0) {
+                y -= speed;
                 if (y % 50 == 0) {
                     isMoving = false;
                     isUp = false;
                 }
             }
-            if (isDown&&y<550) {
-                y+=speed;
+            if (isDown && y < 550) {
+                y += speed;
                 if (y % 50 == 0) {
                     isMoving = false;
                     isDown = false;
                 }
             }
-            if (isLeft&&x>0) {
-                x-=speed;
+            if (isLeft && x > 0) {
+                x -= speed;
                 if (x % 50 == 0) {
                     isMoving = false;
                     isLeft = false;
                 }
             }
-            if(isRight&&x<750) {
-                x+=speed;
+            if(isRight && x < 750) {
+                x += speed;
                 if (x % 50 == 0) {
                     isMoving = false;
                     isRight = false;
@@ -216,7 +216,8 @@ public class GameEntity implements Serializable {
             return false;
         }
         final GameEntity other = (GameEntity) obj;
-        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+        if ((this.id == null) ? (other.id != null)
+                              : !this.id.equals(other.id)) {
             return false;
         }
         return true;

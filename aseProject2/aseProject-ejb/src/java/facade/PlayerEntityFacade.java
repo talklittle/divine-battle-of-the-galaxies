@@ -15,7 +15,8 @@ import javax.persistence.PersistenceContext;
  * @author _yy
  */
 @Stateless
-public class PlayerEntityFacade extends AbstractFacade<PlayerEntity> implements PlayerEntityFacadeRemote {
+public class PlayerEntityFacade extends AbstractFacade<PlayerEntity>
+                                implements PlayerEntityFacadeRemote {
     @PersistenceContext(unitName = "aseProject-ejbPU")
     private EntityManager em;
 

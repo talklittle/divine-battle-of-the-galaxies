@@ -15,7 +15,8 @@ import javax.persistence.PersistenceContext;
  * @author _yy
  */
 @Stateless
-public class accountInfoFacade extends AbstractFacade<accountInfo> implements accountInfoFacadeRemote {
+public class accountInfoFacade extends AbstractFacade<accountInfo>
+                               implements accountInfoFacadeRemote {
     @PersistenceContext(unitName = "aseProject-ejbPU")
     private EntityManager em;
 

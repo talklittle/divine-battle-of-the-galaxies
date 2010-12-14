@@ -15,35 +15,36 @@ import javax.persistence.Entity;
 @Entity
 public class PlayerEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String password; //logIn and createAccount and changePassword
-//    private long gametotal; //updateHistory and showStatistics
-//    private long gamewin; //updateHistory and showStatistics
-//    private long starstotal; //updateHistory and showStatistics
-    //long is not suitable for duration
-    private int duration; //updateHistory and showStatistics
-    //variables for the current game
-    private String mode; //gameover
-    private int stars; //collectStars and killPlayer and collectStat and gamescoreboard
-    private String color; //gameStart
-    private int x; //Start and character moveControl and regenerate
-    private int y; //Start and character moveControl and regenerate
-//    private Vector Mon;  //collectMonster monsterTimeout
-    private boolean frozen; // freezePlayer and freezeTimeout
+    //logIn and createAccount and changePassword
+    private String password;
+//    // updateHistory and showStatistics
+//    private long gametotal;
+//    // updateHistory and showStatistics
+//    private long gamewin;
+//    // updateHistory and showStatistics
+//    private long starstotal;
+    // long is not suitable for duration
+    // updateHistory and showStatistics
+    private int duration;
+    
+    // variables for the current game
+    // gameover
+    private String mode;
+    // collectStars and killPlayer and collectStat and gamescoreboard
+    private int stars;
+    //gameStart
+    private String color;
+    //Start and character moveControl and regenerate
+    private int x;
+    private int y;
+//    // collectMonster monsterTimeout
+//    private Vector Mon;
+    // freezePlayer and freezeTimeout
+    private boolean frozen;
     private long frozentime;
     private long newGameTime;
     private long gameOverTime;
 
-//    public PlayerEntity() {
-//
-//    }
-
-//    public PlayerEntity(int x, int y, String mode) {
-//        super(x,y);
-//        this.mode = mode;
-//        this.frozen = false;
-//        this.duration = 0;
-//        this.stars = 0;
-//    }
 
     /**
      * Get the value of password
@@ -127,25 +128,6 @@ public class PlayerEntity extends GameEntity implements Serializable {
         this.newGameTime = newGameTime;
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 0;
-//        hash += (id != null ? id.hashCode() : 0);
-//        return hash;
-//    }
-
-//    @Override
-//    public boolean equals(Object object) {
-//        // TODO: Warning - this method won't work in the case the id fields are not set
-//        if (!(object instanceof userEntity)) {
-//            return false;
-//        }
-//        userEntity other = (userEntity) object;
-//        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-//            return false;
-//        }
-//        return true;
-//    }
 
 
 }

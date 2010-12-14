@@ -13,10 +13,9 @@ import javax.persistence.Entity;
  * @author Andrew
  */
 @Entity
-public class MonsterEntity extends GameEntity implements Serializable {
+public class MonsterEntity extends GameEntity
+                           implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    private int x, y;
 
     private String type;
     private String ownerId;
@@ -29,7 +28,7 @@ public class MonsterEntity extends GameEntity implements Serializable {
     }
 
     public MonsterEntity(int x, int y, String type) {
-        super(x,y);
+        super(x, y);
         this.type = type;
         this.timeToHatch = 10000;
     }
