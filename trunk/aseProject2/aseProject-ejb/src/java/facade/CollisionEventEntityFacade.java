@@ -15,7 +15,10 @@ import javax.persistence.PersistenceContext;
  * @author _yy
  */
 @Stateless
-public class CollisionEventEntityFacade extends AbstractFacade<CollisionEventEntity> implements CollisionEventEntityFacadeRemote {
+public class CollisionEventEntityFacade
+       extends AbstractFacade<CollisionEventEntity>
+       implements CollisionEventEntityFacadeRemote {
+
     @PersistenceContext(unitName = "aseProject-ejbPU")
     private EntityManager em;
 

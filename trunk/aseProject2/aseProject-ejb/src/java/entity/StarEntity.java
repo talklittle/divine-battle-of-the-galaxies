@@ -17,14 +17,12 @@ import javax.persistence.Entity;
 public class StarEntity extends GameEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int x, y;
-
     public StarEntity() {
         
     }
 
     public StarEntity(int x, int y) {
-        super(x,y);
+        super(x, y);
     }
 
 }
