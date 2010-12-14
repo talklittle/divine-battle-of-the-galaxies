@@ -44,21 +44,19 @@ public class Main implements ActionListener {
 
 
     public Main() {
-        window = new JFrame("DIVINE BATTLE OF THE GALAXIES - Game Master.");
+        window = new JFrame("DIVINE BATTLE OF THE GALAXIES - "
+                            + "Game Master.");
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         window.addWindowListener(new WindowAdapter() {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                int flag = JOptionPane.showConfirmDialog(window, "You're the Game Master. Really exit?", "Exit Game", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int flag = JOptionPane.showConfirmDialog(window,
+                           "You're the Game Master. Really exit?",
+                           "Exit Game",
+                           JOptionPane.YES_NO_OPTION,
+                           JOptionPane.QUESTION_MESSAGE);
                 if (JOptionPane.YES_OPTION == flag) {
-
-                    //
-                    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                    // TODO should kick everyone out, right?
-                    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                    //
-
                     System.exit(0);
                 } else {
                     return;
@@ -110,12 +108,14 @@ public class Main implements ActionListener {
                 }
             } catch (EJBException ex) {
                 try {
-                    gameSession = Lookup._lookupGameEntityFacadeRemote();
+                    gameSession = Lookup
+                                  ._lookupGameEntityFacadeRemote();
                 } catch (NamingException ex2) {
                 } finally {
                     try {
                         Thread.sleep(100);
-                    } catch (InterruptedException ex2) {}
+                    } catch (InterruptedException ex2) {
+                    }
                 }
             }
 
@@ -132,7 +132,11 @@ public class Main implements ActionListener {
                 Iterator iter = players.iterator();
                 while (iter.hasNext()) {
                     PlayerEntity player = (PlayerEntity) iter.next();
-                    if (player.isFrozen() && ((System.currentTimeMillis() - player.getFrozentime()) > FREEZE_DURATION_MILLIS)) {
+                    long currentTime = System.currentTimeMillis();
+                    long frozenTime = player.getFrozentime();
+                    if (player.isFrozen() && (currentTime - frozenTime
+                                              > FREEZE_DURATION_MILLIS
+                                             )) {
                         player.setFrozen(false);
                         player.setFrozentime(0);
                         playerSession.edit(player);
@@ -140,12 +144,14 @@ public class Main implements ActionListener {
                 }
             } catch (EJBException ex) {
                 try {
-                    gameSession = Lookup._lookupGameEntityFacadeRemote();
+                    gameSession = Lookup
+                                  ._lookupGameEntityFacadeRemote();
                 } catch (NamingException ex2) {
                 } finally {
                     try {
                         Thread.sleep(100);
-                    } catch (InterruptedException ex2) {}
+                    } catch (InterruptedException ex2) {
+                    }
                 }
             }
         }
@@ -153,7 +159,8 @@ public class Main implements ActionListener {
 
     public void initTimers() {
         monsterTimer = new Timer();
-        monsterTimer.scheduleAtFixedRate(new MonsterTask(), 1000, 1000);
+        monsterTimer.scheduleAtFixedRate(new MonsterTask(),
+                                         1000, 1000);
         cleanTimer = new Timer();
         cleanTimer.scheduleAtFixedRate(new CleanTask(), 200, 200);
     }
