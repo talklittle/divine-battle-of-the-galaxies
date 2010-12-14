@@ -151,7 +151,9 @@ public class drawPanel extends JPanel implements KeyListener {
             winner = player.getId();
             winnerColor = player.getColor();
         }
-        b.drawImage(img, player.getX(), player.getY(), null);
+        int[] screenXY = screenUtil.gridToScreen(player.getX(),
+                                                 player.getY());
+        b.drawImage(img, screenXY[0], screenXY[1], null);
     }
 
     private void drawMonster(Graphics2D b, MonsterEntity monster)
@@ -166,13 +168,17 @@ public class drawPanel extends JPanel implements KeyListener {
                                         + monster.getColor()
                                         + ".png"));
         }
-        b.drawImage(img, monster.getX(), monster.getY(), null);
+        int[] screenXY = screenUtil.gridToScreen(monster.getX(),
+                                                 monster.getY());
+        b.drawImage(img, screenXY[0], screenXY[1], null);
     }
 
     private void drawStar(Graphics2D b, StarEntity star)
                  throws IOException {
         BufferedImage img = ImageIO.read(new File("assets/star.png"));
-        b.drawImage(img, star.getX(), star.getY(), null);
+        int[] screenXY = screenUtil.gridToScreen(star.getX(),
+                                                 star.getY());
+        b.drawImage(img, screenXY[0], screenXY[1], null);
     }
 
     public void drawScreen() {
@@ -192,8 +198,6 @@ public class drawPanel extends JPanel implements KeyListener {
 
     private void handleCollisionEvent(CollisionEventEntity event) {
         int type = event.getCollisionType();
-        int x = event.getX();
-        int y = event.getY();
         String id1 = event.getGameEntityId1();
         String id2 = event.getGameEntityId2();
 
