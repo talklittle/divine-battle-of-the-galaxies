@@ -25,7 +25,8 @@ public class boardPanel extends JPanel {
         add(gamePanel, BorderLayout.CENTER);
 
         iPanel = new infoPanel();
-        iPanel.setBorder(BorderFactory.createEmptyBorder(70, 30, 30, 30));
+        iPanel.setBorder(BorderFactory.createEmptyBorder(70, 30,
+                                                         30, 30));
         GameSession = Lookup.lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
         add(iPanel, BorderLayout.EAST);

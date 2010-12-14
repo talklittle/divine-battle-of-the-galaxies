@@ -74,7 +74,7 @@ public class adminPanel extends JPanel implements ActionListener {
         setBackground(new java.awt.Color(255, 255, 204));
 
         userPanelTitle = new JLabel();
-        userPanelTitle.setFont(new java.awt.Font("Algerian", 0, 24)); // NOI18N
+        userPanelTitle.setFont(new java.awt.Font("Algerian", 0, 24));
         userPanelTitle.setText("MANAGE USER ACCOUNTS");
         add(userPanelTitle, BorderLayout.NORTH);
 
@@ -82,19 +82,20 @@ public class adminPanel extends JPanel implements ActionListener {
         //add(scrollPane, BorderLayout.CENTER);
 
         logoutButton = new JButton();
-        logoutButton.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
+        logoutButton.setFont(new java.awt.Font("Algerian", 1, 12));
         logoutButton.setText("LOGOUT ADMIN CONSOLE");
         logoutButton.addActionListener(this);
         add(logoutButton, BorderLayout.SOUTH);
 
         //edit panel
         editPane = new JPanel();
-        BoxLayout editLayout = new BoxLayout(editPane, BoxLayout.Y_AXIS);
+        BoxLayout editLayout = new BoxLayout(editPane,
+                                             BoxLayout.Y_AXIS);
         editPane.setLayout(editLayout);
-        editPane.setPreferredSize(new Dimension(300,500));
+        editPane.setPreferredSize(new Dimension(300, 500));
 
         editButton = new JButton();
-        editButton.setFont(new java.awt.Font("Algerian", 1, 12)); // NOI18N
+        editButton.setFont(new java.awt.Font("Algerian", 1, 12));
         editButton.setText("EDIT USER");
         editButton.addActionListener(this);
         editButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -115,9 +116,11 @@ public class adminPanel extends JPanel implements ActionListener {
         editPane.add(refreshButton);
 
         subEditPane = new JPanel();
-        BoxLayout subLayout = new BoxLayout(subEditPane, BoxLayout.Y_AXIS);
+        BoxLayout subLayout = new BoxLayout(subEditPane,
+                                            BoxLayout.Y_AXIS);
         subEditPane.setLayout(subLayout);
-        subEditPane.setBorder(BorderFactory.createEmptyBorder(70,30,30,30));
+        subEditPane.setBorder(
+                BorderFactory.createEmptyBorder(70, 30, 30, 30));
         editPane.add(subEditPane);
 
         add(editPane, BorderLayout.EAST);
@@ -194,8 +197,7 @@ public class adminPanel extends JPanel implements ActionListener {
         public Object getValueAt(int row, int col) {
             try {
                 return data.get(row)[col];
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 //catch null upon delete
                 return null;
             }
@@ -219,10 +221,13 @@ public class adminPanel extends JPanel implements ActionListener {
     private void loadTable() {
         acctTable = new JTable(new myTableModel());
         acctTable.removeEditor();
-        acctTable.setPreferredScrollableViewportSize(new Dimension(500, 200));
+        acctTable.setPreferredScrollableViewportSize(
+                  new Dimension(500, 200));
         acctTable.setFillsViewportHeight(true);
-        acctTable.getSelectionModel().addListSelectionListener(new RowListener());
-        acctTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        acctTable.getSelectionModel().addListSelectionListener(
+                                      new RowListener());
+        acctTable.setSelectionMode(
+                  ListSelectionModel.SINGLE_SELECTION);
         scrollPane = new JScrollPane(acctTable);
         add(scrollPane, BorderLayout.CENTER);
     }
@@ -242,8 +247,8 @@ public class adminPanel extends JPanel implements ActionListener {
     public String MD5(String pass) throws NoSuchAlgorithmException {
 	MessageDigest m = MessageDigest.getInstance("MD5");
 	byte[] data = pass.getBytes();
-	m.update(data,0,data.length);
-	BigInteger i = new BigInteger(1,m.digest());
+	m.update(data, 0, data.length);
+	BigInteger i = new BigInteger(1, m.digest());
 	return String.format("%1$032X", i);
     }
 
@@ -251,7 +256,8 @@ public class adminPanel extends JPanel implements ActionListener {
         subEditPane.removeAll();
         Object src = e.getSource();
 
-        if(src == editButton && selectPwd!=null && selectUser!=null) {
+        if (src == editButton && selectPwd != null
+                              && selectUser != null) {
             userDisp.setText(selectUser);
             editPswField.setText("");
 
@@ -261,19 +267,22 @@ public class adminPanel extends JPanel implements ActionListener {
             subEditPane.add(editPswField);
             subEditPane.add(saveButton);
             subEditPane.add(cancelButton);
-        }
-
-        else if(src == saveButton) {
-            accountInfo user = (accountInfo)AcctSession.find(selectUser);
+        } else if (src == saveButton) {
+            accountInfo user = (accountInfo)
+                               AcctSession.find(selectUser);
             int passwordLength = editPswField.getText().length();
             // Check for characters and numbers only
             Pattern p = Pattern.compile("[^a-zA-Z_0-9]");
             Matcher m = p.matcher(editPswField.getText());
             if (passwordLength < 6 || passwordLength > 20) {
-                JOptionPane.showMessageDialog(null, "Invalid password: length must be between 6 and 20 (inclusive).");
+                JOptionPane.showMessageDialog(null,
+                            "Invalid password: length must be between"
+                            + " 6 and 20 (inclusive).");
             }
             else if(m.find()) {
-                JOptionPane.showMessageDialog(null, "Invalid password: Must contain only letters and numbers");
+                JOptionPane.showMessageDialog(null,
+                            "Invalid password: Must contain only "
+                            + "letters and numbers");
             }
 
             else {
@@ -287,24 +296,30 @@ public class adminPanel extends JPanel implements ActionListener {
                 user.setPsw(password);
                 AcctSession.edit(user);
                 JLabel editMsg = new JLabel();
-                editMsg.setText("User ["+selectUser+"]\n updated!");
+                editMsg.setText("User [" + selectUser + "]"
+                                + "\n updated!");
                 editMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
                 subEditPane.add(editMsg);
-                acctTable.setValueAt(password,rowIndex, 1);
+                acctTable.setValueAt(password, rowIndex, 1);
             }
         }
 
         else if(src == deleteButton) {
             accountInfo user = (accountInfo)AcctSession.find(selectUser);
             AcctSession.remove(user);
-            int confirm = JOptionPane.showConfirmDialog(editPane, "Are you sure you want to\ndelete user ["+selectUser+"]?",
-                    "Delete User?",JOptionPane.WARNING_MESSAGE);
+            int confirm = JOptionPane.showConfirmDialog(editPane,
+                          "Are you sure you want to\n"
+                          + "delete user [" + selectUser + "]?",
+                          "Delete User?",
+                          JOptionPane.WARNING_MESSAGE);
             if (confirm == JOptionPane.YES_OPTION) {
                 JLabel editMsg = new JLabel();
-                editMsg.setText("User ["+selectUser+"]\n deleted!");
+                editMsg.setText("User [" + selectUser + "]\n"
+                                + "deleted!");
                 editMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
                 subEditPane.add(editMsg);
-                myTableModel model = (myTableModel)acctTable.getModel();
+                myTableModel model = (myTableModel)
+                                     acctTable.getModel();
                 model.removeRow(rowIndex);
             }
         }
