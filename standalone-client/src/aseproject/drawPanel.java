@@ -33,6 +33,11 @@ import session.GameEntityFacadeRemote;
 public class drawPanel extends JPanel implements KeyListener {
 
     public static final long MOVEMENT_INPUT_DELAY_MILLIS = 100;
+    public static final int SCREEN_PIXEL_WIDTH = 800;
+    public static final int SCREEN_PIXEL_HEIGHT = 600;
+    public static final int GRID_WIDTH = 16;
+    public static final int GRID_HEIGHT = 12;
+    public static final int GRID_SQUARE_SIZE = 50;
     BufferedImage buffer;
     public boolean nFlag_gameOver = false;
     public String winner = "";
@@ -42,13 +47,17 @@ public class drawPanel extends JPanel implements KeyListener {
     private String username;
     private GameEntityFacadeRemote GameSession;
 //    PlayerEntity player;
-    private HashSet<CollisionEventEntity> seenCollisionEvents = new HashSet<CollisionEventEntity>();
-    private static final Object seenCollisionEventsLock = new Object();
+    private HashSet<CollisionEventEntity> seenCollisionEvents
+            = new HashSet<CollisionEventEntity>();
+    private static final Object seenCollisionEventsLock
+            = new Object();
+    private ScreenUtil screenUtil
+            = new ScreenUtil(GRID_WIDTH, GRID_HEIGHT,
+                             SCREEN_PIXEL_WIDTH, SCREEN_PIXEL_HEIGHT);
 
     public drawPanel() {
         GameSession = Lookup.lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
-        //GameSession.initGameBoard();
         this.setIgnoreRepaint(true);
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -57,10 +66,10 @@ public class drawPanel extends JPanel implements KeyListener {
     }
 
     public void Initialize(String username) {
-        System.out.println("drawpanel: " + username);
+        //System.out.println("drawpanel: " + username);
         this.username = username;
-//        player = (PlayerEntity) GameSession.find(username);
-        buffer = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
+        buffer = new BufferedImage(800, 600,
+                                   BufferedImage.TYPE_INT_RGB);
     }
 
     public void drawBuffer() throws InterruptedException {
@@ -69,16 +78,19 @@ public class drawPanel extends JPanel implements KeyListener {
         b.fillRect(0, 0, 800, 600);
 
         b.setColor(Color.yellow);
-        for (int i = 0; i < 16; i++) {
-            b.drawLine(i * 50, 0, i * 50, 600);
+        for (int i = 0; i < GRID_WIDTH; i++) {
+            b.drawLine(i * GRID_SQUARE_SIZE, 0,
+                       i * GRID_SQUARE_SIZE, 600);
         }
-        for (int i = 0; i < 12; i++) {
-            b.drawLine(0, i * 50, 800, i * 50);
+        for (int i = 0; i < GRID_HEIGHT; i++) {
+            b.drawLine(0, i * GRID_SQUARE_SIZE,
+                       800, i * GRID_SQUARE_SIZE);
         }
 
         // draw entities on buffer b
         List gameEntities = GameSession.findAll();
-        PlayerEntity myPlayer = (PlayerEntity) GameSession.find(username);
+        PlayerEntity myPlayer =
+                     (PlayerEntity) GameSession.find(username);
 
         Iterator iter = gameEntities.iterator();
         while (iter.hasNext()) {
@@ -87,61 +99,80 @@ public class drawPanel extends JPanel implements KeyListener {
             try {
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
-                    img = ImageIO.read(new File("assets/sprite-" + player.getColor() + ".png"));
-                    if (player.getStars() >= 10 && (player.getId().equals(username)
-                            || player.getGameOverTime() > myPlayer.getNewGameTime())) {
-                        nFlag_gameOver = true;
-                        if (player.getId().equals(username)) {
-                            // when I get game over, save my game over time
-                            myPlayer.setGameOverTime(System.currentTimeMillis());
-                        } else {
-                            // if someone else won, copy their game over time
-                            myPlayer.setGameOverTime(player.getGameOverTime());
-                        }
-                        GameSession.edit(myPlayer);
-                        
-//                        GameSession.gameOver(nFlag_gameOver);
-                        winner = player.getId();
-                        winnerColor = player.getColor();
-                    }
-                    //b.drawString("STAR" + player.getStars(), player.getX() + 50, player.getY() + 50);
-                    b.drawImage(img, entity.getX(), entity.getY(), null);
+                    drawPlayer(b, player, myPlayer);
                 } else if (entity instanceof MonsterEntity) {
-                    MonsterEntity egg = (MonsterEntity) entity;
-                    if (egg.getType().equals("kill")) {
-                        img = ImageIO.read(new File("assets/kill-" + egg.getColor() + ".png"));
-                    } else {
-                        img = ImageIO.read(new File("assets/freeze-" + egg.getColor() + ".png"));
-                    }
-                    b.drawImage(img, entity.getX(), entity.getY(), null);
+                    MonsterEntity monster = (MonsterEntity) entity;
+                    drawMonster(b, monster);
                 } else if (entity instanceof StarEntity) {
-                    img = ImageIO.read(new File("assets/star.png"));
-                    b.drawImage(img, entity.getX(), entity.getY(), null);
+                    StarEntity star = (StarEntity) entity;
+                    drawStar(b, star);
                 } else if (entity instanceof CollisionEventEntity) {
-                    CollisionEventEntity collision = (CollisionEventEntity) entity;
+                    CollisionEventEntity collision
+                            = (CollisionEventEntity) entity;
 
-                    synchronized (seenCollisionEventsLock) {
-                        if (!isEventAlreadySeen(collision)) {
-                            handleCollisionEvent(collision);
-                        }
+                    if (!isEventAlreadySeen(collision)) {
+                        handleCollisionEvent(collision);
                     }
                 }
 
             } catch (IOException ex) {
-                Logger.getLogger(drawPanel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(drawPanel.class.getName())
+                      .log(Level.SEVERE, null, ex);
             }
 
         }
-        /*b.setColor(Color.red);
-        String[][] occ = GameSession.getOcc();
-        for (int i = 0; i < 16; i++) {
-        for (int j = 0; j < 12; j++) {
-        if (occ[i][j] != null) {
-        b.drawString(occ[i][j], i * 50, j * 50 + 25);
-        }
-        }
-        }*/
         b.dispose();
+    }
+
+    private void drawPlayer(Graphics2D b, PlayerEntity player,
+                            PlayerEntity myPlayer)
+                 throws IOException {
+        BufferedImage img = ImageIO.read(new File("assets/sprite-"
+                                         + player.getColor()
+                                         + ".png"));
+        if ((player.getId().equals(username) ||
+             player.getGameOverTime() > myPlayer.getNewGameTime())
+            && player.getStars() >= 10) {
+
+            nFlag_gameOver = true;
+            if (player.getId().equals(username)) {
+                // when I get game over,
+                // save my game over time
+                myPlayer.setGameOverTime(
+                         System.currentTimeMillis());
+            } else {
+                // if someone else won,
+                // copy their game over time
+                myPlayer.setGameOverTime(
+                         player.getGameOverTime());
+            }
+            GameSession.edit(myPlayer);
+
+            winner = player.getId();
+            winnerColor = player.getColor();
+        }
+        b.drawImage(img, player.getX(), player.getY(), null);
+    }
+
+    private void drawMonster(Graphics2D b, MonsterEntity monster)
+                 throws IOException {
+        BufferedImage img;
+        if (monster.getType().equals("kill")) {
+            img = ImageIO.read(new File("assets/kill-"
+                                        + monster.getColor()
+                                        + ".png"));
+        } else {
+            img = ImageIO.read(new File("assets/freeze-"
+                                        + monster.getColor()
+                                        + ".png"));
+        }
+        b.drawImage(img, monster.getX(), monster.getY(), null);
+    }
+
+    private void drawStar(Graphics2D b, StarEntity star)
+                 throws IOException {
+        BufferedImage img = ImageIO.read(new File("assets/star.png"));
+        b.drawImage(img, star.getX(), star.getY(), null);
     }
 
     public void drawScreen() {
@@ -151,6 +182,7 @@ public class drawPanel extends JPanel implements KeyListener {
         g.dispose();
 
     }
+
 
     private boolean isEventAlreadySeen(CollisionEventEntity event) {
         boolean seen;
