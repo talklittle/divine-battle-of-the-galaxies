@@ -259,8 +259,8 @@ public class registerPanel extends JPanel
             }
             // Insert record in GameEntity
             System.out.println("Hello World");
-                  
-            if (numPlayers() <= 4) {
+
+            if (numPlayers() <= 3) {
                 User = new PlayerEntity();
                 User.setId(username);
                 String random_color
@@ -308,41 +308,36 @@ public class registerPanel extends JPanel
                 e.printStackTrace();
             }
             isCorrect = correctPassword.equals(charPsw);
-            //after verify the psw and account
+            // after verify the psw and account
             if (isCorrect) {
-                //if it's the admin account
+                // if it's the admin account
                 if (username.equals("admin")) {
                     parent.window.remove(this);
                     parent.adminConsole();
                     return true;
                 }
-                //see if the user already has a character on the gameboard
+                // see if the user already has a character
                 User = playerFacade.find(username);
-                //if he doesn't, create a new character on the board
-                if (User != null) {
-                    User.setX(0);
-                    User.setY(0);
-                    User.setStars(0);
+                // if he doesn't, create a new character on the board
+                if (User == null && numPlayers() <= 3) {
+                    User = new PlayerEntity();
+                    User.setId(username);
+                    String random_color
+                            = Colors.COLOR_STRINGS[random.nextInt(8)];
+                    User.setColor(random_color);
                     User.setNewGameTime(System.currentTimeMillis());
-                    playerFacade.edit(User);
-                    nFlag_registered = true;
+                    playerFacade.create(User);
                     parent.gamePanel.iPanel.initInfo(User.getId());
+                    nFlag_registered = true;
+
+                } else if (numPlayers() >= 4) {
+                    JOptionPane.showMessageDialog(null,
+                                "GAME FULL, PLEASE LOGIN LATER");
+                    nFlag_registered = false;
                 } else {
-                    if (numPlayers() <= 4) {
-                        User = new PlayerEntity();
-                        User.setId(username);
-                        String random_color = Colors.COLOR_STRINGS[
-                                              random.nextInt(8)];
-                        User.setColor(random_color);
-                        playerFacade.create(User);
-                        nFlag_registered = true;
-                        parent.gamePanel.iPanel
-                                        .initInfo(User.getId());
-                    } else {
-                        JOptionPane.showMessageDialog(null,
-                                    "GAME FULL, PLEASE LOGIN LATER");
-                        nFlag_registered = false;
-                    }
+                    JOptionPane.showMessageDialog(null,
+                                "YOU ARE ALREADY LOGGED IN");
+                    nFlag_registered = false;
                 }
             } else {
                 JOptionPane.showMessageDialog(null,
