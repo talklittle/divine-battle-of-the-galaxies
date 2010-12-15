@@ -31,7 +31,7 @@ import session.accountInfoFacadeRemote;
 import util.Colors;
 
 /**
- *
+ * the panel with register/login
  * @author _yy
  */
 public class registerPanel extends JPanel
@@ -66,6 +66,10 @@ public class registerPanel extends JPanel
 
     private static final Random random = new Random();
 
+    /**
+     * constructor
+     * @param m instance of standalone-client/Main
+     */
     public registerPanel(Main m) {
 
         parent = m;
@@ -161,6 +165,9 @@ public class registerPanel extends JPanel
         accountInfoFacade = Lookup.lookupaccountInfoFacadeRemote();
     }
 
+    /**
+     * start over from initial screen (let you register or login)
+     */
     public void rebuildPanel() {
         removeAll();
         add(gameTitle);
@@ -168,6 +175,9 @@ public class registerPanel extends JPanel
         add(loginBtn);
     }
 
+    /**
+     * go to login screen
+     */
     private void doLogin() {
         rebuildPanel();
         add(newAccountUserLabel);
@@ -180,6 +190,9 @@ public class registerPanel extends JPanel
         panelMode = PANEL_MODE_LOGIN;
     }
 
+    /**
+     * go to registration screen
+     */
     private void doNewAccount() {
         rebuildPanel();
         add(newAccountUserLabel);
@@ -192,6 +205,12 @@ public class registerPanel extends JPanel
         panelMode = PANEL_MODE_NEW_ACCOUNT;
     }
 
+    /**
+     * helper method to do MD5 hashing
+     * @param pass
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     public String MD5(String pass) throws NoSuchAlgorithmException {
 	MessageDigest m = MessageDigest.getInstance("MD5");
 	byte[] data = pass.getBytes();
@@ -200,6 +219,12 @@ public class registerPanel extends JPanel
 	return String.format("%1$032X", i);
     }
 
+    /**
+     * try to create a new account
+     * @param newAccount
+     * @param input
+     * @return whether it was created
+     */
     protected boolean createNewAccount(String newAccount,
                                        String input) {
         username = newAccount;
@@ -287,6 +312,12 @@ public class registerPanel extends JPanel
         return nFlag_registered;
     }
 
+    /**
+     * check if login is valid
+     * @param oldAccount
+     * @param input
+     * @return whether it is valid
+     */
     protected boolean verifyOldAccount(String oldAccount,
                                        char[] input) {
         username = oldAccount;
@@ -348,6 +379,10 @@ public class registerPanel extends JPanel
         return nFlag_registered;
     }
 
+    /**
+     * return number of players currently in game
+     * @return
+     */
     private int numPlayers() {
         int num = 0;
         Iterator it = playerFacade.findAll().iterator();
@@ -360,6 +395,10 @@ public class registerPanel extends JPanel
     }
 
 
+    /**
+     * handler for button clicks
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
@@ -383,6 +422,10 @@ public class registerPanel extends JPanel
 
     }
 
+    /**
+     * handler for mouseover of buttons (makes a sound)
+     * @param e
+     */
     public void mouseEntered(MouseEvent e) {
         SoundEffects.playSound(SOUND_BUTTON_MOUSEOVER);
     }

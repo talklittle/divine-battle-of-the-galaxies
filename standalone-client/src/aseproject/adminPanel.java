@@ -36,7 +36,7 @@ import javax.swing.table.TableModel;
 import session.accountInfoFacadeRemote;
 
 /**
- *
+ * Administrator panel with functionality to modify accounts.
  * @author Janessa
  */
 public class adminPanel extends JPanel implements ActionListener {
@@ -65,6 +65,10 @@ public class adminPanel extends JPanel implements ActionListener {
     private accountInfoFacadeRemote AcctSession;
     private Main parent;
 
+    /**
+     * constructor. sets up panes and buttons
+     * @param m instance of standalone-client/Main
+     */
     public adminPanel(Main m) {
         parent = m;
         AcctSession = Lookup.lookupaccountInfoFacadeRemote();
@@ -160,6 +164,9 @@ public class adminPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * TableModel to handle display of usernames/passwords
+     */
     class myTableModel extends AbstractTableModel {
 
         String[] columnNames = {"Username", "Password"};
@@ -232,6 +239,9 @@ public class adminPanel extends JPanel implements ActionListener {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Listener to help with rows changing
+     */
     private class RowListener implements ListSelectionListener {
         public void valueChanged(ListSelectionEvent event) {
             if (event.getValueIsAdjusting()) {
@@ -244,6 +254,12 @@ public class adminPanel extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * helper method to perform MD5 hashing
+     * @param pass
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     public String MD5(String pass) throws NoSuchAlgorithmException {
 	MessageDigest m = MessageDigest.getInstance("MD5");
 	byte[] data = pass.getBytes();
@@ -252,6 +268,10 @@ public class adminPanel extends JPanel implements ActionListener {
 	return String.format("%1$032X", i);
     }
 
+    /**
+     * handler for button clicks
+     * @param e
+     */
     public void actionPerformed(ActionEvent e) {
         subEditPane.removeAll();
         Object src = e.getSource();

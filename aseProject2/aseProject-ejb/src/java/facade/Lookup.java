@@ -14,7 +14,7 @@ import session.GameEntityFacadeRemote;
 import session.accountInfoFacadeRemote;
 
 /**
- *
+ * Utility class for doing JNDI lookups for the Facades
  * @author Andrew
  */
 public class Lookup {

@@ -6,7 +6,8 @@
 package aseproject;
 
 /**
- *
+ * Utility class to convert between grid coordinates and
+ * screen pixel coordinates.
  * @author Andrew
  */
 public class ScreenUtil {

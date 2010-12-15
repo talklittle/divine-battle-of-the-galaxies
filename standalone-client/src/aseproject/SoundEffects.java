@@ -12,7 +12,7 @@ import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
 /**
- *
+ * Utility class to play sounds.
  * @author Andrew
  */
 public class SoundEffects {

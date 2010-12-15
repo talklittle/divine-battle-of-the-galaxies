@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
+ * Facade for accountInfo
  * @author _yy
  */
 @Stateless

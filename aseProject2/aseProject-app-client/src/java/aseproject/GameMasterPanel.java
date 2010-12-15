@@ -14,7 +14,9 @@ package aseproject;
 import session.GameEntityFacadeRemote;
 
 /**
- *
+ * This is the JPanel containing the debug game master stuff,
+ * including the 2 buttons to initialize game board and clear
+ * game board.
  * @author Andrew
  */
 public class GameMasterPanel extends javax.swing.JPanel {
@@ -93,11 +95,19 @@ public class GameMasterPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Initialize the game objects on the board.
+     * @param evt
+     */
     private void initBoardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_initBoardButtonActionPerformed
         gameSession = Lookup.lookupGameEntityFacadeRemote();
         gameSession.initGameBoard();
     }//GEN-LAST:event_initBoardButtonActionPerformed
 
+    /**
+     * When you click the Clear Board button, clear the board.
+     * @param evt
+     */
     private void clearBoardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBoardButtonActionPerformed
         gameSession.clearGameBoard();
     }//GEN-LAST:event_clearBoardButtonActionPerformed
@@ -110,6 +120,11 @@ public class GameMasterPanel extends javax.swing.JPanel {
     private javax.swing.JLabel updateCounterLabel;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * sets the counter displaying the number of times the
+     * Timer fired.
+     * @param counter
+     */
     public void setUpdateCounter(long counter) {
         this.updateCounter = counter;
         updateCounterLabel.setText(String.valueOf(counter));

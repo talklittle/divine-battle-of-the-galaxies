@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
+ * Entity representing account (username and password)
  * @author _yy
  */
 @Entity
@@ -25,18 +25,34 @@ public class accountInfo implements Serializable {
 
     private String psw;
 
+    /**
+     * get account password
+     * @return
+     */
     public String getPsw() {
         return psw;
     }
 
+    /**
+     * set account password
+     * @param psw
+     */
     public void setPsw(String psw) {
         this.psw = psw;
     }
-    
+
+    /**
+     * get account id (username)
+     * @return
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * set account id (username)
+     * @param id
+     */
     public void setId(String id) {
         this.id = id;
     }
