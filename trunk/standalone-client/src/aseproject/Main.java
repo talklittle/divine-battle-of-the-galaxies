@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import session.GameEntityFacadeRemote;
 
 /**
- *
+ * Main class to run the standalone-client
  * @author _yy
  */
 public class Main implements ActionListener {
@@ -34,6 +34,9 @@ public class Main implements ActionListener {
     GameEntityFacadeRemote gameSession;
     boolean nFlag_admin;
 
+    /**
+     * constructor, initialize window stuff and WindowListener
+     */
     public Main() {
 
         nFlag_admin = false;
@@ -73,6 +76,9 @@ public class Main implements ActionListener {
         window.setVisible(true);
     }
 
+    /**
+     * show the admin console
+     */
     public void adminConsole() {
         System.out.println("add admin console");
         nFlag_admin = true;
@@ -82,6 +88,9 @@ public class Main implements ActionListener {
         adminConsole.requestFocusInWindow();
     }
 
+    /**
+     * start the main game loop of registerPanel -> game -> gameOver
+     */
     public void go() {
         window.add(regPanel);
         window.setVisible(true);
@@ -136,6 +145,10 @@ public class Main implements ActionListener {
         }
     }
 
+    /**
+     * executable entrypoint for standalone-client
+     * @param args
+     */
     public static void main(String[] args) {
         Main game = new Main();
         game.go();
@@ -143,6 +156,10 @@ public class Main implements ActionListener {
 
     }
 
+    /**
+     * restart the game. action called from game over screen button.
+     * @param e
+     */
     public void actionPerformed(ActionEvent e) {
 
         //delete all player entity in the board

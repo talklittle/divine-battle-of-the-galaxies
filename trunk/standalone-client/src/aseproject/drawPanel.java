@@ -27,7 +27,7 @@ import javax.swing.*;
 import session.GameEntityFacadeRemote;
 
 /**
- *
+ * the panel where the game is shown, with grid and GameEntities
  * @author _yy
  */
 public class drawPanel extends JPanel implements KeyListener {
@@ -65,6 +65,9 @@ public class drawPanel extends JPanel implements KeyListener {
             = new ScreenUtil(GRID_WIDTH, GRID_HEIGHT,
                              SCREEN_PIXEL_WIDTH, SCREEN_PIXEL_HEIGHT);
 
+    /**
+     * default constructor. set up board and listeners
+     */
     public drawPanel() {
         GameSession = Lookup.lookupGameEntityFacadeRemote();
         GameSession.gameBoard();
@@ -75,6 +78,10 @@ public class drawPanel extends JPanel implements KeyListener {
 
     }
 
+    /**
+     * set up username and the draw buffer
+     * @param username
+     */
     public void Initialize(String username) {
         //System.out.println("drawpanel: " + username);
         this.username = username;
@@ -82,11 +89,16 @@ public class drawPanel extends JPanel implements KeyListener {
                                    BufferedImage.TYPE_INT_RGB);
     }
 
+    /**
+     * draw onto draw buffer
+     * @throws InterruptedException
+     */
     public void drawBuffer() throws InterruptedException {
         Graphics2D b = buffer.createGraphics();
         b.setColor(Color.black);
         b.fillRect(0, 0, 800, 600);
 
+        // draw the grid
         b.setColor(Color.yellow);
         for (int i = 0; i < GRID_WIDTH; i++) {
             b.drawLine(i * GRID_SQUARE_SIZE, 0,
@@ -134,6 +146,13 @@ public class drawPanel extends JPanel implements KeyListener {
         b.dispose();
     }
 
+    /**
+     * draw the player
+     * @param b
+     * @param player
+     * @param myPlayer
+     * @throws IOException
+     */
     private void drawPlayer(Graphics2D b, PlayerEntity player,
                             PlayerEntity myPlayer)
                  throws IOException {
@@ -166,6 +185,12 @@ public class drawPanel extends JPanel implements KeyListener {
         b.drawImage(img, screenXY[0], screenXY[1], null);
     }
 
+    /**
+     * draw the monster
+     * @param b
+     * @param monster
+     * @throws IOException
+     */
     private void drawMonster(Graphics2D b, MonsterEntity monster)
                  throws IOException {
         BufferedImage img;
@@ -183,6 +208,12 @@ public class drawPanel extends JPanel implements KeyListener {
         b.drawImage(img, screenXY[0], screenXY[1], null);
     }
 
+    /**
+     * draw the star
+     * @param b
+     * @param star
+     * @throws IOException
+     */
     private void drawStar(Graphics2D b, StarEntity star)
                  throws IOException {
         BufferedImage img = ImageIO.read(new File("assets/star.png"));
@@ -191,6 +222,9 @@ public class drawPanel extends JPanel implements KeyListener {
         b.drawImage(img, screenXY[0], screenXY[1], null);
     }
 
+    /**
+     * draw buffer to screen
+     */
     public void drawScreen() {
         Graphics2D g = (Graphics2D) this.getGraphics();
         g.drawImage(buffer, 0, 0, this);
@@ -200,12 +234,22 @@ public class drawPanel extends JPanel implements KeyListener {
     }
 
 
+    /**
+     * tell if already processed event (so you don't play same
+     * sound twice)
+     * @param event
+     * @return
+     */
     private boolean isEventAlreadySeen(CollisionEventEntity event) {
         boolean seen;
         seen = seenCollisionEvents.contains(event);
         return seen;
     }
 
+    /**
+     * handle collisions (play sounds)
+     * @param event
+     */
     private void handleCollisionEvent(CollisionEventEntity event) {
         int type = event.getCollisionType();
         String id1 = event.getGameEntityId1();
@@ -236,6 +280,10 @@ public class drawPanel extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * start game and enter game loop
+     * @param username
+     */
     public void startGame(String username) {
         Initialize(username);
         boardPanel parent = (boardPanel) this.getParent();
@@ -258,6 +306,10 @@ public class drawPanel extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * handle key press for movement
+     * @param e
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();

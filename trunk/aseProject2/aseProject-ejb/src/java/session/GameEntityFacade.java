@@ -20,7 +20,7 @@ import javax.persistence.PersistenceContext;
 import util.Colors;
 
 /**
- *
+ * Facade for GameEntity
  * @author _yy
  */
 @Stateless
@@ -50,6 +50,10 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         return em;
     }
 
+    /**
+     * get the game board occupancy grid
+     * @return
+     */
     @Override
     public String[][] getOcc() {
         return gameBoardOcc;
@@ -59,6 +63,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         super(GameEntity.class);
     }
 
+    /**
+     * initialize game board with monsters and stars in random spots
+     */
     @Override
     public void initGameBoard() {
         // initialize Stars
@@ -115,6 +122,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         //initTimer();
     }
 
+    /**
+     * clear the entities except PlayerEntities
+     */
     @Override
     public void clearGameBoard() {
         List<GameEntity> gameEntities = findAll();
@@ -125,6 +135,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         }
     }
 
+    /**
+     * clear CollisionEventEntities that have expired
+     */
     @Override
     public void cleanOldCollisionEvents() {
         long time = System.currentTimeMillis();
@@ -142,6 +155,16 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         }
     }
 
+    /**
+     * tell if it is a valid move.
+     * i.e. it is within the grid boundaries,
+     * and the change is strictly up, down, left, or right.
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @return
+     */
     public boolean isValidMove(int fromX, int fromY,
                                int toX, int toY) {
         int dx = Math.abs(fromX - toX);
@@ -152,6 +175,9 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
                ((dx == 1 && dy == 0) || (dx == 0 && dy == 1));
     }
 
+    /**
+     * populate the game board occupancy array.
+     */
     @Override
     public void gameBoard() {
         List gameEntities = findAll();
@@ -170,6 +196,13 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         }*/
     }
 
+    /**
+     * do the logic when the player is moving, assuming valid move
+     * @param player
+     * @param toX
+     * @param toY
+     * @return
+     */
     public boolean playerLogic(PlayerEntity player,
                                int toX, int toY) {
         if (player.isFrozen()) {
@@ -230,6 +263,13 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         return true;
     }
 
+    /**
+     * do the logic of monster moving, assuming a valid move
+     * @param monster
+     * @param toX
+     * @param toY
+     * @return
+     */
     public boolean monsterLogic(MonsterEntity monster,
                                 int toX, int toY) {
         if (gameBoardOcc[toX][toY] != null) {
@@ -264,6 +304,13 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         }
     }
 
+    /**
+     * do the logic of monster killing player
+     * @param monster
+     * @param player
+     * @param toX
+     * @param toY
+     */
     private void monsterKillPlayer(MonsterEntity monster,
                                    PlayerEntity player,
                                    int toX, int toY) {
@@ -289,6 +336,13 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         edit(player);
     }
 
+    /**
+     * do the logic of monster freezing player
+     * @param monster
+     * @param player
+     * @param toX
+     * @param toY
+     */
     private void monsterFreezePlayer(MonsterEntity monster,
                                      PlayerEntity player,
                                      int toX, int toY) {
@@ -313,6 +367,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         edit(player);
     }
 
+    /**
+     * move a GameEntity up
+     * @param id
+     * @return
+     */
     @Override
     public boolean moveUp(String id) {
         gameBoard();
@@ -329,6 +388,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         return move(entity, fromX, fromY, toX, toY);
     }
 
+    /**
+     * move a GameEntity left
+     * @param id
+     * @return
+     */
     @Override
     public boolean moveLeft(String id) {
         gameBoard();
@@ -345,6 +409,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         return move(entity, fromX, fromY, toX, toY);
     }
 
+    /**
+     * move a GameEntity down
+     * @param id
+     * @return
+     */
     @Override
     public boolean moveDown(String id) {
         gameBoard();
@@ -361,6 +430,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         return move(entity, fromX, fromY, toX, toY);
     }
 
+    /**
+     * move a GameEntity right
+     * @param id
+     * @return
+     */
     @Override
     public boolean moveRight(String id) {
         gameBoard();
@@ -377,6 +451,15 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         return move(entity, fromX, fromY, toX, toY);
     }
 
+    /**
+     * private method to validate a move and actually move
+     * @param entity
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @return
+     */
     private boolean move(GameEntity entity,
                          int fromX, int fromY, int toX, int toY) {
         if (!isValidMove(fromX, fromY, toX, toY)) {
@@ -398,7 +481,11 @@ public class GameEntityFacade extends AbstractFacade<GameEntity>
         }
         return true;
     }
-    
+
+    /**
+     * UNUSED. tell if it is game over.
+     * @return
+     */
     @Override
     public boolean gameOver() {
         return true;

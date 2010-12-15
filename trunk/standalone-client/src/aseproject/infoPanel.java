@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *
+ * Panel to display info about current player
  * @author Janessa
  */
 public class infoPanel extends JPanel {
@@ -33,6 +33,9 @@ public class infoPanel extends JPanel {
     JLabel userLabel;
     PlayerEntityFacadeRemote playerSession;
 
+    /**
+     * default constructor. set up labels
+     */
     public infoPanel() {
         playerSession = Lookup.lookupPlayerEntityFacadeRemote();
         
@@ -63,6 +66,10 @@ public class infoPanel extends JPanel {
         frozenLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
+    /**
+     * populate the info
+     * @param id
+     */
     public void initInfo(String id) {
         this.username = id;
         this.user = playerSession.find(username);
@@ -89,6 +96,9 @@ public class infoPanel extends JPanel {
         }
     }
 
+    /**
+     * update the info
+     */
     public void updateInfo() {
         if (!initialized) {
             return;

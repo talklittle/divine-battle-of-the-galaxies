@@ -6,7 +6,7 @@
 package util;
 
 /**
- *
+ * Class for holding the colors of players and monsters
  * @author Andrew
  */
 public class Colors {

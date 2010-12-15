@@ -15,7 +15,7 @@ import session.GameEntityFacadeRemote;
 import session.accountInfoFacadeRemote;
 
 /**
- *
+ * Utility class for looking up facades
  * @author Andrew
  */
 public class Lookup {

@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 import session.GameEntityFacadeRemote;
 
 /**
- *
+ * the Main class for app-client, responsible for running
  * @author Andrew
  */
 public class Main implements ActionListener {
@@ -43,6 +43,9 @@ public class Main implements ActionListener {
     Timer cleanTimer;
 
 
+    /**
+     * Constructor for the app-client.
+     */
     public Main() {
         window = new JFrame("DIVINE BATTLE OF THE GALAXIES - "
                             + "Game Master.");
@@ -66,6 +69,9 @@ public class Main implements ActionListener {
         gameMasterPanel = new GameMasterPanel();
     }
 
+    /**
+     * show the game master panel, initialize timers and go
+     */
     private void go() {
         window.add(gameMasterPanel);
         window.setContentPane(gameMasterPanel);
@@ -78,6 +84,9 @@ public class Main implements ActionListener {
         initTimers();
     }
 
+    /**
+     * A TimerTask to move the monsters around
+     */
     class MonsterTask extends TimerTask {
         public void run() {
             try {
@@ -86,6 +95,7 @@ public class Main implements ActionListener {
                 Random rand = new Random();
                 int direction;
 
+                // go through and randomly move each monster
                 while (iter.hasNext()) {
                     GameEntity entity = (GameEntity) iter.next();
                     if (entity instanceof MonsterEntity) {
@@ -123,6 +133,10 @@ public class Main implements ActionListener {
         }
     }
 
+    /**
+     * Task to clean up collision events (for sound effects)
+     * and to unfreeze players after freeze wears off.
+     */
     class CleanTask extends TimerTask {
         public void run() {
             try {
@@ -157,6 +171,9 @@ public class Main implements ActionListener {
         }
     }
 
+    /**
+     * initialize the monster timer and cleanup timer
+     */
     public void initTimers() {
         monsterTimer = new Timer();
         monsterTimer.scheduleAtFixedRate(new MonsterTask(),
@@ -168,6 +185,10 @@ public class Main implements ActionListener {
 
 
 
+    /**
+     * action performed. unused!
+     * @param e
+     */
     public void actionPerformed(ActionEvent e) {
         
     }

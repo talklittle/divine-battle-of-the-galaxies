@@ -64,66 +64,130 @@ public class PlayerEntity extends GameEntity implements Serializable {
         this.password = password;
     }
 
+    /**
+     * get player's color
+     * @return
+     */
     public String getColor() {
         return color;
     }
 
+    /**
+     * set player's color
+     * @param color
+     */
     public void setColor(String color) {
         this.color = color;
     }
 
+    /**
+     * get frozen duration
+     * @return
+     */
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * set frozen duration
+     * @param duration
+     */
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
+    /**
+     * is the player frozen?
+     * @return
+     */
     public boolean isFrozen() {
         return frozen;
     }
 
+    /**
+     * the player is frozen
+     * @param frozen
+     */
     public void setFrozen(boolean frozen) {
         this.frozen = frozen;
     }
 
+    /**
+     * what mode is player in (game over?) (UNUSED)
+     * @return
+     */
     public String getMode() {
         return mode;
     }
 
+    /**
+     * player mode (game over?) (UNUSED)
+     * @param mode
+     */
     public void setMode(String mode) {
         this.mode = mode;
     }
 
+    /**
+     * get the number of stars player is holding
+     * @return
+     */
     public int getStars() {
         return stars;
     }
 
+    /**
+     * set the number of stars player is holding
+     * @param stars
+     */
     public void setStars(int stars) {
         this.stars = stars;
     }
 
+    /**
+     * set the time when player got frozen
+     * @param f_time
+     */
     public void setFrozentime(long f_time) {
         this.frozentime = f_time;
     }
 
+    /**
+     * get the time when player got frozen
+     * @return
+     */
     public long getFrozentime() {
         return frozentime;
     }
 
+    /**
+     * get the time when player entered game over
+     * @return
+     */
     public long getGameOverTime() {
         return gameOverTime;
     }
 
+    /**
+     * set the time when player entered game over
+     * @param gameOverTime
+     */
     public void setGameOverTime(long gameOverTime) {
         this.gameOverTime = gameOverTime;
     }
 
+    /**
+     * get the time when player started new game
+     * @return
+     */
     public long getNewGameTime() {
         return newGameTime;
     }
 
+    /**
+     * set the time when player started new game
+     * @param newGameTime
+     */
     public void setNewGameTime(long newGameTime) {
         this.newGameTime = newGameTime;
     }

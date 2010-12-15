@@ -10,7 +10,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 /**
- *
+ * Remote interface for accountInfoFacade
  * @author _yy
  */
 @Remote
